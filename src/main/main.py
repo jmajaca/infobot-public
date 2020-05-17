@@ -10,13 +10,14 @@ from src.models.base import DataBase
 from src.models.model_list import Notification, Course, Pin
 from src.main.html_scraper import Scraper
 from src.main.logger import Logger
-from .. import config
+from src import config
 
 
 if __name__ == '__main__':
-    client = slack.WebClient(token=sys.argv[1])
-    scraper = Scraper(link=config['fer_url'], payload={'username': sys.argv[2], 'password': sys.argv[3]})
+    client = slack.WebClient(token=config['bot_token'])
+    scraper = Scraper(link=config['fer_url'], payload={'username': config['username'], 'password': config['password']})
     database = DataBase()
+    del config
     logger = Logger(log_file)
     sys.argv[1:] = []
     # start_app(client)
