@@ -1,0 +1,9 @@
+import src.models.author
+import src.models.channel
+import src.models.course
+import src.models.filter
+import src.models.notification
+import src.models.pin
+import src.models.reaction
+import src.models.reminder
+import src.models.slack_user
