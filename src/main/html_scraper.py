@@ -3,8 +3,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 from src.main.helper import create_notification_object
-from src.main.logger import Logger
-from src.main.constants import log_file
+from src.main import logger
 
 
 class Scraper:
@@ -14,15 +13,11 @@ class Scraper:
         self.payload = payload
         self.headers = {'User-Agent': 'Mozilla/5.0'}
         self.html_parser = 'html.parser'
-        log_location = log_file
         if kwargs:
             if 'headers' in kwargs:
                 self.headers = kwargs['headers']
             if 'html_parser' in kwargs:
                 self.html_parser = kwargs['html.parser']
-            if 'log_location' in kwargs:
-                log_location = kwargs['log_location']
-        self.logger = Logger(log_location)
 
     def scrape_data(self):
         notifications = []
@@ -30,7 +25,7 @@ class Scraper:
             notifications = generate_notifications(self.link, self.payload, self.html_parser, self.headers)
         except Exception as e:
             notifications = []
-            self.logger.error_log(e, text='Error has occurred while scraping data')
+            logger.error_log(e, text='Error has occurred while scraping data')
         finally:
             return notifications
 

@@ -33,5 +33,5 @@ def generate_reactions_message(target_reaction):
     result_string = 'Here is top chart for :' + target_reaction + ':\n\n'
     for i in range(len(results)):
         item = results[i]
-        result_string += str(i+1) + '. <@' + item[0] + '> with ' + str(item[1]) + ' total reactions received (sent ' + str(item[2]) + '\n'
+        result_string += str(i+1) + '. <@' + item[0] + '> with ' + str(item[1]) + ' total reactions received (sent ' + str(item[2]) + ')\n'
     return result_string

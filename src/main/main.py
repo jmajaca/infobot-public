@@ -1,26 +1,17 @@
 from src.main.helper import *
 from datetime import timedelta
 from src.main.reactions import count_reactions
-from src.main.constants import log_file
-import slack
-import sys
 import gc
 import time
 from src.models.base import DataBase
 from src.models.model_list import Notification, Course, Pin
-from src.main.html_scraper import Scraper
-from src.main.logger import Logger
-from src import config
+from src.main import client, logger, scraper
+from src.web.flask_app import start_app
 
 
 if __name__ == '__main__':
-    client = slack.WebClient(token=config['bot_token'])
-    scraper = Scraper(link=config['fer_url'], payload={'username': config['username'], 'password': config['password']})
     database = DataBase()
-    del config
-    logger = Logger(log_file)
-    sys.argv[1:] = []
-    # start_app(client)
+    start_app()
     logger.info_log('Program started.')
     count_reactions(client)
     try:
