@@ -1,3 +1,5 @@
+from logger import Logger
+import os
 config = dict()
 
 with open('../resources/config.cfg') as file:
@@ -8,3 +10,5 @@ with open('../resources/config.cfg') as file:
 if config['erase'] == '1':
     with open('../resources/config.cfg', 'w') as file:
         file.write('DELETED')
+
+logger = Logger(config['log_path'])

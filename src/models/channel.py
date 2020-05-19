@@ -1,5 +1,5 @@
 from src.models.base import Base
-from sqlalchemy import Column, Integer, String, ForeignKey, TIMESTAMP
+from sqlalchemy import Column, String, ForeignKey, TIMESTAMP
 from sqlalchemy.orm import relationship
 
 
@@ -17,4 +17,4 @@ class Channel(Base):
         self.id, self.tag, self.creator_id, self.created = id, tag, creator_id, created
 
     def __repr__(self):
-        return "<Channel(id='%s', tag='%s', creator_id='%d')>" % (self.id, self.tag, self.creator_id)
+        return "<Channel(id='%s', tag='%s', creator_id='%s', created='%s')>" % (self.id, self.tag, self.creator_id, self.created)

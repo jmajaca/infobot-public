@@ -3,7 +3,8 @@ import requests
 import re
 from bs4 import BeautifulSoup
 from src.main.helper import create_notification_object
-from src.main import logger
+from src import logger
+from src import errors
 
 
 class Scraper:
@@ -23,6 +24,9 @@ class Scraper:
         notifications = []
         try:
             notifications = generate_notifications(self.link, self.payload, self.html_parser, self.headers)
+        except errors.LoginError as e:
+            notifications = None
+            logger.warning_log(e.text)
         except Exception as e:
             notifications = []
             logger.error_log(e, text='Error has occurred while scraping data')
@@ -36,7 +40,10 @@ def generate_notifications(fer_url, payload, html_parser, headers):
     session = requests.Session()
     intranet = session.post(fer_url + '/login', headers=headers, data=payload)
     soup = BeautifulSoup(intranet.text, html_parser)
-    for link in soup.findAll('div', {'class': 'caption caption-news_show_headlines_96779'}):
+    links = soup.findAll('div', {'class': 'caption caption-news_show_headlines_96779'})
+    if len(links) == 0:
+        raise errors.LoginError
+    for link in links:
         link = link.a
         notification = dict()
         notification['link'] = fer_url + link['href']

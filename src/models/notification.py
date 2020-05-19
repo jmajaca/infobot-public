@@ -19,7 +19,8 @@ class Notification(Base):
             title, site, author, publish_date, text, link
 
     def __repr__(self):
-        return "<Notification(id='%d', title='%s', link='%s')>" % (self.id, self.title, self.link)
+        return "<Notification(id='%d', title='%s', link='%s', site='%d', author='%s', publish_date='%s')>" % \
+               (self.id, self.title, self.link, self.site, self.author, self.publish_date)
 
 
 

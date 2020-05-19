@@ -15,4 +15,5 @@ class Reaction(Base):
         self.channel, self.timestamp, self.name, self.sender, self.receiver = channel, timestamp, name, sender, receiver
 
     def __repr__(self):
-        return "<Reaction(id='%d', name='%s', sender='%s', receiver='%s')>" % (self.id, self.name, self.sender, self.receiver)
+        return "<Reaction(id='%d', name='%s', sender='%s', receiver='%s', timestamp='%f', channel='%s')>" % \
+               (self.id, self.name, self.sender, self.receiver, self.timestamp, self.channel)

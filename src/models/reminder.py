@@ -15,4 +15,5 @@ class Reminder(Base):
         self.text, self.end_date, self.timer, self.notification = text, end_date, timer, notification
 
     def __repr__(self):
-        return 'todo'
+        return "<Reminder(id='%d', text='%s', end_date='%s', timer='%d', notification='%d', posted='%s')>" % \
+               (self.id, self.text, self.end_date, self.timer, self.notification, self.posted)

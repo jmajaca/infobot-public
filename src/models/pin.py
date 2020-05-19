@@ -16,4 +16,5 @@ class Pin(Base):
         self.creation_date, self.timer, self.channel, self.timestamp = creation_date, timer, channel, timestamp
 
     def __repr__(self):
-        return "<Pin(id='%d')>" % self.id
+        return "<Pin(id='%d', creation_date='%s', timer='%s', channel='%s', timestamp='%f', done='%s')>" % \
+               (self.id, self.creation_date, self.timer, self.channel, self.timestamp, self.done)
