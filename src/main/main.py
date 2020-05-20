@@ -15,6 +15,7 @@ if __name__ == '__main__':
     start_app()
     logger.info_log('Program started.')
     count_reactions(client)
+    timeout = 600
     try:
         loop_count = 0
         while True:
@@ -24,7 +25,11 @@ if __name__ == '__main__':
             print('Scraping phase done.')
             # TODO catch exception do in main
             if notifications is None:
-                time.sleep(600)
+                timeout *= 2
+                time.sleep(min(timeout, 2400))
+                notifications = []
+            else:
+                timeout = 600
             for notification in notifications:
                 result = database.select(Notification, title=notification.title, site=notification.site,
                                          author=notification.author, publish_date=notification.publish_date,
