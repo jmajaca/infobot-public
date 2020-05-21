@@ -132,3 +132,4 @@ dmypy.json
 src/log/*
 src/resources/config.cfg
 .idea/
+src/resources/legacy/*
