@@ -1,4 +1,5 @@
 from logger import Logger
+from src import interrupt_handler
 import os
 config = dict()
 
@@ -12,3 +13,5 @@ if config['erase'] == '1':
         file.write('DELETED')
 
 logger = Logger(config['log_path'])
+
+interrupt_handler.listen_signals(logger)
