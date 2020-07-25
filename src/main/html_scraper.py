@@ -29,7 +29,7 @@ class Scraper:
             logger.warning_log(e.text)
         except Exception as e:
             notifications = []
-            logger.error_log(e, text='Error has occurred while scraping data')
+            logger.error_log(e, text='Error has occurred while scraping data ')
         finally:
             return notifications
 

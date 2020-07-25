@@ -1,20 +1,22 @@
-from src.main.helper import *
-from datetime import timedelta
-from src.main.reactions import count_reactions
 import gc
+import os
+import sys
 import time
+from datetime import timedelta
+
+from src import logger
+from src.main import client, scraper
+from src.main.helper import *
+from src.main.reactions import count_reactions
 from src.models.base import DataBase
 from src.models.model_list import Notification, Course, Pin
-from src.main import client, scraper
-from src import logger
 from src.web.flask_app import start_app
-
 
 if __name__ == '__main__':
     database = DataBase()
-    start_app()
+    # start_app()
     logger.info_log('Program started.')
-    count_reactions(client)
+    # count_reactions(client)
     timeout = 600
     try:
         loop_count = 0
@@ -37,14 +39,14 @@ if __name__ == '__main__':
                 if result is None:
                     course = database.select(Course, id=notification.site)
                     if check_filters(notification):
-                        for reminder in generate_reminders(notification):
-                            database.insert(reminder)
                         response = client.chat_postMessage(channel=course.channel_tag, text=structure_message(notification))
                     database.insert(notification)
                     if check_filters(notification):
+                        for reminder in generate_reminders(notification):
+                            database.insert(reminder)
                         # https://api.slack.com/methods/pins.add
                         client.pins_add(channel=response['channel'], timestamp=response['ts'])
-                        database.insert(Pin(datetime.now(), timedelta(hours=24), response['channel'], response['ts']))
+                        # database.insert(Pin(datetime.now(), timedelta(hours=24), response['channel'], response['ts']))
             gc.collect()
             if loop_count == 10:
                 count_reactions(client)
@@ -56,5 +58,5 @@ if __name__ == '__main__':
         print('ded')
         error_channel = '#random'
         client.chat_postMessage(channel=error_channel, text='I am dead.')
-        logger.info_log('Program ended.')
+        logger.info_log('Program finished with exit code 1.')
         exit(1)

@@ -8,12 +8,12 @@ class Reaction(Base):
     name = Column(String, nullable=False)
     sender = Column(String, ForeignKey('slack_user.id'), nullable=False)
     receiver = Column(String, ForeignKey('slack_user.id'), nullable=False)
-    timestamp = Column(Float, nullable=False)
+    timestamp = Column(Float, nullable=True)
     channel = Column(String, ForeignKey('channel.id'))
 
     def __init__(self, channel, timestamp, name, sender, receiver):
         self.channel, self.timestamp, self.name, self.sender, self.receiver = channel, timestamp, name, sender, receiver
 
     def __repr__(self):
-        return "<Reaction(id='%d', name='%s', sender='%s', receiver='%s', timestamp='%f', channel='%s')>" % \
-               (self.id, self.name, self.sender, self.receiver, self.timestamp, self.channel)
+        return ("<Reaction(id='%d', name='%s', sender='%s', receiver='%s', timestamp='%s', channel='%s')>" %
+                (self.id, self.name, self.sender, self.receiver, str(self.timestamp), self.channel))

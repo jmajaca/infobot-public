@@ -30,7 +30,8 @@ CREATE TABLE channel(
 CREATE TABLE course(
     id SERIAL PRIMARY KEY,
     name VARCHAR(64) UNIQUE NOT NULL,
-    channel_tag VARCHAR(64) REFERENCES channel(tag)
+    channel_tag VARCHAR(64) REFERENCES channel(tag),
+    url VARCHAR(64) DEFAULT NULL
 );
 
 CREATE TABLE author(
@@ -54,7 +55,7 @@ CREATE TABLE reminder(
     text VARCHAR(1024) NOT NULL,
     end_date TIMESTAMP NOT NULL,
     timer INTERVAL NOT NULL,
-    notification INT REFERENCES notification(id),
+    notification INT NOT NULL REFERENCES notification(id),
     posted BOOLEAN DEFAULT FALSE,
     CONSTRAINT check_timer_positive CHECK(timer > '0 hours')
 );
@@ -77,10 +78,10 @@ CREATE TABLE Filter(
 CREATE TABLE reaction(
     id SERIAL PRIMARY KEY,
     name VARCHAR (64) NOT NULL,
-    timestamp FLOAT NOT NULL,
+    timestamp FLOAT,
     channel VARCHAR(64) REFERENCES channel(id),
     sender VARCHAR(64) NOT NULL REFERENCES slack_user(id),
-    receiver VARCHAR(64) REFERENCES slack_user(id)
+    receiver VARCHAR(64) NOT NULL REFERENCES slack_user(id)
 );
 
 INSERT INTO "user"(name, password) VALUES('admin', 'b''$2b$12$F9sY/cFFo8/wKmBex1SMhO8ZiVecyKCnUiWtrhBdJIr0q38WSzmqO''')

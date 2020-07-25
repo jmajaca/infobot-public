@@ -93,11 +93,9 @@ def get_date(match_group):
 
 
 def get_time(match_group):
-    match_group = match_group.replace('.', ':')
-    if 'h' in match_group:
-        match_group = match_group[:len(match_group)-1] + ':00'
-    if len(match_group) == 1:
-        match_group += ':00'
+    match_group = re.sub(r"[^\:\d]", "", match_group.replace('.', ':').strip())
+    if len(match_group) <= 2:
+        return ' ' + match_group + ':00'
     return ' ' + match_group
 
 
