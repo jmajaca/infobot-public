@@ -25,6 +25,11 @@ class DataBase:
             result = result.filter(getattr(table, key) == kwargs[key])
         return result.first()
 
+    def select_many(self, table, **kwargs):
+        result = self.session.query(table)
+        for key in kwargs.keys():
+            result = result.filter(getattr(table, key) == kwargs[key])
+        return result.all()
 
 # getattr(object, attrname)
 # setattr(object, attrname, value)

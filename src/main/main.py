@@ -3,6 +3,7 @@ import os
 import sys
 import time
 from datetime import timedelta
+from src.main import refresh_active_courses
 
 from src import logger
 from src.main import client, scraper
@@ -16,6 +17,8 @@ if __name__ == '__main__':
     database = DataBase()
     # start_app()
     logger.info_log('Program started.')
+    refresh_active_courses.start()
+    courses = database.select_many(Course, watch=True)
     # count_reactions(client)
     timeout = 600
     try:
@@ -23,7 +26,7 @@ if __name__ == '__main__':
         while True:
             check_pins(client)
             check_reminders(client)
-            notifications = scraper.scrape_data()
+            notifications = scraper.scrape_notifications(courses)
             print('Scraping phase done.')
             # TODO catch exception do in main
             if notifications is None:
@@ -55,7 +58,6 @@ if __name__ == '__main__':
     except Exception as e:
         logger.error_log(e)
     finally:
-        print('ded')
         error_channel = '#random'
         client.chat_postMessage(channel=error_channel, text='I am dead.')
         logger.info_log('Program finished with exit code 1.')

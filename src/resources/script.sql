@@ -31,7 +31,8 @@ CREATE TABLE course(
     id SERIAL PRIMARY KEY,
     name VARCHAR(64) UNIQUE NOT NULL,
     channel_tag VARCHAR(64) REFERENCES channel(tag),
-    url VARCHAR(64) DEFAULT NULL
+    url VARCHAR(64) DEFAULT NULL,
+    watch BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE author(
@@ -70,7 +71,7 @@ CREATE TABLE pin(
 );
 
 -- TODO make this table
-CREATE TABLE Filter(
+CREATE TABLE filter(
     id SERIAL PRIMARY KEY,
     ban_title VARCHAR(64) NOT NULL
 );
