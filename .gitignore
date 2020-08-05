@@ -133,3 +133,4 @@ src/log/*
 src/resources/config.cfg
 .idea/
 src/resources/legacy/*
+src/resources/docker-compose.yml

@@ -32,7 +32,9 @@ Run command `sudo bash tools_setup.sh` to install listed tools.
 ## Database setup
 
 This part of setup is based on [this](https://phoenixnap.com/kb/deploy-postgresql-on-docker)
-tutorial. To setup database run command `sudo bash database_setup.sh [container_name] [postgres_password]`.
+and [this](https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-debian-9) tutorial. 
+To setup database run command `sudo bash database_setup.sh`. For script to work you will need **docker-compose.yaml** 
+file in which options are defined. For access to that file please contact maintainer of the project.
 Command will first create empty docker container containing postgres database and
 then it will fill database with tables from infobot-public project.
 
