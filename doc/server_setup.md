@@ -1,4 +1,4 @@
-# Initial setup
+# Initial server setup
 
 > Notice: all scripts bellow can be run at once with `sudo bash complete_setup.sh`
 
