@@ -9,7 +9,7 @@ Workspace url for testing can be found on `**TODO** api_url`.
 Infobot has following permissions on slack workspace:
 
 |     OAuth Scope     |     Description     |
-| ------------------- | -------------------:|
+| :------------------ | :-------------------|
 | app_mentions:read   | View messages that directly mention @infobot in conversations that the app is in |
 | channels:read      | View basic information about public channels in the workspace |
 | chat:write | Send messages as @infobot |
@@ -18,6 +18,5 @@ Infobot has following permissions on slack workspace:
 | im:write | Start direct messages with people |
 | pins:read | View pinned content in channels and conversations that Infobot has been added to |
 | pins:write | Add and remove pinned messages and files |
-| reactions: read | View emoji reactions and their associated content in channels and conversations that Infobot has 
-been added to |
+| reactions: read | View emoji reactions and their associated content in channels and conversations that Infobot has been added to |
 | users:read | View people in the workspace |
