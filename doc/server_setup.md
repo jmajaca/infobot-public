@@ -37,6 +37,3 @@ To setup database run command `sudo bash database_setup.sh`. For script to work 
 file in which options are defined. For access to that file please contact maintainer of the project.
 Command will first create empty docker container containing postgres database and
 then it will fill database with tables from infobot-public project.
-
-
-## Slack Test Workspace setup
