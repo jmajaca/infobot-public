@@ -37,10 +37,13 @@ Run command `sudo bash tools_setup.sh` to install listed tools.
 
 This part of setup is based on [this](https://phoenixnap.com/kb/deploy-postgresql-on-docker)
 and [this](https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-debian-9) tutorial. 
-To setup database run command `sudo bash database_setup.sh`. For script to work you will need **docker-compose.yaml** 
+To setup database run command `sudo bash database_docker_setup.sh`. For script to work you will need **docker-compose.yaml** 
 file in which options are defined. File can be accessed via API from `**TODO** api_url`.
 Command will create two databases: one for production and one for testing. Both databases will be initialized with empty
 tables from infobot project. Production database is on default postgres port `5432` while test database is on port
 `5431`.
 
 ## Docker application setup
+
+To run infobot python application run `sudo bash python_docker_setup.sh` this will install
+requirements and start application with exposed port `9000`. 
