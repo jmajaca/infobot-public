@@ -20,3 +20,5 @@ Infobot has following permissions on slack workspace:
 | pins:write | Add and remove pinned messages and files |
 | reactions: read | View emoji reactions and their associated content in channels and conversations that Infobot has been added to |
 | users:read | View people in the workspace |
+
+## Slack API

@@ -4,6 +4,10 @@
 
 ## Python 3.7 setup for Debian GNU/Linux 9 (stretch)
 
+> Notice: Skip this step if you are not planing to develop application or create hotfixes
+> directly on server. Alternative is to run python application in docker container which
+> will be described in one of the following chapters.
+
 To install Python 3.7 and its dependencies as weel as packages for infobot-public
 project run following command:
 `sudo bash python_setup.sh`. Script follows instructions for installing Python
@@ -29,11 +33,14 @@ official tutorial.
 
 Run command `sudo bash tools_setup.sh` to install listed tools.
 
-## Database setup
+## Docker database setup
 
 This part of setup is based on [this](https://phoenixnap.com/kb/deploy-postgresql-on-docker)
 and [this](https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-debian-9) tutorial. 
 To setup database run command `sudo bash database_setup.sh`. For script to work you will need **docker-compose.yaml** 
-file in which options are defined. For access to that file please contact maintainer of the project.
-Command will first create empty docker container containing postgres database and
-then it will fill database with tables from infobot-public project.
+file in which options are defined. File can be accessed via API from `**TODO** api_url`.
+Command will create two databases: one for production and one for testing. Both databases will be initialized with empty
+tables from infobot project. Production database is on default postgres port `5432` while test database is on port
+`5431`.
+
+## Docker application setup

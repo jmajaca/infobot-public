@@ -1,0 +1,4 @@
+slack
+slackclient
+requests
+bs4
