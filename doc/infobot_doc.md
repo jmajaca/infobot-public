@@ -1,4 +1,4 @@
-# Initial server setup
+# Initial setup
 
 > Notice: all scripts bellow (w/o python installation on server) can be run at once with 
 > `sudo bash start_application.sh [file_id]`
@@ -104,7 +104,7 @@ open a form for adding or deleting ssh keys.
 #### Firewall rules
 
 To expose ports to outside world you will need to create Firewall rules. Follow
-(this)[https://stackoverflow.com/questions/21065922/how-to-open-a-specific-port-such-as-9090-in-google-compute-engine]
+[this](https://stackoverflow.com/questions/21065922/how-to-open-a-specific-port-such-as-9090-in-google-compute-engine)
 link for more information.
 You will want to create rules that expose ports `5432`, `5431` and `9000` to all (IP range: `0.0.0.0/0`).
 
