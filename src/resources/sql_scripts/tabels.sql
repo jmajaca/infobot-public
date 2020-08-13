@@ -84,12 +84,3 @@ CREATE TABLE reaction(
     sender VARCHAR(64) NOT NULL REFERENCES slack_user(id),
     receiver VARCHAR(64) NOT NULL REFERENCES slack_user(id)
 );
-
-INSERT INTO "user"(name, password) VALUES('admin', 'b''$2b$12$F9sY/cFFo8/wKmBex1SMhO8ZiVecyKCnUiWtrhBdJIr0q38WSzmqO''')
---INSERT INTO course VALUES(DEFAULT, 'Skriptni jezici', '#skriptni');
---INSERT INTO course VALUES(DEFAULT, 'Umjetna inteligencija', '#ai');
---INSERT INTO course VALUES(DEFAULT, 'Statistička analiza podataka', '#sap');
---INSERT INTO course VALUES(DEFAULT, 'Trgovačko pravo', '#pravo');
---INSERT INTO course VALUES(DEFAULT, 'Interaktivna računalna grafika', '#irg');
---INSERT INTO course VALUES(DEFAULT, 'Završni rad', '#završni');
---INSERT INTO course VALUES(DEFAULT, 'Napredno korištenje operacijskog sustava Linuxi', '#linux');
