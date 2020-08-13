@@ -13,6 +13,6 @@ def start():
         reader = csv.DictReader(file)
         for row in reader:
             course = Course(row['name'], row['tag'], row['url'], True)
-            # database.insert(course)
+            database.insert(course)
     with open('course_list.csv', 'w') as file:
         file.write('')
