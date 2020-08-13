@@ -41,11 +41,12 @@ def start():
                                          author=notification.author, publish_date=notification.publish_date,
                                          text=notification.text, link=notification.link)
                 if result is None:
+                    fresh_notification = notification.publish_date + timedelta(hours=24) >= datetime.now()
                     course = database.select(Course, id=notification.site)
-                    if check_filters(notification):
+                    if check_filters(notification) and fresh_notification:
                         response = client.chat_postMessage(channel=course.channel_tag, text=structure_message(notification))
                     database.insert(notification)
-                    if check_filters(notification):
+                    if check_filters(notification) and fresh_notification:
                         for reminder in generate_reminders(notification):
                             database.insert(reminder)
                         # https://api.slack.com/methods/pins.add

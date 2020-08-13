@@ -40,8 +40,8 @@ def generate_notifications(fer_url, payload, html_parser, headers, courses):
     session = requests.Session()
     intranet = session.post(fer_url + '/login', headers=headers, data=payload)
     soup = BeautifulSoup(intranet.text, html_parser)
-    links = soup.findAll('div', {'class': 'caption caption-news_show_headlines_96779'})
-    if len(links) == 0:
+    check_element = soup.find('li', {'class': 'home-page'})
+    if not check_element.text.__contains__('Intranet'):
         raise errors.LoginError
     for course in courses:
         link = course.url + '/obavijesti'
@@ -53,11 +53,13 @@ def generate_notifications(fer_url, payload, html_parser, headers, courses):
             notification['link'] = fer_url + title_element.a['href']
             notification['title'] = title_element.get_text().rstrip().lstrip()
             notification['site_name'] = course.name
-            notification['author_name'] = soup.find('span', {'class': 'author_name'}).get_text().rstrip().lstrip()
+            notification['author_name'] = news_article.find('span', {'class': 'author_name'}).get_text().rstrip().lstrip()
             date = None
-            for el in soup.findAll('time'):
+            for el in news_article.findAll('time'):
                 if len(el['datetime']) == 16:
                     tmp_date = datetime.strptime(el['datetime'], '%Y-%m-%dT%H:%M')
+                elif len(el['datetime']) == 18:
+                    tmp_date = datetime.strptime(el['datetime'], '%Y-%m-%dCET%H:%M')
                 else:
                     tmp_date = datetime.strptime(el['datetime'], '%Y-%m-%dCEST%H:%M')
                 if date is None:
@@ -66,7 +68,7 @@ def generate_notifications(fer_url, payload, html_parser, headers, courses):
                     if date < tmp_date:
                         date = tmp_date
             notification['date'] = date
-            text = str(soup.find('div', {'class': 'news_lead'})).replace('<p>', '').replace('</p>', '\n')
+            text = str(news_article.find('div', {'class': 'news_lead'})).replace('<p>', '').replace('</p>', '\n')
             text = '\n'.join(text.split('\n')[1:-1]).lstrip().rstrip()
             text = text.replace('<strong>', ' *').replace('</strong>', '* ').replace('<em>', ' ■').replace('</em>', '■ ')
             # https://api.slack.com/reference/surfaces/formatting#linking_to_urls

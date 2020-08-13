@@ -47,7 +47,7 @@ CREATE TABLE notification(
     site INT REFERENCES course(id),
     author INT REFERENCES author(id),
     publish_date TIMESTAMP NOT NULL,
-    text VARCHAR(2048) NOT NULL,
+    text VARCHAR(4096) NOT NULL,
     link varchar(256) NOT NULL
 );
 
