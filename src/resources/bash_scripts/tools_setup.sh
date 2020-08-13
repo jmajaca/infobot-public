@@ -5,6 +5,12 @@ apt-get update
 echo Installing Git
 yes Y | apt install git
 
+echo Installing unzip
+apt install unzip
+
+echo Installing curl
+apt install curl
+
 echo Installing Docker
 cd /tmp || exit
 mkdir docker
