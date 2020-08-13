@@ -2,3 +2,6 @@ slack
 slackclient
 requests
 bs4
+sqlalchemy
+psycopg2
+flask
