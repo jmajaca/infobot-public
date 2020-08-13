@@ -1,0 +1,7 @@
+slack
+slackclient
+requests
+bs4
+sqlalchemy
+psycopg2-binary
+flask

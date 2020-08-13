@@ -7,8 +7,8 @@ import uuid
 class Logger:
 
     def __init__(self, file_location):
-        self.log_file = file_location + 'log.log'
-        self.trace_file = file_location + 'trace.log'
+        self.log_file = file_location + '/application_log.log'
+        self.trace_file = file_location + '/application_trace.log'
 
     def new_element_log(self, element, response, msg_done):
         with open(self.log_file, 'a') as log:
