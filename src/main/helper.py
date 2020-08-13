@@ -26,8 +26,9 @@ def check_reminders(client):
         notification = session.query(Notification).filter(Notification.id == reminder.notification).first()
         course = session.query(Course).filter(notification.site == Course.id).first()
         time_left = reminder.end_date - datetime.now()
-        text = '*' + str(time_left) + 'h* left until this event\n>' + notification.title + '\n>' + reminder.text + '\nSee more at ' + notification.link
-        response = client.chat_postMessage(channel=course.channel_tag, text=text)
+        text = '*' + str(time_left) + '* left until this event\n>' + notification.title + '\n>' + reminder.text + '\nSee more at ' + notification.link
+        if time_left >= timedelta(0):
+            response = client.chat_postMessage(channel=course.channel_tag, text=text)
         reminder.posted = True
         session.commit()
 

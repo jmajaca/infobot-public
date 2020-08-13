@@ -48,7 +48,9 @@ def start():
                     database.insert(notification)
                     if check_filters(notification) and fresh_notification:
                         for reminder in generate_reminders(notification):
-                            database.insert(reminder)
+                            old_reminder = database.select(Reminder, text=reminder.text, notification=reminder.notification)
+                            if old_reminder is None:
+                                database.insert(reminder)
                         # https://api.slack.com/methods/pins.add
                         client.pins_add(channel=response['channel'], timestamp=response['ts'])
                         # database.insert(Pin(datetime.now(), timedelta(hours=24), response['channel'], response['ts']))
