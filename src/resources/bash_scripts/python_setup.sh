@@ -36,5 +36,14 @@ sudo python3.7 -m pip install requests
 echo Installing bs4 package
 sudo python3.7 -m pip install bs4
 
+echo Installing psycopg2-binary package
+sudo python3.7 -m pip install psycopg2-binary
+
+echo Installing sqlalchemy package
+sudo python3.7 -m pip install sqlalchemy
+
+echo Installing flask package
+sudo python3.7 -m pip install flask
+
 echo "Installing Python packages important for infobot-public done"
 
