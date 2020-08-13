@@ -14,6 +14,6 @@ if config['erase'] == '1':
     with open(current_path + 'resources/config.cfg', 'w') as file:
         file.write('DELETED')
 
-logger = Logger(config['log_path'])
+logger = Logger(current_path + '/log')
 
 interrupt_handler.listen_signals(logger)
