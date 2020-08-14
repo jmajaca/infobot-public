@@ -1,0 +1,78 @@
+<mat-card class="main-content">
+
+  <mat-card-header>
+    <h2>WATCH LIST</h2>
+  </mat-card-header>
+  <mat-card-content>
+
+    <div *ngFor="let activeCourse of activeCourses; let i = index" class="list-wrapper"
+         [ngStyle]="hovered === i ? hoverStyle() : null"
+         (mouseover)="hovered = i"
+         (mouseout)="hovered = -1">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput [value]="activeCourse.name" disabled>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tag</mat-label>
+        <input matInput [value]="activeCourse.tag" disabled>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="url-input">
+        <mat-label>Url</mat-label>
+        <input matInput [value]="activeCourse.url" disabled>
+      </mat-form-field>
+
+      <mat-slide-toggle [checked]="activeCourse.watch">Watch</mat-slide-toggle>
+
+    </div>
+    <div>
+      <form [formGroup]="courseForm" class="list-wrapper" (ngSubmit)="submitForm()">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="Predmet">
+          <mat-error *ngIf="courseForm.get('name').errors?.required && courseForm.get('name').touched">
+            {{requiredErrorMsg}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tag</mat-label>
+          <mat-select formControlName="tag" disableOptionCentering>
+            <mat-option *ngFor="let tag of courseTagList" [value]="tag">
+              #{{tag}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="courseForm.get('tag').errors?.required && courseForm.get('tag').touched">
+            {{requiredErrorMsg}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="url-input">
+          <mat-label>Url</mat-label>
+          <input matInput formControlName="url">
+          <mat-error *ngIf="courseForm.get('url').errors?.required && courseForm.get('url').touched">
+            {{requiredErrorMsg}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-slide-toggle (change)="toggleChange($event)" formControlName="watch">Watch</mat-slide-toggle>
+
+        <button mat-raised-button class="add-button" [disabled]="courseForm.invalid">Add</button>
+
+      </form>
+
+    </div>
+  </mat-card-content>
+
+  <mat-card-header>
+    <h2>UNWATCHED COURSES</h2>
+  </mat-card-header>
+  <mat-card-content>
+
+  </mat-card-content>
+
+</mat-card>

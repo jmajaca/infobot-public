@@ -1,0 +1,30 @@
+.main-content {
+  margin: auto;
+  width: 70%;
+}
+
+.url-input {
+  width: 400px;
+}
+
+.list-wrapper .mat-form-field {
+  margin-top: 1vh;
+  margin-bottom: -1vh;
+  margin-left: 1vw;
+}
+
+.list-wrapper .mat-slide-toggle {
+  margin-top: 1vh;
+  margin-bottom: -1vh;
+  margin-left: 1vw;
+}
+
+.add-button {
+  margin-bottom: -2vh;
+  margin-left: 1vw;
+}
+
+.hover-list-element {
+  background: lightgrey;
+  cursor: pointer;
+}
