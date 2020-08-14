@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, String, Sequence, TIMESTAMP, Interval, ForeignKey, Float, Boolean
-from sqlalchemy.orm import relationship
 from src.models.base import Base
 
 

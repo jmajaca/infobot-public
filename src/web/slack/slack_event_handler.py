@@ -20,5 +20,3 @@ def slack_event_handler():
         response = client.chat_postMessage(channel=data['event']['channel'], text=answer_msg)
         return Response(), 200
     return Response(), 404
-
-

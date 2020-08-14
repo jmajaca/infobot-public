@@ -1,17 +1,13 @@
 import gc
-import os
-import sys
 import time
-from datetime import timedelta
-from src.main import refresh_active_courses
 
 from src import logger
 from src.main import client, scraper
+from src.main import refresh_active_courses
 from src.main.helper import *
 from src.main.reactions import count_reactions
 from src.models.base import DataBase
-from src.models.model_list import Notification, Course, Pin
-from src.web.flask_app import start_app
+from src.models.model_list import Notification, Course
 
 
 def start():
@@ -44,7 +40,8 @@ def start():
                     fresh_notification = notification.publish_date + timedelta(hours=24) >= datetime.now()
                     course = database.select(Course, id=notification.site)
                     if check_filters(notification) and fresh_notification:
-                        response = client.chat_postMessage(channel=course.channel_tag, text=structure_message(notification))
+                        response = client.chat_postMessage(channel=course.channel_tag,
+                                                           text=structure_message(notification))
                     database.insert(notification)
                     if check_filters(notification) and fresh_notification:
                         for reminder in generate_reminders(notification):

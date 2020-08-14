@@ -1,11 +1,9 @@
 import signal
 import sys
-import time
-import threading
-
+from src import logger
 # https://stackoverflow.com/questions/4205317/capture-keyboardinterrupt-in-python-without-try-except
 
-local_logger = None
+local_logger: logger.Logger
 
 
 def signal_handler(received_signal, frame):
@@ -18,9 +16,9 @@ def signal_handler(received_signal, frame):
         sys.exit(137)
 
 
-def listen_signals(logger):
+def listen_signals(app_logger):
     global local_logger
-    local_logger = logger
+    local_logger = app_logger
     signal.signal(signal.SIGINT, signal_handler)
     # print('Press Ctrl+C')
     # forever = threading.Event()

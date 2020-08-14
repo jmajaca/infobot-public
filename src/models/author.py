@@ -15,7 +15,3 @@ class Author(Base):
 
     def __repr__(self):
         return "<Author(id='%d', first_name='%s', last_name='%s')>" % (self.id, self.first_name, self.last_name)
-
-
-
-

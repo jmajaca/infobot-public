@@ -1,10 +1,11 @@
-from datetime import datetime
-import requests
 import re
+import requests
+
+from datetime import datetime
 from bs4 import BeautifulSoup
-from src.main.helper import create_notification_object
-from src import logger
 from src import errors
+from src import logger
+from src.main.helper import create_notification_object
 
 
 class Scraper:
@@ -53,7 +54,8 @@ def generate_notifications(fer_url, payload, html_parser, headers, courses):
             notification['link'] = fer_url + title_element.a['href']
             notification['title'] = title_element.get_text().rstrip().lstrip()
             notification['site_name'] = course.name
-            notification['author_name'] = news_article.find('span', {'class': 'author_name'}).get_text().rstrip().lstrip()
+            notification['author_name'] = news_article.find('span',
+                                                            {'class': 'author_name'}).get_text().rstrip().lstrip()
             date = None
             for el in news_article.findAll('time'):
                 if len(el['datetime']) == 16:
@@ -70,16 +72,19 @@ def generate_notifications(fer_url, payload, html_parser, headers, courses):
             notification['date'] = date
             text = str(news_article.find('div', {'class': 'news_lead'})).replace('<p>', '').replace('</p>', '\n')
             text = '\n'.join(text.split('\n')[1:-1]).lstrip().rstrip()
-            text = text.replace('<strong>', ' *').replace('</strong>', '* ').replace('<em>', ' ■').replace('</em>', '■ ')
+            text = text.replace('<strong>', ' *').replace('</strong>', '* ').replace('<em>', ' ■').replace('</em>',
+                                                                                                           '■ ')
             # https://api.slack.com/reference/surfaces/formatting#linking_to_urls
             text_links = re.findall(r'((?:[^<>]*)<a href=\"([^<> ]*)\"[^<>]*>([^<>]*)</a>)', text)
             for text_link in text_links:
                 if re.search(r'http.*', text_link[1]):
-                    text = re.sub(pattern=re.compile('<a href=\"' + text_link[1] + '\"[^<>]*>([^<>]*)</a>'), string=text, repl='&lt;'
-                                                                                                             + text_link[1] + '|' + text_link[2] + '&gt;')
+                    text = re.sub(pattern=re.compile('<a href=\"' + text_link[1] + '\"[^<>]*>([^<>]*)</a>'),
+                                  string=text, repl='&lt;'
+                                                    + text_link[1] + '|' + text_link[2] + '&gt;')
                 else:
-                    text = re.sub(pattern=re.compile('<a href=\"' + text_link[1] + '\"[^<>]*>([^<>]*)</a>'), string=text, repl='&lt;mailto:'
-                                                                                                             + text_link[2] + '|' + text_link[2] + '&gt;')
+                    text = re.sub(pattern=re.compile('<a href=\"' + text_link[1] + '\"[^<>]*>([^<>]*)</a>'),
+                                  string=text, repl='&lt;mailto:'
+                                                    + text_link[2] + '|' + text_link[2] + '&gt;')
             text = text.replace('<li>', '<li>• ')
             text = text.replace('  ', ' ')
             text = BeautifulSoup(text, html_parser).get_text()
@@ -91,7 +96,7 @@ def generate_notifications(fer_url, payload, html_parser, headers, courses):
 
 def tune_italic_bold(text):
     # first - on the start of line, second - in the middle of line
-    text = tune_text(text, re.findall(r'.?\*[^\*]+\*.', text), '*')
+    text = tune_text(text, re.findall(r'.?\*[^*]+\*.', text), '*')
     text = tune_text(text, re.findall(r'.?■[^■]+■.', text), '■')
     # TODO this is specific
     # if re.findall(re.compile('(■[a-z\.0-9]+@[a-z]+\.[a-z]{2,3})'), text):

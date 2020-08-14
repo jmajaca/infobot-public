@@ -24,9 +24,10 @@ def main():
         date_created = datetime.fromtimestamp(channel['created'])
         author_id = channel['creator']
         if database.select(Channel, id=channel['id']) is None:
-            database.insert(Channel(channel['id'], '#'+channel['name'], author_id, date_created))
+            database.insert(Channel(channel['id'], '#' + channel['name'], author_id, date_created))
     # insert courses
-    courses = [('Skriptni jezici', '#skriptni'), ('Umjetna inteligencija', '#ai'), ('Statistička analiza podataka', '#sap'),
+    courses = [('Skriptni jezici', '#skriptni'), ('Umjetna inteligencija', '#ai'),
+               ('Statistička analiza podataka', '#sap'),
                ('Trgovačko pravo', '#pravo'), ('Interaktivna računalna grafika', '#irg'), ('Završni rad', '#završni'),
                ('Napredno korištenje operacijskog sustava Linuxi', '#linux')]
     for course in courses:

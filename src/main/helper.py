@@ -1,7 +1,8 @@
-from src.models.model_list import Notification, Course, Author, Reminder, Pin, Filter
-from src.models.base import DataBase, Session
-from datetime import datetime, timedelta
 import re
+from datetime import datetime, timedelta
+
+from src.models.base import DataBase, Session
+from src.models.model_list import Notification, Course, Author, Reminder, Pin, Filter
 
 
 def structure_message(notification):
@@ -9,7 +10,8 @@ def structure_message(notification):
     author = database.select(Author, id=notification.author)
     output_string = '>*' + notification.title + '*\n>\n>'
     output_string += str(notification.text).replace('\n', '\n>') + '\n>\n>'
-    output_string += '*' + author.first_name + ' ' + author.last_name + '*' + ' '*10 + parse_date(str(notification.publish_date)) + '\n\n'
+    output_string += '*' + author.first_name + ' ' + author.last_name + '*' + ' ' * 10 + parse_date(
+        str(notification.publish_date)) + '\n\n'
     output_string += '[src: ' + notification.link + ']'
     return output_string
 
@@ -21,12 +23,14 @@ def parse_date(date):
 
 def check_reminders(client):
     session = Session()
-    reminders = session.query(Reminder).filter(Reminder.end_date - Reminder.timer <= datetime.now()).filter(Reminder.posted == False).all()
+    reminders = session.query(Reminder).filter(Reminder.end_date - Reminder.timer <= datetime.now()).filter(
+        Reminder.posted == False).all()
     for reminder in reminders:
         notification = session.query(Notification).filter(Notification.id == reminder.notification).first()
         course = session.query(Course).filter(notification.site == Course.id).first()
         time_left = reminder.end_date - datetime.now()
-        text = '*' + str(time_left) + 'h* left until this event\n>' + notification.title + '\n>' + reminder.text + '\nSee more at ' + notification.link
+        text = '*' + str(time_left) + ('h* left until this event\n>' + notification.title + '\n>' + reminder.text +
+                                       '\nSee more at ' + notification.link)
         response = client.chat_postMessage(channel=course.channel_tag, text=text)
         reminder.posted = True
         session.commit()
@@ -38,7 +42,10 @@ def generate_reminders(notification):
     months = 'siječ|veljač|ožuj|trav|svib|lip|srp|kolovoz|ruj|listopad|studen|prosin'
     chapters = input_string.split('\n')
     for chapter in chapters:
-        matches = re.findall("(([0-9]{1,2}\. ?([0-9]\.|" + months + "))[^0-9]*( ?[0-9]{4}[^0-9]+|[^0-9]+)([0-9]+(:[0-9]+| ?h|\.[0-9]+| ?sati?))h?[^.0-9])", chapter)
+        matches = re.findall(r"(([0-9]{1,2}\. ?([0-9]\.|" +
+                             months +
+                             r"))[^0-9]*( ?[0-9]{4}[^0-9]+|[^0-9]+)([0-9]+(:[0-9]+| ?h|\.[0-9]+| ?sati?))h?[^.0-9])",
+                             chapter)
         if len(matches) != 0:
             for match in matches:
                 test = get_date(match[1]) + get_time(match[4])
@@ -93,7 +100,7 @@ def get_date(match_group):
 
 
 def get_time(match_group):
-    match_group = re.sub(r"[^\:\d]", "", match_group.replace('.', ':').strip())
+    match_group = re.sub(r"[^:\d]", "", match_group.replace('.', ':').strip())
     if len(match_group) <= 2:
         return ' ' + match_group + ':00'
     return ' ' + match_group
@@ -122,12 +129,15 @@ def check_pins(client):
 def create_notification_object(notification):
     database = DataBase()
     site = database.select(Course, name=notification['site_name'])
-    author = database.select(Author, first_name=notification['author_name'].split()[0], last_name=' '.join(notification['author_name'].split()[1:]))
+    author = database.select(Author, first_name=notification['author_name'].split()[0],
+                             last_name=' '.join(notification['author_name'].split()[1:]))
     if author is None:
         author_name_list = notification['author_name'].split()
         database.insert(Author(author_name_list[0], ' '.join(author_name_list[1:])))
-        author = database.select(Author, first_name=notification['author_name'].split()[0], last_name=notification['author_name'].split()[1])
-    return Notification(notification['title'], site.id, author.id, notification['date'], notification['text'], notification['link'])
+        author = database.select(Author, first_name=notification['author_name'].split()[0],
+                                 last_name=notification['author_name'].split()[1])
+    return Notification(notification['title'], site.id, author.id, notification['date'], notification['text'],
+                        notification['link'])
 
 
 def from_notification_to_dict(notification):

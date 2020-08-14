@@ -12,7 +12,3 @@ class Filter(Base):
 
     def __repr__(self):
         return "<Filter(id='%d', ban_title='%s')>" % (self.id, self.ban_title)
-
-
-
-
