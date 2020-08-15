@@ -13,8 +13,8 @@ class Course(Base):
     channel = relationship("Channel", uselist=False, back_populates="course")
     notifications = relationship('Notification')
 
-    def __init__(self, name, channel_tag, url=None, watch=True):
-        self.name, self.channel_tag, self.url, self.watch = name, channel_tag, url, watch
+    def __init__(self, name, channel_tag, url=None, watch=True, course_id=None):
+        self.name, self.channel_tag, self.url, self.watch, self.id = name, channel_tag, url, watch, course_id
 
     def __repr__(self):
         return "<Course(id='{}', name='{}', channel_tag='{}', url='{}', watch='{}')>".format(
