@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 
 from src.models.base import DataBase, Session
 from src.models.channel import Channel
@@ -20,7 +20,7 @@ def course_handler():
     form.init_tags(channel_tags)
     if form.validate_on_submit():
         if form.id.data == -1:
-            new_course = Course(form.name.data, form.tag.data, form.url.data, form.watch.data)
+            new_course = Course(form.name.data, request.form.get('tag_select'), form.url.data, form.watch.data)
             session.add(new_course)
             session.commit()
             session.flush()
@@ -28,12 +28,12 @@ def course_handler():
             course = session.query(Course).filter(Course.id == form.id.data).first()
             course.name = form.name.data
             course.url = form.url.data
+            course.channel_tag = request.form.get('tag_select')
             # course.watch = form.watch.data
             session.commit()
             session.flush()
         courses = session.query(Course).all()
         form.name.data = ''
-        form.tag.data = ''
         form.url.data = ''
         form.watch.data = True
     watched = [course for course in courses if course.watch]

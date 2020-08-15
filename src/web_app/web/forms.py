@@ -7,12 +7,13 @@ from wtforms.validators import DataRequired
 class WatchlistForm(FlaskForm):
     id = IntegerField(default=-1)
     name = StringField('Name:', validators=[DataRequired()])
-    tag = SelectField('Tag:', choices=[''], validators=[], default='#tinf')
+    # tag = SelectField('Tag:', choices=[''], validators=[])
     url = StringField('URL:', validators=[DataRequired()])
     watch = BooleanField('Watch:', validators=[])
     # https://stackoverflow.com/questions/39147578/set-wtforms-submit-button-to-icon
     # submit = SubmitField('Add')
 
     def init_tags(self, tags):
-        for tag in tags:
-            self.tag.choices.append(tag)
+        pass
+        # for tag in tags:
+        #     self.tag.choices.append(tag)
