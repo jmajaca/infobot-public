@@ -43,3 +43,12 @@
     background-color: lightgrey;
     margin-top:10vh;
 }
+
+.tag-add {
+    margin-left: 5vw;
+    cursor: pointer;
+}
+
+.card-top-spacing {
+    margin-top: 5vh;
+}

@@ -3,10 +3,10 @@
 <div>
     <div class="card center-div">
         <div class="card-header">
-            <h4>WATCH LIST</h4>
+            <h4>COURSE WATCH LIST</h4>
         </div>
         <ul class="list-group list-group-flush">
-            {% for course in courses %}
+            {% for course in watched_courses %}
                 <li class="list-group-item">
 
                     <div class="grid-wrapper-custom">
@@ -64,7 +64,13 @@
                     </div>
 
                     <div class="grid-watchlist-tag">
-                        {{ form.tag.label }}<br>
+                        <div>
+                            {{ form.tag.label }}
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle-fill tag-add" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4a.5.5 0 0 0-1 0v3.5H4a.5.5 0 0 0 0 1h3.5V12a.5.5 0 0 0 1 0V8.5H12a.5.5 0 0 0 0-1H8.5V4z"/>
+                            </svg>
+                            <br>
+                        </div>
                         {{ form.tag(class_="watchlist-common tag-input") }}
                     </div>
 
@@ -94,4 +100,61 @@
         </ul>
     </div>
 </div>
+
+<div class="card-top-spacing">
+    <div class="card center-div">
+        <div class="card-header">
+            <h4>UNWATCHED COURSES</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for course in unwatched_courses %}
+                <li class="list-group-item">
+
+                    <div class="grid-wrapper-custom">
+                        <div class="grid-watchlist-name">
+                            <label>Name:</label><br>
+                            <input type="text" value="{{course.name}}" class="watchlist-common">
+                        </div>
+
+                        <div class="grid-watchlist-tag">
+                            <label>Tag:</label><br>
+                            <select class="watchlist-common tag-input">
+                                {% for tag in tags %}
+                                    {% if tag == course.channel_tag %}
+                                        <option selected>{{tag}}</option>
+                                    {% else %}
+                                        <option>{{tag}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="grid-watchlist-url">
+                            <label>URL:</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">https://www.fer.unizg.hr/predmet/</span>
+                                </div>
+                                <input type="text" value="{{course.url}}" class="url-input watchlist-common" aria-describedby="basic-addon3">
+                            </div>
+                        </div>
+
+                        <div class="checkbox grid-watchlist-watch">
+                            <label>Watch:</label><br>
+                            <label>
+                                {% if course.watch %}
+                                    <input type="checkbox" data-toggle="toggle" class="watchlist-common" checked>
+                                {% else %}
+                                    <input type="checkbox" data-toggle="toggle" class="watchlist-common">
+                                {% endif %}
+                            </label>
+                        </div>
+                    </div>
+
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
 {% endblock content %}

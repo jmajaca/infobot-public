@@ -8,7 +8,7 @@ class WatchlistForm(FlaskForm):
     name = StringField('Name:', validators=[DataRequired()])
     tag = SelectField('Tag:', choices=[''], validators=[DataRequired()])
     url = StringField('URL:', validators=[DataRequired()])
-    watch = BooleanField('Watch:', validators=[DataRequired()])
+    watch = BooleanField('Watch:', validators=[])
     submit = SubmitField('Add')
 
     def init_tags(self, tags):

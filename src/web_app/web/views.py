@@ -8,8 +8,8 @@ from src.web_app.web.forms import WatchlistForm
 app_ui = Blueprint('app_ui', __name__, template_folder='templates')
 
 
-@app_ui.route('/ui/', methods=['GET', 'POST'])
-def show():
+@app_ui.route('/ui/course', methods=['GET', 'POST'])
+def course_handler():
     database = DataBase()
     form = WatchlistForm()
     courses = database.select_many(Course)
@@ -26,4 +26,8 @@ def show():
         form.tag.data = ''
         form.url.data = ''
         form.watch.data = True
-    return render_template('course_watch_list.html', courses=courses, tags=channel_tags, form=form), 200
+    watched = [course for course in courses if course.watch]
+    unwatched = [course for course in courses if not course.watch]
+    return render_template('course.html', watched_courses=watched, unwatched_courses=unwatched, tags=channel_tags,
+                           form=form), 200
+
