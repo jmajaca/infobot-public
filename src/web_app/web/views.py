@@ -19,8 +19,11 @@ def course_handler():
     channel_tags = [channel.tag for channel in channels]
     form.init_tags(channel_tags)
     if form.validate_on_submit():
+        watch = False
+        if request.form.get('watch_input') == 'on':
+            watch = True
         if form.id.data == -1:
-            new_course = Course(form.name.data, request.form.get('tag_select'), form.url.data, form.watch.data)
+            new_course = Course(form.name.data, request.form.get('tag_select'), form.url.data, watch)
             session.add(new_course)
             session.commit()
             session.flush()
@@ -29,7 +32,7 @@ def course_handler():
             course.name = form.name.data
             course.url = form.url.data
             course.channel_tag = request.form.get('tag_select')
-            # course.watch = form.watch.data
+            course.watch = watch
             session.commit()
             session.flush()
         courses = session.query(Course).all()
