@@ -17,4 +17,4 @@ def start_app():
 
 
 def start_app_windows():
-    app.run(config['flask_address'], config['flask_port'], False)
+    app.run(config['flask_address'], config['flask_port'], True)

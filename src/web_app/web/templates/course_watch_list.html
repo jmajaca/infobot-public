@@ -9,36 +9,45 @@
             {% for course in courses %}
                 <li class="list-group-item">
 
-                    <label>Name:</label>
-                    <input type="text" value="{{course.name}}">
-
-                    <label>Tag:</label>
-                    <select>
-                        {% for tag in tags %}
-                            {% if tag == course.channel_tag %}
-                                <option selected>{{tag}}</option>
-                            {% else %}
-                                <option>{{tag}}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-
-                    <label>URL:</label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">https://www.fer.unizg.hr/predmet/</span>
+                    <div class="grid-wrapper-custom">
+                        <div class="grid-watchlist-name">
+                            <label>Name:</label><br>
+                            <input type="text" value="{{course.name}}" class="watchlist-common">
                         </div>
-                        <input type="text" value="{{course.url}}" class="form-control" aria-describedby="basic-addon3">
-                    </div>
 
-                    <div class="checkbox">
-                        <label>
-                            {% if course.watch %}
-                                <input type="checkbox" data-toggle="toggle" checked> Watch
-                            {% else %}
-                                <input type="checkbox" data-toggle="toggle"> Watch
-                            {% endif %}
-                        </label>
+                        <div class="grid-watchlist-tag">
+                            <label>Tag:</label><br>
+                            <select class="watchlist-common tag-input">
+                                {% for tag in tags %}
+                                    {% if tag == course.channel_tag %}
+                                        <option selected>{{tag}}</option>
+                                    {% else %}
+                                        <option>{{tag}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="grid-watchlist-url">
+                            <label>URL:</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">https://www.fer.unizg.hr/predmet/</span>
+                                </div>
+                                <input type="text" value="{{course.url}}" class="url-input watchlist-common" aria-describedby="basic-addon3">
+                            </div>
+                        </div>
+
+                        <div class="checkbox grid-watchlist-watch">
+                            <label>Watch:</label><br>
+                            <label>
+                                {% if course.watch %}
+                                    <input type="checkbox" data-toggle="toggle" class="watchlist-common" checked>
+                                {% else %}
+                                    <input type="checkbox" data-toggle="toggle" class="watchlist-common">
+                                {% endif %}
+                            </label>
+                        </div>
                     </div>
 
                 </li>

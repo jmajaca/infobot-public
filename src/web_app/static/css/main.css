@@ -2,3 +2,44 @@
     width: 70%;
     margin: auto;
 }
+
+.grid-wrapper-custom {
+    display: grid;
+}
+
+.grid-watchlist-name {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.grid-watchlist-tag {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.grid-watchlist-url {
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+.grid-watchlist-watch {
+    grid-column-start: 4;
+    grid-column-end: 5;
+}
+
+.url-input {
+    width: 8vw;
+}
+
+.tag-input {
+    width: 8vw;
+}
+
+.watchlist-common {
+    height: 5vh;
+}
+
+.app-background {
+    background-color: lightgrey;
+    margin-top:10vh;
+}
