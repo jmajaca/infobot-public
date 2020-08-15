@@ -52,6 +52,45 @@
 
                 </li>
             {% endfor %}
+            <li class="list-group-item">
+                <form action="" method="post" novalidate class="grid-wrapper-custom">
+
+                    {{ form.hidden_tag() }}
+                    {{ form.csrf_token }}
+
+                    <div class="grid-watchlist-name">
+                        {{ form.name.label }}<br>
+                        {{ form.name(class_="watchlist-common") }}
+                    </div>
+
+                    <div class="grid-watchlist-tag">
+                        {{ form.tag.label }}<br>
+                        {{ form.tag(class_="watchlist-common tag-input") }}
+                    </div>
+
+                    <div class="grid-watchlist-url">
+                        {{ form.url.label }}<br>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">https://www.fer.unizg.hr/predmet/</span>
+                            </div>
+                            {{ form.url(class_="watchlist-common url-input") }}
+                        </div>
+                    </div>
+
+                    <div class="checkbox grid-watchlist-watch">
+                        {{ form.watch.label }}<br>
+                        <label>
+                            {{ form.watch(class_="watchlist-common", data_toggle="toggle", checked=True) }}
+                        </label>
+                    </div>
+
+                    <div>
+                        <p>{{ form.submit() }}</p>
+                    </div>
+
+                </form>
+            </li>
         </ul>
     </div>
 </div>

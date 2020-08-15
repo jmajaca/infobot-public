@@ -6,7 +6,9 @@ from src.web_app.web.views import app_ui
 # https://stackoverflow.com/questions/11994325/how-to-divide-flask-app-into-multiple-py-files
 
 app = Flask(__name__, template_folder='application/templates')
+app.config['SECRET_KEY'] = 'you-will-never-guess'
 app.register_blueprint(app_ui)
+
 
 def start_app():
     global config
