@@ -8,11 +8,12 @@ from src.main.helper import *
 from src.main.reactions import count_reactions
 from src.models.base import DataBase
 from src.models.model_list import Notification, Course
+from src.web_app.flask_app import start_app_windows
 
 
 def start():
     database = DataBase()
-    # start_app()
+    start_app_windows()
     logger.info_log('Program started.')
     refresh_active_courses.start()
     courses = database.select_many(Course, watch=True)
