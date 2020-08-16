@@ -64,7 +64,7 @@
     margin-bottom: 10vh;
 }
 
-.course-add, .course-reset, .course-delete, .tag-add {
+.course-add, .course-reset, .course-delete, .course-archive, .tag-add {
 	background: none;
 	color: inherit;
 	border: none;

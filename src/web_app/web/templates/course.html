@@ -26,12 +26,9 @@
                             <label>
                                 <select class="watchlist-common tag-input selectpicker dropdown" name="tag_select"
                                     data-live-search="true" data-width="130px" data-dropup-auto="false">
+                                    <option selected>{{course.channel_tag}}</option>
                                     {% for tag in tags %}
-                                        {% if tag == course.channel_tag %}
-                                            <option selected>{{tag}}</option>
-                                        {% else %}
-                                            <option>{{tag}}</option>
-                                        {% endif %}
+                                        <option>{{tag}}</option>
                                     {% endfor %}
                                 </select>
                             </label>
@@ -55,20 +52,33 @@
                         </div>
 
                         <div class="grid-watchlist-actions">
-                            <button type="submit" class="course-add">
+                            <button type="submit" class="course-add" data-toggle="tooltip" data-placement="bottom" title="Save">
                                 <svg id="submit-icon" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-check2" fill="currentColor" xmlns="http://www.w3.org/2000/svg" onclick="">
                                     <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
                                 </svg>
                             </button>
 
-                            <button type="reset" class="course-reset">
+                            <button type="reset" class="course-reset" data-toggle="tooltip" data-placement="bottom" title="Reset">
                                 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-arrow-repeat" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M2.854 7.146a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L2.5 8.207l1.646 1.647a.5.5 0 0 0 .708-.708l-2-2zm13-1a.5.5 0 0 0-.708 0L13.5 7.793l-1.646-1.647a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0 0-.708z"/>
                                     <path fill-rule="evenodd" d="M8 3a4.995 4.995 0 0 0-4.192 2.273.5.5 0 0 1-.837-.546A6 6 0 0 1 14 8a.5.5 0 0 1-1.001 0 5 5 0 0 0-5-5zM2.5 7.5A.5.5 0 0 1 3 8a5 5 0 0 0 9.192 2.727.5.5 0 1 1 .837.546A6 6 0 0 1 2 8a.5.5 0 0 1 .501-.5z"/>
                                 </svg>
                             </button>
 
-                            <button type="button" class="course-delete" id="deleteCourse" onclick="delete_course('{{course.id}}')">
+                            {% if course.channel_tag != '#general' %}
+
+                                <button type="button" class="course-archive" data-toggle="tooltip" data-placement="bottom" title="Archive">
+                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-file-arrow-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                      <path fill-rule="evenodd" d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z"/>
+                                      <path fill-rule="evenodd" d="M4.646 8.146a.5.5 0 0 1 .708 0L8 10.793l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
+                                      <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6A.5.5 0 0 1 8 4z"/>
+                                    </svg>
+                                </button>
+
+                            {% endif %}
+
+                            <button type="button" class="course-delete" id="deleteCourse" onclick="delete_course('{{course.id}}')"
+                                    data-toggle="tooltip" data-placement="bottom" title="Delete">
                                 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
                                     <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
@@ -185,12 +195,9 @@
                             <label>
                                 <select class="watchlist-common tag-input selectpicker dropdown" name="tag_select"
                                     data-live-search="true" data-width="130px" data-dropup-auto="false">
+                                    <option selected>{{course.channel_tag}}</option>
                                     {% for tag in tags %}
-                                        {% if tag == course.channel_tag %}
-                                            <option selected>{{tag}}</option>
-                                        {% else %}
-                                            <option>{{tag}}</option>
-                                        {% endif %}
+                                        <option>{{tag}}</option>
                                     {% endfor %}
                                 </select>
                             </label>
@@ -258,6 +265,12 @@
     function refresh_page() {
         window.location.href = '/ui/course';
     }
+</script>
+
+<script>
+    $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 
 <!-- END JS SCRIPTS -->

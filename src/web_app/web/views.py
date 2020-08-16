@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from flask import Blueprint, render_template, request, redirect, url_for
 
 from src.models.base import DataBase, Session
@@ -19,9 +18,6 @@ def course_handler():
     courses = session.query(Course).all()
     for course in courses:
         course.url = course.url.split('/')[-1]
-    channels = session.query(Channel).all()
-    channel_tags = [channel.tag for channel in channels]
-    form.init_tags(channel_tags)
     if form.validate_on_submit():
         watch = False
         if request.form.get('watch_input') == 'on':
@@ -46,6 +42,13 @@ def course_handler():
     watched = [course for course in courses if course.watch]
     unwatched = [course for course in courses if not course.watch]
     users = session.query(SlackUser).filter(SlackUser.name != 'infobot').all()
+    # channels = session.query(Channel).all()
+    channels = session.query(Channel).outerjoin(Course, Channel.tag == Course.channel_tag).filter(
+        Course.channel_tag == None).all()
+    print(channels)
+    channel_tags = [channel.tag for channel in channels]
+    if not channel_tags.__contains__('#general'):
+        channel_tags.append('#general')
     return render_template('course.html', watched_courses=watched, unwatched_courses=unwatched, tags=channel_tags,
                            form=form, users=users), 200
 
