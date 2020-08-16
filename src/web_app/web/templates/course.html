@@ -67,7 +67,8 @@
 
                             {% if course.channel_tag != '#general' %}
 
-                                <button type="button" class="course-archive" data-toggle="tooltip" data-placement="bottom" title="Archive">
+                                <button type="button" class="course-archive" data-toggle="tooltip" data-placement="bottom"
+                                        title="Archive" onclick="archive('{{course.channel_tag}}')">
                                     <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-file-arrow-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                       <path fill-rule="evenodd" d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z"/>
                                       <path fill-rule="evenodd" d="M4.646 8.146a.5.5 0 0 1 .708 0L8 10.793l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
@@ -262,6 +263,16 @@
             setTimeout(refresh_page, 500);
         }
     }
+
+    function archive(tag) {
+        let response = confirm("Are you sure you want to archive this channel?");
+        if (response) {
+            console.log(tag)
+            $.post("/ui/channel/archive?tag=" + tag.substr(1), function(data){},"json");
+            setTimeout(refresh_page, 500);
+        }
+    }
+
     function refresh_page() {
         window.location.href = '/ui/course';
     }

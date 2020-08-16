@@ -45,7 +45,6 @@ def course_handler():
     # channels = session.query(Channel).all()
     channels = session.query(Channel).outerjoin(Course, Channel.tag == Course.channel_tag).filter(
         Course.channel_tag == None).all()
-    print(channels)
     channel_tags = [channel.tag for channel in channels]
     if not channel_tags.__contains__('#general'):
         channel_tags.append('#general')
@@ -76,6 +75,20 @@ def add_channel_tag():
     session.add(channel_model)
     client.conversations_setTopic(channel=channel['id'], topic=topic)
     client.conversations_invite(channel=channel['id'], users=users)
+    session.commit()
+    session.flush()
+    return redirect(url_for('app_ui.course_handler'))
+
+
+@app_ui.route('/ui/channel/archive', methods=['POST'])
+def archive_channel():
+    session = Session()
+    channel_tag = '#' + request.args.get('tag')
+    channel = session.query(Channel).filter(Channel.tag == channel_tag).first()
+    client.conversations_archive(channel=channel.id)
+    course = session.query(Course).filter(Course.channel_tag == channel_tag).first()
+    course.watch = False
+    session.add(course)
     session.commit()
     session.flush()
     return redirect(url_for('app_ui.course_handler'))
