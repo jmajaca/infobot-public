@@ -10,7 +10,6 @@ app_ui = Blueprint('app_ui', __name__, template_folder='templates')
 
 @app_ui.route('/ui/course', methods=['GET', 'POST'])
 def course_handler():
-    print('XX'*50)
     session = Session()
     form = WatchlistForm()
     courses = session.query(Course).all()
@@ -54,10 +53,3 @@ def course_delete():
     session.commit()
     session.flush()
     return redirect(url_for('app_ui.course_handler'))
-
-
-# background process happening without any refreshing
-@app_ui.route('/background_process_test')
-def background_process_test():
-    print("Hello")
-    return "nothing"

@@ -240,12 +240,21 @@
     </div>
 </div>
 
+<!-- JS SCRIPTS -->
+
 <script type=text/javascript>
     function delete_course(id) {
-        $.post("/ui/course/delete?id=" + id, function(data){},"json");
+        let response = confirm("Are you sure you want to delete this course from database?");
+        if (response) {
+            $.post("/ui/course/delete?id=" + id, function(data){},"json");
+            setTimeout(refresh_page, 500);
+        }
+    }
+    function refresh_page() {
         window.location.href = '/ui/course';
     }
 </script>
 
+<!-- END JS SCRIPTS -->
 
 {% endblock content %}
