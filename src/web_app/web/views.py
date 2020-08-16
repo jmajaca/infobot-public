@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 
 from src.models.base import DataBase, Session
 from src.models.channel import Channel
@@ -10,6 +10,7 @@ app_ui = Blueprint('app_ui', __name__, template_folder='templates')
 
 @app_ui.route('/ui/course', methods=['GET', 'POST'])
 def course_handler():
+    print('XX'*50)
     session = Session()
     form = WatchlistForm()
     courses = session.query(Course).all()
@@ -43,3 +44,20 @@ def course_handler():
     unwatched = [course for course in courses if not course.watch]
     return render_template('course.html', watched_courses=watched, unwatched_courses=unwatched, tags=channel_tags,
                            form=form), 200
+
+
+@app_ui.route('/ui/course/delete', methods=['POST'])
+def course_delete():
+    course_id = request.args.get('id')
+    session = Session()
+    session.query(Course).filter(Course.id == course_id).delete()
+    session.commit()
+    session.flush()
+    return redirect(url_for('app_ui.course_handler'))
+
+
+# background process happening without any refreshing
+@app_ui.route('/background_process_test')
+def background_process_test():
+    print("Hello")
+    return "nothing"
