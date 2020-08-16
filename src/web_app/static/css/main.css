@@ -60,6 +60,10 @@
     margin-top: 5vh;
 }
 
+.card-bottom-spacing {
+    margin-bottom: 10vh;
+}
+
 .course-add, .course-reset, .course-delete  {
 	background: none;
 	color: inherit;
@@ -68,4 +72,12 @@
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+}
+
+.add-course-buttons {
+    margin-right: 1.85vw;
+}
+
+.watch-label {
+    margin-left: -1.2vw;
 }

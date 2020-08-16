@@ -47,7 +47,7 @@
                         </div>
 
                         <div class="checkbox grid-watchlist-watch">
-                            <label>Watch:</label><br>
+                            <label class="watch-label">Watch:</label><br>
                             <label>
                                 <input name="watch_input" type="checkbox" data-toggle="toggle" class="watchlist-common" {% if course.watch %} checked {% endif %}>
                             </label>
@@ -126,13 +126,13 @@
                     </div>
 
                     <div class="checkbox grid-watchlist-watch">
-                        <label>Watch:</label><br>
+                        <label class="watch-label">Watch:</label><br>
                         <label>
                             <input name="watch_input" type="checkbox" data-toggle="toggle" class="watchlist-common" checked>
                         </label>
                     </div>
 
-                    <div class="grid-watchlist-actions">
+                    <div class="grid-watchlist-actions add-course-buttons">
                         <button type="submit" class="course-add">
                             <svg id="submit-icon" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-check2" fill="currentColor" xmlns="http://www.w3.org/2000/svg" onclick="">
                                 <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
@@ -155,10 +155,10 @@
     </div>
 </div>
 
-<div class="card-top-spacing">
+<div class="card-top-spacing card-bottom-spacing">
     <div class="card center-div">
         <div class="card-header">
-            <h4>COURSE WATCH LIST</h4>
+            <h4>UNWATCHED COURSE LIST</h4>
         </div>
         <ul class="list-group list-group-flush">
             {% for course in unwatched_courses %}
@@ -202,7 +202,7 @@
                         </div>
 
                         <div class="checkbox grid-watchlist-watch">
-                            <label>Watch:</label><br>
+                            <label class="watch-label">Watch:</label><br>
                             <label>
                                 <input name="watch_input" type="checkbox" data-toggle="toggle" class="watchlist-common" {% if course.watch %} checked {% endif %}>
                             </label>
