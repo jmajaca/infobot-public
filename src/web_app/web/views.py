@@ -1,9 +1,13 @@
+from datetime import datetime
+
 from flask import Blueprint, render_template, request, redirect, url_for
 
 from src.models.base import DataBase, Session
 from src.models.channel import Channel
 from src.models.course import Course
+from src.models.slack_user import SlackUser
 from src.web_app.web.forms import WatchlistForm
+from src.main import client
 
 app_ui = Blueprint('app_ui', __name__, template_folder='templates')
 
@@ -41,8 +45,9 @@ def course_handler():
         form.watch.data = True
     watched = [course for course in courses if course.watch]
     unwatched = [course for course in courses if not course.watch]
+    users = session.query(SlackUser).filter(SlackUser.name != 'infobot').all()
     return render_template('course.html', watched_courses=watched, unwatched_courses=unwatched, tags=channel_tags,
-                           form=form), 200
+                           form=form, users=users), 200
 
 
 @app_ui.route('/ui/course/delete', methods=['POST'])
@@ -50,6 +55,24 @@ def course_delete():
     course_id = request.args.get('id')
     session = Session()
     session.query(Course).filter(Course.id == course_id).delete()
+    session.commit()
+    session.flush()
+    return redirect(url_for('app_ui.course_handler'))
+
+
+@app_ui.route('/ui/channel', methods=['POST'])
+def add_channel_tag():
+    session = Session()
+    channel_tag = request.form.get('tag')
+    topic = request.form.get('topic')
+    users = request.form.getlist('user_select')
+    response = client.conversations_create(name=channel_tag, is_private=False)
+    channel = response['channel']
+    channel_model = Channel(channel['id'], '#' + channel['name'], channel['creator'], datetime.fromtimestamp(
+        channel['created']))
+    session.add(channel_model)
+    client.conversations_setTopic(channel=channel['id'], topic=topic)
+    client.conversations_invite(channel=channel['id'], users=users)
     session.commit()
     session.flush()
     return redirect(url_for('app_ui.course_handler'))

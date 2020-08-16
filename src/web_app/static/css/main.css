@@ -51,7 +51,7 @@
     margin-top:10vh;
 }
 
-.tag-add {
+.tag-add-position {
     margin-left: 5vw;
     cursor: pointer;
 }
@@ -64,7 +64,7 @@
     margin-bottom: 10vh;
 }
 
-.course-add, .course-reset, .course-delete  {
+.course-add, .course-reset, .course-delete, .tag-add {
 	background: none;
 	color: inherit;
 	border: none;
