@@ -3,7 +3,10 @@
 <div>
     <div class="card center-div">
         <div class="card-header">
-            <h4>COURSE WATCH LIST</h4>
+            <h4 data-toggle="tooltip" data-placement="top"
+                title="List of non-archived courses for which infobot is scraping data">
+                COURSE WATCH LIST
+            </h4>
         </div>
         <ul class="list-group list-group-flush">
             {% for course in watched_courses %}
@@ -51,7 +54,7 @@
                             </label>
                         </div>
 
-                        <div class="grid-watchlist-actions">
+                        <div class="grid-watchlist-actions" {% if course.channel_tag == '#general' %} style="margin-right: 2vw;" {% endif %}>
                             <button type="submit" class="course-add" data-toggle="tooltip" data-placement="bottom" title="Save">
                                 <svg id="submit-icon" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-check2" fill="currentColor" xmlns="http://www.w3.org/2000/svg" onclick="">
                                     <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
@@ -173,10 +176,112 @@
 <div class="card-top-spacing card-bottom-spacing">
     <div class="card center-div">
         <div class="card-header">
-            <h4>UNWATCHED COURSE LIST</h4>
+            <h4 data-toggle="tooltip" data-placement="top"
+                title="List of non-archived courses for which infobot is NOT scraping data">
+                UNWATCHED COURSE LIST
+            </h4>
         </div>
         <ul class="list-group list-group-flush">
             {% for course in unwatched_courses %}
+                <li class="list-group-item">
+
+                    <form class="grid-wrapper-custom" action="{{url_for('app_ui.course_handler')}}" method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.csrf_token }}
+                        <div hidden>
+                            {{ form.id(value=course.id) }}
+                        </div>
+
+                        <div class="grid-watchlist-name">
+                            {{ form.name.label }}<br>
+                            {{ form.name(class_="watchlist-common", value=course.name) }}
+                        </div>
+
+                        <div class="grid-watchlist-tag">
+                            <label>Tag:</label><br>
+                            <label>
+                                <select class="watchlist-common tag-input selectpicker dropdown" name="tag_select"
+                                    data-live-search="true" data-width="130px" data-dropup-auto="false">
+                                    <option selected>{{course.channel_tag}}</option>
+                                    {% for tag in tags %}
+                                        <option>{{tag}}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </div>
+
+                        <div class="grid-watchlist-url">
+                            {{ form.url.label }}<br>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">https://www.fer.unizg.hr/predmet/</span>
+                                </div>
+                                {{ form.url(class_="watchlist-common url-input", value=course.url) }}
+                            </div>
+                        </div>
+
+                        <div class="checkbox grid-watchlist-watch">
+                            <label class="watch-label">Watch:</label><br>
+                            <label>
+                                <input name="watch_input" type="checkbox" data-toggle="toggle" class="watchlist-common" {% if course.watch %} checked {% endif %}>
+                            </label>
+                        </div>
+
+                        <div class="grid-watchlist-actions" {% if course.channel_tag == '#general' %} style="margin-right: 2vw;" {% endif %}>
+                            <button type="submit" class="course-add">
+                                <svg id="submit-icon" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-check2" fill="currentColor" xmlns="http://www.w3.org/2000/svg" onclick="">
+                                    <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                            </button>
+
+                            <button type="reset" class="course-reset">
+                                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-arrow-repeat" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M2.854 7.146a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L2.5 8.207l1.646 1.647a.5.5 0 0 0 .708-.708l-2-2zm13-1a.5.5 0 0 0-.708 0L13.5 7.793l-1.646-1.647a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0 0-.708z"/>
+                                    <path fill-rule="evenodd" d="M8 3a4.995 4.995 0 0 0-4.192 2.273.5.5 0 0 1-.837-.546A6 6 0 0 1 14 8a.5.5 0 0 1-1.001 0 5 5 0 0 0-5-5zM2.5 7.5A.5.5 0 0 1 3 8a5 5 0 0 0 9.192 2.727.5.5 0 1 1 .837.546A6 6 0 0 1 2 8a.5.5 0 0 1 .501-.5z"/>
+                                </svg>
+                            </button>
+
+                            {% if course.channel_tag != '#general' %}
+
+                                <button type="button" class="course-archive" data-toggle="tooltip" data-placement="bottom"
+                                        title="Archive" onclick="archive('{{course.channel_tag}}')">
+                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-file-arrow-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                      <path fill-rule="evenodd" d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z"/>
+                                      <path fill-rule="evenodd" d="M4.646 8.146a.5.5 0 0 1 .708 0L8 10.793l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/>
+                                      <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6A.5.5 0 0 1 8 4z"/>
+                                    </svg>
+                                </button>
+
+                            {% endif %}
+
+                            <button type="button" class="course-delete" onclick="delete_course('{{course.id}}')">
+                                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
+                                  <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
+                                </svg>
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
+
+<div class="card-top-spacing card-bottom-spacing">
+    <div class="card center-div">
+        <div class="card-header">
+            <h4 data-toggle="tooltip" data-placement="top"
+                title="List of archived courses for which infobot is not scraping data">
+                ARCHIVED COURSE LIST
+            </h4>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for course in archived_courses %}
                 <li class="list-group-item">
 
                     <form class="grid-wrapper-custom" action="{{url_for('app_ui.course_handler')}}" method="post">
@@ -235,6 +340,20 @@
                                 </svg>
                             </button>
 
+                            {% if course.channel_tag != '#general' %}
+
+                                <button type="button" class="course-archive" data-toggle="tooltip" data-placement="bottom"
+                                        title="Unarchive option is disabled for now">
+                                    <!-- onclick="unarchive('{{course.channel_tag}}')" -->
+                                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-file-arrow-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z"/>
+                                        <path fill-rule="evenodd" d="M4.646 7.854a.5.5 0 0 0 .708 0L8 5.207l2.646 2.647a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 0 0 0 .708z"/>
+                                        <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 0 .5.5z"/>
+                                    </svg>
+                                </button>
+
+                            {% endif %}
+
                             <button type="button" class="course-delete" onclick="delete_course('{{course.id}}')">
                                 <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                   <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
@@ -269,6 +388,15 @@
         if (response) {
             console.log(tag)
             $.post("/ui/channel/archive?tag=" + tag.substr(1), function(data){},"json");
+            setTimeout(refresh_page, 500);
+        }
+    }
+
+    function unarchive(tag) {
+        let response = confirm("Are you sure you want to unarchive this channel?");
+        if (response) {
+            console.log(tag)
+            $.post("/ui/channel/unarchive?tag=" + tag.substr(1), function(data){},"json");
             setTimeout(refresh_page, 500);
         }
     }
