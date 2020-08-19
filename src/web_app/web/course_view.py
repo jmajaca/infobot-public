@@ -8,10 +8,10 @@ from src.models.slack_user import SlackUser
 from src.web_app.web.forms import WatchlistForm
 from src.main import client
 
-app_ui = Blueprint('app_ui', __name__, template_folder='templates')
+app_course = Blueprint('app_course', __name__, template_folder='templates')
 
 
-@app_ui.route('/ui/course', methods=['GET', 'POST'])
+@app_course.route('/ui/course', methods=['GET', 'POST'])
 def course_handler():
     session = Session()
     form = WatchlistForm()
@@ -54,7 +54,7 @@ def course_handler():
                            form=form, users=users, archived_courses=archived), 200
 
 
-@app_ui.route('/ui/course/delete', methods=['POST'])
+@app_course.route('/ui/course/delete', methods=['POST'])
 def course_delete():
     course_id = request.args.get('id')
     session = Session()
@@ -68,7 +68,7 @@ def course_delete():
     return redirect(url_for('app_ui.course_handler'))
 
 
-@app_ui.route('/ui/channel', methods=['POST'])
+@app_course.route('/ui/channel', methods=['POST'])
 def add_channel_tag():
     session = Session()
     channel_tag = request.form.get('tag')
@@ -86,7 +86,7 @@ def add_channel_tag():
     return redirect(url_for('app_ui.course_handler'))
 
 
-@app_ui.route('/ui/channel/archive', methods=['POST'])
+@app_course.route('/ui/channel/archive', methods=['POST'])
 def archive_channel():
     session = Session()
     channel_tag = '#' + request.args.get('tag')
@@ -102,7 +102,7 @@ def archive_channel():
     return redirect(url_for('app_ui.course_handler'))
 
 
-@app_ui.route('/ui/channel/unarchive', methods=['POST'])
+@app_course.route('/ui/channel/unarchive', methods=['POST'])
 def unarchive_channel():
     session = Session()
     channel_tag = '#' + request.args.get('tag')
