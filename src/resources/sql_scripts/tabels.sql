@@ -24,7 +24,8 @@ CREATE TABLE channel(
     id VARCHAR(64) PRIMARY KEY,
     tag VARCHAR(64) UNIQUE NOT NULL,
     creator_id VARCHAR(64) NOT NULL REFERENCES slack_user(id),
-    created TIMESTAMP NOT NULL
+    created TIMESTAMP NOT NULL,
+    archived BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE course(
@@ -32,7 +33,7 @@ CREATE TABLE course(
     name VARCHAR(64) UNIQUE NOT NULL,
     channel_tag VARCHAR(64) REFERENCES channel(tag),
     url VARCHAR(64) DEFAULT NULL,
-    watch BOOLEAN DEFAULT TRUE
+    watch BOOLEAN DEFAULT TRUE NOT NULL
 );
 
 CREATE TABLE author(

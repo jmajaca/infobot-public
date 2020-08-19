@@ -1,4 +1,4 @@
-from src.web.flask_app import app
+from src.web_app.flask_app import app
 from flask import request, Response
 from src.main import client
 from src.main.reactions import count_reactions, generate_reactions_message

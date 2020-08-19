@@ -1,0 +1,83 @@
+.center-div {
+    width: 75%;
+    margin: auto;
+}
+
+.grid-wrapper-custom {
+    display: grid;
+}
+
+.grid-watchlist-name {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.grid-watchlist-tag {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.grid-watchlist-url {
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+.grid-watchlist-watch {
+    grid-column-start: 4;
+    grid-column-end: 5;
+}
+
+.grid-watchlist-actions {
+    grid-column-start: 5;
+    grid-column-end: 6;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.url-input {
+    width: 8vw;
+}
+
+.tag-input {
+    width: 8vw;
+}
+
+.watchlist-common {
+    height: 5vh;
+}
+
+.app-background {
+    background-color: lightgrey;
+    margin-top:10vh;
+}
+
+.tag-add-position {
+    margin-left: 5vw;
+    cursor: pointer;
+}
+
+.card-top-spacing {
+    margin-top: 5vh;
+}
+
+.card-bottom-spacing {
+    margin-bottom: 10vh;
+}
+
+.course-add, .course-reset, .course-delete, .course-archive, .tag-add {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.add-course-buttons {
+    margin-right: 3.8vw;
+}
+
+.watch-label {
+    margin-left: -1.2vw;
+}
