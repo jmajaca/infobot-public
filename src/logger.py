@@ -40,3 +40,15 @@ class Logger:
     def warning_log(self, text):
         with open(self.log_file, 'a', encoding="utf-8") as log:
             log.write('[' + str(datetime.now()) + '] WARNING: ' + text + '\n')
+
+    def read_application_log(self):
+        with open(self.log_file, 'r', errors='ignore') as log:
+            content = log.readlines()
+            content = [x.strip()[:-1] if x[-1] == '\n' else x.strip() for x in content]
+            return content
+
+    def read_application_trace(self):
+        with open(self.trace_file, 'r', errors='ignore') as log:
+            content = log.readlines()
+            content = [x.strip()[:-1] if x[-1] == '\n' else x.strip() for x in content]
+            return content

@@ -6,18 +6,88 @@
 			<span class="progress-bar-label">0%</span>
 		</div>
 	</div>
+	<div style="text-align: center" id="progress-bar-action">
+		ACTION
+	</div>
+	<div>
+		<table class="table table-hover table-sm">
+			<thead>
+				<tr>
+					<th scope="col">Timestamp</th>
+					<th scope="col">Type</th>
+					<th scope="col">Message</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for log in logs %}
+
+					<tr {% if log.type == 'TRACE' %}
+						style="cursor:pointer" data-toggle="modal" data-target="#traceModal"
+						{% endif %}>
+						<td>{{log.timestamp}}</td>
+						{% if log.type == 'INFO'%}
+							<td class="info-text">{{log.type}}</td>
+						{% elif log.type == 'ERROR'%}
+							<td class="error-text">{{log.type}}</td>
+						{% elif log.type == 'WARNING'%}
+							<td class="warning-text">{{log.type}}</td>
+						{% elif log.type == 'TRACE'%}
+							<td data-id="{{log.trace}}" class="trace-text">{{log.type}}</td>
+						{% else %}
+							<td>{{log.type}}</td>
+						{% endif %}
+						<td>{{log.message}}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
 </div>
 
 <script>
 
 	var source = new EventSource("/ui/home/progress");
 	source.onmessage = function(event) {
-		$('.progress-bar').css('width', event.data+'%').attr('aria-valuenow', event.data);
-		$('.progress-bar-label').text(event.data+'%');
+		const data = event.data.split(',')
+		$('.progress-bar').css('width', data[0]+'%').attr('aria-valuenow', data[0]);
+		$('.progress-bar-label').text(data[0]+'%');
+		$('#progress-bar-action').text(data[1])
 
-		if(event.data === 100){
+		if(data[0] === 100){
 			source.close()
 		}
 	}
-	</script>
+
+
+	$(document).on("click", ".trace-text", function () {
+		var trace = $(this).data('id');
+		$("#showTrace").val( trace );
+	});
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="traceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Trace log</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+			<textarea id="showTrace" disabled ></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End modal -->
+
 {% endblock content %}
