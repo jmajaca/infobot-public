@@ -1,7 +1,7 @@
 import gc
 import time
 
-from src import logger
+from src import logger, progress_queue
 from src.main import client, scraper
 from src.main import refresh_active_courses
 from src.main.helper import *
@@ -13,9 +13,8 @@ from src.web_app.flask_app import start_app_windows
 
 def start():
     database = DataBase()
-    start_app_windows()
     logger.info_log('Program started.')
-    refresh_active_courses.start()
+    # refresh_active_courses.start()
     courses = database.select_many(Course, watch=True)
     # count_reactions(client)
     timeout = 600
@@ -25,6 +24,7 @@ def start():
             check_pins(client)
             check_reminders(client)
             notifications = scraper.scrape_notifications(courses)
+            progress_queue.put(40)
             print('Scraping phase done.')
             # TODO catch exception do in main
             if notifications is None:
@@ -33,7 +33,9 @@ def start():
                 notifications = []
             else:
                 timeout = 600
-            for notification in notifications:
+            for i in range(len(notifications)):
+                progress_queue.put(80)
+                notification = notifications[i]
                 result = database.select(Notification, title=notification.title, site=notification.site,
                                          author=notification.author, publish_date=notification.publish_date,
                                          text=notification.text, link=notification.link)

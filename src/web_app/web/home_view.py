@@ -20,12 +20,14 @@ def home():
 @app_home.route('/ui/home/progress')
 def progress():
     def generate():
-        x = 0
+        x = progress_queue.get()
         action = 'ACTION PLACEHOLDER'
         while x <= 100:
+            print(x)
             yield "data:" + str(x) + ',' + action + "\n\n"
-            x = x + 10
-            time.sleep(0.5)
+            x = progress_queue.get()
+            # x = x + 10
+            # time.sleep(0.5)
 
     return Response(generate(), mimetype='text/event-stream')
 

@@ -44,7 +44,10 @@ def generate_notifications(fer_url, payload, html_parser, headers, courses):
     check_element = soup.find('li', {'class': 'home-page'})
     if not check_element.text.__contains__('Intranet'):
         raise errors.LoginError
-    for course in courses:
+    # progress_queue.put(init_progress)
+    for i in range(len(courses)):
+        course = courses[i]
+        # progress_queue.put(init_progress + int(scrape_progress/(i+1)))
         link = course.url + '/obavijesti'
         notification = dict()
         raw_html = session.get(link, headers=headers, data=payload).text
