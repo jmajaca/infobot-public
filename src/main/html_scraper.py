@@ -1,9 +1,11 @@
 import re
+import time
+
 import requests
 
 from datetime import datetime
 from bs4 import BeautifulSoup
-from src import errors
+from src import errors, progress_queue, init_progress, scrape_progress, none_progress
 from src import logger
 from src.main.helper import create_notification_object
 
@@ -44,15 +46,18 @@ def generate_notifications(fer_url, payload, html_parser, headers, courses):
     check_element = soup.find('li', {'class': 'home-page'})
     if not check_element.text.__contains__('Intranet'):
         raise errors.LoginError
-    # progress_queue.put(init_progress)
+    progress_queue.put((init_progress, 'Setup done'))
     for i in range(len(courses)):
+        time.sleep(2)
         course = courses[i]
-        # progress_queue.put(init_progress + int(scrape_progress/(i+1)))
+        progress_queue.put((None, 'Scraping \'' + course.name + '\''))
         link = course.url + '/obavijesti'
         notification = dict()
-        raw_html = session.get(link, headers=headers, data=payload).text
+        raw_html = session.get('https://' + link, headers=headers, data=payload).text
         soup = BeautifulSoup(raw_html, html_parser)
-        for news_article in soup.findAll('div', {'class': 'news_article'}):
+        news_articles = soup.findAll('div', {'class': 'news_article'})
+        for j in range(len(news_articles)):
+            news_article = news_articles[j]
             title_element = news_article.find('div', {'class': 'news_title'})
             notification['link'] = fer_url + title_element.a['href']
             notification['title'] = title_element.get_text().rstrip().lstrip()
@@ -93,6 +98,7 @@ def generate_notifications(fer_url, payload, html_parser, headers, courses):
             text = BeautifulSoup(text, html_parser).get_text()
             notification['text'] = tune_italic_bold(text)
             info.append(create_notification_object(notification))
+        progress_queue.put((init_progress + int(scrape_progress/(len(courses))) * (i+1), 'Scraping \'' + course.name + '\' done'))
     session.get(fer_url + '/login/Logout?logout=1')
     return info
 

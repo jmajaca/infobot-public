@@ -65,7 +65,7 @@ def course_delete():
     session.query(Course).filter(Course.id == course_id).delete()
     session.commit()
     session.flush()
-    return redirect(url_for('app_ui.course_handler'))
+    return redirect(url_for('app_course.course_handler'))
 
 
 @app_course.route('/ui/channel', methods=['POST'])
@@ -83,7 +83,7 @@ def add_channel_tag():
     client.conversations_invite(channel=channel['id'], users=users)
     session.commit()
     session.flush()
-    return redirect(url_for('app_ui.course_handler'))
+    return redirect(url_for('app_course.course_handler'))
 
 
 @app_course.route('/ui/channel/archive', methods=['POST'])
@@ -99,7 +99,7 @@ def archive_channel():
     session.add(course)
     session.commit()
     session.flush()
-    return redirect(url_for('app_ui.course_handler'))
+    return redirect(url_for('app_course.course_handler'))
 
 
 @app_course.route('/ui/channel/unarchive', methods=['POST'])
@@ -116,4 +116,4 @@ def unarchive_channel():
     session.add(channel)
     session.commit()
     session.flush()
-    return redirect(url_for('app_ui.course_handler'))
+    return redirect(url_for('app_course.course_handler'))

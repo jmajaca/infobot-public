@@ -1,8 +1,5 @@
-import os
 import re
-import time
-import json
-from src import logger
+from src import logger, progress_queue
 from flask import Blueprint, render_template, Response
 
 app_home = Blueprint('app_home', __name__, template_folder='templates')
@@ -20,15 +17,15 @@ def home():
 @app_home.route('/ui/home/progress')
 def progress():
     def generate():
-        x = progress_queue.get()
-        action = 'ACTION PLACEHOLDER'
-        while x <= 100:
-            print(x)
-            yield "data:" + str(x) + ',' + action + "\n\n"
-            x = progress_queue.get()
-            # x = x + 10
-            # time.sleep(0.5)
-
+        progress_num = 0
+        action = ''
+        while progress_num <= 100:
+            data = progress_queue.get()
+            if data[0] is not None:
+                progress_num = data[0]
+            if data[1] is not None:
+                action = data[1]
+            yield "data:" + str(progress_num) + ',' + action + "\n\n"
     return Response(generate(), mimetype='text/event-stream')
 
 
