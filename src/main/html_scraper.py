@@ -5,7 +5,7 @@ import requests
 
 from datetime import datetime
 from bs4 import BeautifulSoup
-from src import errors, progress_queue, init_progress, scrape_progress, none_progress
+from src import errors, progress_queue, init_progress, scrape_progress
 from src import logger
 from src.main.helper import create_notification_object
 
@@ -47,10 +47,11 @@ def generate_notifications(fer_url, payload, html_parser, headers, courses):
     if not check_element.text.__contains__('Intranet'):
         raise errors.LoginError
     progress_queue.put((init_progress, 'Setup done'))
+    course_progress = int(scrape_progress / (len(courses)))
     for i in range(len(courses)):
         time.sleep(2)
         course = courses[i]
-        progress_queue.put((None, 'Scraping \'' + course.name + '\''))
+        progress_queue.put((None, 'Scraping course \'%s\'' % course.name))
         link = course.url + '/obavijesti'
         notification = dict()
         raw_html = session.get('https://' + link, headers=headers, data=payload).text
@@ -98,7 +99,9 @@ def generate_notifications(fer_url, payload, html_parser, headers, courses):
             text = BeautifulSoup(text, html_parser).get_text()
             notification['text'] = tune_italic_bold(text)
             info.append(create_notification_object(notification))
-        progress_queue.put((init_progress + int(scrape_progress/(len(courses))) * (i+1), 'Scraping \'' + course.name + '\' done'))
+            progress_queue.put((init_progress + course_progress * i + int(course_progress/len(news_articles)) * (j+1),
+                                'Scraping course \'%s\'' % course.name))
+        progress_queue.put((init_progress + course_progress * (i+1), 'Scraping course \'%s\' done' % course.name))
     session.get(fer_url + '/login/Logout?logout=1')
     return info
 
