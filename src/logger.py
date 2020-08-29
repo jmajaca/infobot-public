@@ -1,5 +1,4 @@
 from datetime import datetime
-import traceback
 import uuid
 
 
@@ -10,36 +9,33 @@ class Logger:
         self.log_file = file_location + '/application_log.log'
         self.trace_file = file_location + '/application_trace.log'
 
-    def new_element_log(self, element, response, msg_done):
+    def new_element_log(self, element, response):
         with open(self.log_file, 'a', encoding="utf-8") as log:
-            log.write('[' + str(datetime.now()) + '] New message ' + str(response['ts']) + ' sent to channel ' +
-                      str(response['channel']) + ' with link of original post ' + str(element['link']) +
-                      '. Current number of messages done is ' + str(len(msg_done)) + '.\n')
+            log.write('[%s] New message %s sent to channel %s with link of original post %s.\n' %
+                      (str(datetime.now()), str(response['ts']), str(response['channel']), str(element['link'])))
 
-    def info_log(self, text):
+    def info_log(self, text: str):
         with open(self.log_file, 'a', encoding="utf-8") as log:
-            log.write('[' + str(datetime.now()) + '] INFO: ' + text + '\n')
+            log.write('[%s] INFO: %s.\n' % (str(datetime.now()), text))
 
-    def error_log(self, e, **kwargs):
+    def error_log(self, e: Exception, **kwargs):
         text = ''
+        trace_id = uuid.uuid4().hex
         if kwargs and 'text' in kwargs:
             text = kwargs['text']
         with open(self.log_file, 'a', encoding="utf-8") as log:
-            log.write('[' + str(datetime.now()) + '] ERROR: ' + text + str(e) + '\n')
-        self.trace_log(e)
+            log.write('[%s] ERROR: %s. ' % (str(datetime.now()), text + e.__cause__.__str__().replace('\n', '')))
+            log.write('For more information see trace.log input with uuid %s.\n' % trace_id)
+        self.trace_log(e, trace_id)
 
-    def trace_log(self, e):
-        trace_id = uuid.uuid4().hex
-        text = 'See trace.log input with uuid ' + str(trace_id) + ' for more information.'
-        with open(self.log_file, 'a', encoding="utf-8") as log:
-            log.write('[' + str(datetime.now()) + '] TRACE: ' + text + '\n')
+    def trace_log(self, e: Exception, trace_id: str):
         with open(self.trace_file, 'a', encoding="utf-8") as trace:
-            trace.write('[' + str(datetime.now()) + '] TRACE: uuid=' + str(trace_id) + '\n')
-            trace.write(str(traceback.format_exc()) + '\n')
+            trace.write('[%s] TRACE: uuid=%s\n' % (str(datetime.now()), trace_id))
+            trace.write('%s\n' % str(e))
 
-    def warning_log(self, text):
+    def warning_log(self, text: str):
         with open(self.log_file, 'a', encoding="utf-8") as log:
-            log.write('[' + str(datetime.now()) + '] WARNING: ' + text + '\n')
+            log.write('[%s] WARNING: %s.\n' % (str(datetime.now()), text))
 
     def read_application_log(self):
         with open(self.log_file, 'r', errors='ignore') as log:
