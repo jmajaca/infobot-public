@@ -121,3 +121,10 @@
     margin-right: auto;
     margin-top: 5%;
 }
+
+.hidden-bar {
+    display: none;
+    background: aqua;
+    cursor: pointer;
+    background-color: aqua;
+}

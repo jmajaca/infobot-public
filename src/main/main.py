@@ -66,5 +66,5 @@ def start_scraper_process():
         error_channel = '#random'
         client.chat_postMessage(channel=error_channel, text='I am dead.')
         logger.info_log('Program finished with exit code 1.')
-        progress_queue.put((none_progress, 'Program finished with exit code 1'))
+        progress_queue.put((none_progress, 'Program finished with exit code 1', 'error'))
         exit(1)

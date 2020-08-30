@@ -18,13 +18,16 @@ def progress():
     def generate():
         progress_num = 0
         action = ''
+        state = 'normal'
         while progress_num <= 100:
             data = progress_queue.get()
             if data[0] is not None:
                 progress_num = data[0]
             if data[1] is not None:
                 action = data[1]
-            yield "data:" + str(progress_num) + ',' + action + "\n\n"
+            if len(data) >= 3 and data[2] is not None:
+                state = data[2]
+            yield "data:" + str(progress_num) + ',' + action + ',' + state + "\n\n"
     return Response(generate(), mimetype='text/event-stream')
 
 
