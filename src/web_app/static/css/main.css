@@ -128,3 +128,7 @@
     cursor: pointer;
     background-color: aqua;
 }
+
+.scraper-button {
+    width: 35vw;
+}
