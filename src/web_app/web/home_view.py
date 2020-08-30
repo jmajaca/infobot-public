@@ -9,9 +9,8 @@ app_home = Blueprint('app_home', __name__, template_folder='templates')
 def home():
     logs = logger.read_application_log()
     trace_logs = logger.read_application_trace()
-    trace_logs.reverse()
     logs.reverse()
-    return render_template('home.html', logs=parse_logs(logs))
+    return render_template('home.html', logs=parse_logs(logs), trace_logs=parse_trace_logs(trace_logs))
 
 
 @app_home.route('/ui/home/progress')
@@ -34,7 +33,38 @@ def parse_logs(logs):
     for log in logs:
         groups = re.search(r'^\[(.*)\] ([A-Z]+): (.*)$', log)
         if groups is not None:
-            result.append({'timestamp': groups[1], 'type': groups[2], 'message': groups[3]})
+            if groups[2] == 'ERROR':
+                # legacy problem
+                # trace_uuid = re.search(r'^.* uuid (.+).$', groups[3])[1]
+                # result.append({'timestamp': groups[1], 'type': groups[2], 'message': groups[3], 'trace_uuid': trace_uuid})
+                trace_uuid = re.search(r'uuid ([A-Za-z0-9]+)', groups[3])
+                if trace_uuid is not None:
+                    result.append(
+                        {'timestamp': groups[1], 'type': groups[2], 'message': groups[3], 'trace_uuid': trace_uuid[1]})
+            else:
+                result.append({'timestamp': groups[1], 'type': groups[2], 'message': groups[3]})
         else:
             result.append({'timestamp': 'unknown', 'type': 'unknown', 'message': log})
     return result
+
+
+def parse_trace_logs(trace_log_lines):
+    first = True
+    result = ''
+    uuid = ''
+    trace_log = dict()
+    for line in trace_log_lines + [None]:
+        if line is None:
+            trace_log[uuid] = result
+            break
+        uuid_match = re.search(r'uuid=([A-Za-z0-9]+)', line)
+        if uuid_match is not None:
+            if first:
+                uuid = uuid_match[1]
+                first = False
+            else:
+                trace_log[uuid] = result
+                uuid = uuid_match[1]
+                result = ''
+        result += line + '\n'
+    return trace_log

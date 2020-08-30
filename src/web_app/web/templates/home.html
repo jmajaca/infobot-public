@@ -29,18 +29,20 @@
 			<tbody>
 				{% for log in logs %}
 
-					<tr {% if log.type == 'TRACE' %}
-						style="cursor:pointer" data-toggle="modal" data-target="#traceModal"
+					<tr {% if log.type == 'ERROR' %}
+						class="error-trace" data-toggle="modal" data-target="#traceModal"
+						data-id="{{trace_logs[log.trace_uuid]}}"
+						data-uuid="{{log.trace_uuid}}"
 						{% endif %}>
 						<td>{{log.timestamp}}</td>
 						{% if log.type == 'INFO'%}
 							<td class="info-text">{{log.type}}</td>
 						{% elif log.type == 'ERROR'%}
-							<td class="error-text">{{log.type}}</td>
+							<td class="error-text">
+								{{log.type}}
+							</td>
 						{% elif log.type == 'WARNING'%}
 							<td class="warning-text">{{log.type}}</td>
-						{% elif log.type == 'TRACE'%}
-							<td data-id="{{log.trace}}" class="trace-text">{{log.type}}</td>
 						{% else %}
 							<td>{{log.type}}</td>
 						{% endif %}
@@ -68,30 +70,31 @@
 	}
 
 
-	$(document).on("click", ".trace-text", function () {
+	$(document).on("click", ".error-trace", function () {
 		var trace = $(this).data('id');
+		var uuid = $(this).data('uuid')
 		$("#showTrace").val( trace );
+		$("#exampleModalLabel").text('Trace log ' + uuid)
 	});
 </script>
 
 <!-- Modal -->
 <div class="modal fade" id="traceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Trace log</h5>
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div>
-			<textarea id="showTrace" disabled ></textarea>
+			<textarea id="showTrace" disabled class="modal-data"></textarea>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
 from datetime import datetime
 import uuid
+import traceback
 
 
 # https://docs.jboss.org/process-guide/en/html/logging.html
@@ -16,7 +17,7 @@ class Logger:
 
     def info_log(self, text: str):
         with open(self.log_file, 'a', encoding="utf-8") as log:
-            log.write('[%s] INFO: %s.\n' % (str(datetime.now()), text))
+            log.write('[%s] INFO: %s\n' % (str(datetime.now()), text))
 
     def error_log(self, e: Exception, **kwargs):
         text = ''
@@ -31,20 +32,20 @@ class Logger:
     def trace_log(self, e: Exception, trace_id: str):
         with open(self.trace_file, 'a', encoding="utf-8") as trace:
             trace.write('[%s] TRACE: uuid=%s\n' % (str(datetime.now()), trace_id))
-            trace.write('%s\n' % str(e))
+            trace.write('%s\n' % traceback.format_exc())
 
     def warning_log(self, text: str):
         with open(self.log_file, 'a', encoding="utf-8") as log:
-            log.write('[%s] WARNING: %s.\n' % (str(datetime.now()), text))
+            log.write('[%s] WARNING: %s\n' % (str(datetime.now()), text))
 
     def read_application_log(self):
         with open(self.log_file, 'r', errors='ignore') as log:
             content = log.readlines()
-            content = [x.strip()[:-1] if x[-1] == '\n' else x.strip() for x in content]
+            content = [x.strip().replace('\n', '') for x in content]
             return content
 
     def read_application_trace(self):
         with open(self.trace_file, 'r', errors='ignore') as log:
             content = log.readlines()
-            content = [x.strip()[:-1] if x[-1] == '\n' else x.strip() for x in content]
+            content = [x.strip().replace('\n', '') for x in content]
             return content

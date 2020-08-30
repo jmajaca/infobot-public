@@ -8,10 +8,9 @@ from src.main.helper import *
 from src.main.reactions import count_reactions
 from src.models.base import DataBase
 from src.models.model_list import Notification, Course, Channel
-from src.web_app.flask_app import start_app_windows
 
 
-def start():
+def start_scraper_process():
     progress_queue.put((none_progress, 'Starting scraper'))
     database = DataBase()
     logger.info_log('Program started.')
