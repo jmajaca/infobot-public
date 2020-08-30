@@ -123,6 +123,7 @@
 <script>
 	// start stop buttons
 	function start() {
+		localStorage.setItem('error', '0');
 		$.get("/ui/home/scraper/start", function(data){},"json");
 	}
 

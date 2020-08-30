@@ -40,6 +40,7 @@ def start_scraper():
     if scraper_process is None or not scraper_process.is_alive():
         scraper_process = multiprocessing.Process(target=start_scraper_process)
         scraper_process.start()
+        progress_queue.put((none_progress, 'Starting scraper'))
     return redirect(url_for('app_home.home'))
 
 
