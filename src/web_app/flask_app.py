@@ -6,12 +6,14 @@ from src.web_app.web.home_view import app_home
 
 # https://stackoverflow.com/questions/11994325/how-to-divide-flask-app-into-multiple-py-files
 from web_app.web.base_view import app_base
+from web_app.web.nav_bar_view import app_nav_bar
 
 app = Flask(__name__, template_folder='application/templates')
 app.config['SECRET_KEY'] = 'you-will-never-guess'
 app.register_blueprint(app_course)
 app.register_blueprint(app_home)
 app.register_blueprint(app_base)
+app.register_blueprint(app_nav_bar)
 
 
 def start_app():

@@ -27,7 +27,18 @@
             <div class="nav-bar-buttons">
                 <button type="button" class="btn btn-dark" onclick="home()">Home</button>
                 <button type="button" class="btn btn-dark" onclick="course()">Courses</button>
+                <button type="button" class="btn btn-dark" onclick="reminder()">Reminders</button>
                 <button type="button" class="btn btn-dark" onclick="reaction()">Reactions</button>
+                <button class="btn btn-dark" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Admin
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="margin-left: 23rem">
+                    <a class="dropdown-item" onclick="scan('users')">Scan for users</a>
+                    <a class="dropdown-item" onclick="scan('channels')">Scan for channels</a>
+                    <a class="dropdown-item" onclick="scan('reactions')">Scan for reactions</a>
+                <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" onclick="scan('complete')">Complete scan</a>
+                </div>
+                </button>
             </div>
         </nav>
     </div>
@@ -44,5 +55,16 @@
     }
     function reaction() {
         window.location.href = '/ui/reaction';
+    }
+    function reminder() {
+        window.location.href = '/ui/reminder';
+    }
+</script>
+<script>
+
+    const SCAN_URL = '/scan/';
+
+    function scan(resource) {
+        $.get(SCAN_URL + resource, function(data){},"json");
     }
 </script>
