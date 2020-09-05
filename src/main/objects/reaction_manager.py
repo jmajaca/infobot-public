@@ -1,12 +1,29 @@
 from slack import WebClient
-
 from models.base import DataBase
-from models.reaction import Reaction
-from models.slack_user import SlackUser
+from models.model_list import Reaction, SlackUser
 from src import Logger
 
 
 class ReactionManager:
+    """
+    A class that is responsible for handling all actions regarding Slack Workspace reactions
+
+    Attributes
+    ----------
+    client : WebClient
+        a Slack WebClient via getting reactions from Slack Workspace is done
+    database : DataBase
+        a objects that is responsible for communicating with database
+    logger : Logger
+        a object that is saving scanner logs to a predefined file
+
+    Methods
+    -------
+    count()
+        Scans for new reactions in Slack Workspace and saves them in the database
+    generate_slack_message(target_reaction) -> str
+        Method for generating Slack message that contains top list (sender and receiver) for target reaction
+    """
 
     def __init__(self, client: WebClient, database: DataBase, logger: Logger):
         self.client, self.database, self.logger = client, database, logger
@@ -32,7 +49,7 @@ class ReactionManager:
                             self.logger.info_log('Database insert {}'.format(slack_reaction))
         self.logger.info_log('Finished counting reactions.')
 
-    def generate_slack_message(self, target_reaction):
+    def generate_slack_message(self, target_reaction) -> str:
         reactions = []
         for user in self.database.select_many(SlackUser):
             sent_count = len(self.database.select_many(Reaction, sender=user.id, name=target_reaction))

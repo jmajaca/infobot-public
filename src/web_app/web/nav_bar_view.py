@@ -1,10 +1,12 @@
 from flask import Blueprint
+from main.objects.scanner import Scanner
 
 app_nav_bar = Blueprint('app_nav_bar', __name__, template_folder='templates')
 
 
 @app_nav_bar.route('/scan/reactions', methods=['GET'])
 def scan_reactions():
+    print(Scanner.__doc__)
     pass
 
 

@@ -1,7 +1,7 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from .. import config
+from src import config
 from src import logger
 
 engine = create_engine(config['database_url'], echo=True, client_encoding='utf8')
