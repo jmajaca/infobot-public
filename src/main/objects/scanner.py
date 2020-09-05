@@ -2,7 +2,7 @@ from slack import WebClient
 from main.objects.reaction_manager import ReactionManager
 from models.base import DataBase
 from models.model_list import Channel, SlackUser
-from src import Logger
+from src import Logger, log_path
 from datetime import datetime
 
 
@@ -35,7 +35,7 @@ class Scanner:
 
     def __init__(self, client: WebClient, database: DataBase):
         self.client, self.database = client, database
-        self.logger = Logger('../../log')
+        self.logger = Logger(log_path)
         self.reaction_manager = ReactionManager(self.client, self.database, self.logger)
 
     def scan_users(self):
