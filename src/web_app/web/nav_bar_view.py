@@ -1,4 +1,4 @@
-from flask import Blueprint, Response
+from flask import Blueprint, Response, get_template_attribute
 
 from main import client
 from main.objects.scanner import Scanner
@@ -48,3 +48,5 @@ def scan_complete():
     except Exception as e:
         logger.error_log(e)
         return Response(status=500)
+
+
