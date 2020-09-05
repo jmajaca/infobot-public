@@ -48,7 +48,6 @@
 
 .app-background {
     background-color: lightgrey;
-    margin-top:10vh;
 }
 
 .tag-add-position {
@@ -131,4 +130,17 @@
 
 .scraper-button {
     width: 35vw;
+}
+
+/*
+ * base.html
+ */
+
+.nav-bar {
+    margin-bottom: 10vh;
+}
+.nav-bar-buttons {
+    float: left;
+    position: absolute;
+    margin-left: 7vw;
 }
