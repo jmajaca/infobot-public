@@ -3,10 +3,11 @@ import re
 
 from main.main import start_scraper_process
 from src import logger, progress_queue, none_progress
-from flask import Blueprint, render_template, Response, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for
 
 app_home = Blueprint('app_home', __name__, template_folder='templates')
 scraper_process: multiprocessing.Process = None
+
 
 @app_home.route('/ui/home')
 def home():
@@ -14,24 +15,6 @@ def home():
     trace_logs = logger.read_application_trace()
     logs.reverse()
     return render_template('home.html', logs=parse_logs(logs), trace_logs=parse_trace_logs(trace_logs))
-
-
-@app_home.route('/ui/home/progress')
-def progress():
-    def generate():
-        progress_num = 0
-        action = ''
-        state = 'normal'
-        while progress_num <= 100:
-            data = progress_queue.get()
-            if data[0] is not None:
-                progress_num = data[0]
-            if data[1] is not None:
-                action = data[1]
-            if len(data) >= 3 and data[2] is not None:
-                state = data[2]
-            yield "data:" + str(progress_num) + ',' + action + ',' + state + "\n\n"
-    return Response(generate(), mimetype='text/event-stream')
 
 
 @app_home.route('/ui/home/scraper/start')

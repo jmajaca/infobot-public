@@ -217,7 +217,7 @@
         $('#status-' + data[2]).show().fadeIn(500);
     }, 500);
 
-    var source = new EventSource("/ui/home/progress");
+    let source = new EventSource("/scraper/progress");
 	source.onmessage = function (event) {
         localStorage.setItem('data', event.data);
     }
