@@ -201,6 +201,7 @@
     $(document).ready(function(){
         $("#status-badges").delay(1000).fadeIn(500);
         hideStatuses();
+        if (localStorage.getItem('error') === null) localStorage.setItem('error', '0');
     });
 
     function hideStatuses() {
