@@ -32,6 +32,9 @@
                 <button type="button" class="btn btn-dark" onclick="reaction()">Reactions</button>
                 <button class="btn btn-dark" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Scan
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
                 <div id="admin-dropdown" class="dropdown-menu" aria-labelledby="navbarDropdown" style="margin-left: 23rem; width: 13rem;">
                     {% for option in options %}
                         <a class="dropdown-item" onclick='scan("{{option}}")'>
@@ -84,6 +87,9 @@
                             <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
                         </svg>
                         admin
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="margin-left: 91%;">
                             <a class="dropdown-item">
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

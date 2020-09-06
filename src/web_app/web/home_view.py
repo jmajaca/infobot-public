@@ -32,7 +32,7 @@ def stop_scraper():
     global scraper_process
     if scraper_process is not None and scraper_process.is_alive():
         scraper_process.kill()
-        progress_queue.put((none_progress, 'Program finished with exit code 130', 'error'))
+        progress_queue.put((none_progress, 'Program finished with exit code 130', 'off'))
     return redirect(url_for('app_home.home'))
 
 
