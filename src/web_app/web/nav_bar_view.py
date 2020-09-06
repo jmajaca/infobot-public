@@ -50,3 +50,6 @@ def scan_complete():
         return Response(status=500)
 
 
+@app_nav_bar.route('/status', methods=['GET'])
+def get_status(status: str):
+    yield "data:" + status + "\n\n"

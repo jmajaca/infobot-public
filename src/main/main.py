@@ -27,6 +27,7 @@ def start_scraper_process():
             print('Scraping phase done.')
             # TODO catch exception do in main
             if notifications is None:
+                progress_queue.put((init_progress + scrape_progress), None, 'warning')
                 timeout *= 2
                 time.sleep(min(timeout, 2400))
                 notifications = []
@@ -57,7 +58,7 @@ def start_scraper_process():
             if loop_count == 10:
                 count_reactions(client)
                 loop_count = 0
-            progress_queue.put((done_progress, 'Scaraping done'))
+            progress_queue.put((done_progress, 'Scraping done', 'sleep'))
             time.sleep(60)
             progress_queue.put((none_progress, 'Starting scraper'))
     except Exception as e:
