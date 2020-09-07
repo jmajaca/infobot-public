@@ -21,6 +21,11 @@
     <input id="time_picker" width="276" />
     <button onclick="saveNewTime()">Save</button>
 </div>
+<div>
+    <label onclick="toggleAutomaticReactionScan()">
+        <input id="scan-toggle" type="checkbox" data-toggle="toggle" {% if alive %} checked {% endif %}>
+    </label>
+</div>
 </div>
 
 
@@ -64,6 +69,27 @@
             type: 'post',
             data: { time: $('#time_picker').val()},
             contentType: 'application/json;charset=UTF-8'
+        });
+    }
+</script>
+<script>
+
+    $(document).ready(function() {
+    setInterval(function(){
+        $.getJSON('/ui/reaction/automatic', function (data) {
+            if (data.status === '1') {
+
+            } else if (data.status === '0' && $('#scan-toggle').is(':checked')) {
+                location.reload();
+            }
+        });
+    },10000)
+    });
+
+    function toggleAutomaticReactionScan() {
+        $.ajax({
+            url: '/ui/reaction/automatic/flip',
+            type: 'get'
         });
     }
 </script>
