@@ -143,3 +143,12 @@ Infobot has following permissions on slack workspace:
 | pins:write | Add and remove pinned messages and files |
 | reactions: read | View emoji reactions and their associated content in channels and conversations that Infobot has been added to |
 | users:read | View people in the workspace |
+
+## Local init
+
+For program to be able to run locally you will need file **config.cfg** stored on path `src/resources/config.cfg`.
+If you don't have config file please contact project maintainer. Next step is to install Python requirements, this
+can easily be done with command `pip install -r src/resources/requirements.txt` from project root folder. Project entry 
+point is located in `start.py` in project root folder. Application is started by running `start.py`.
+By default config application is running on `http://localhost:9000` and is connected to test database on port `5432`.
+If config is not default these options can differ.
