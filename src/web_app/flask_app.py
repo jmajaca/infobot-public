@@ -5,9 +5,9 @@ from src.web_app.web.course_view import app_course
 from src.web_app.web.home_view import app_home
 
 # https://stackoverflow.com/questions/11994325/how-to-divide-flask-app-into-multiple-py-files
-from web_app.web.base_view import app_base
-from web_app.web.nav_bar_view import app_nav_bar
-from web_app.web.reaction_view import app_reaction
+from src.web_app.web.base_view import app_base
+from src.web_app.web.nav_bar_view import app_nav_bar
+from src.web_app.web.reaction_view import app_reaction
 
 app = Flask(__name__, template_folder='application/templates')
 app.config['SECRET_KEY'] = 'you-will-never-guess'
