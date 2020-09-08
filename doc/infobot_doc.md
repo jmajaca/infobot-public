@@ -152,3 +152,9 @@ can easily be done with command `pip install -r src/resources/requirements.txt` 
 point is located in `start.py` in project root folder. Application is started by running `start.py`.
 By default config application is running on `http://localhost:9000` and is connected to test database on port `5432`.
 If config is not default these options can differ.
+
+## Database description
+
+### Diagram
+
+![alt text](https://github.com/jmajaca/infobot-public/tree/22-local-program-init/doc/images/dbdiagram.png?raw=true)
