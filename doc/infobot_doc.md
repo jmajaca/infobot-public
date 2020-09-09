@@ -316,5 +316,49 @@ Click on the *Logout* is going to logout user and redirect him to login page.
 
 ![Alt text](images/user_actions.png?raw=true "User actions")
 
+Navigation bar html code is located in `base.html` as it is JavaScript code for navigation bar actions. Backend logic is located
+in `nav_bar_view.py`. Scraper progress is stored in *localStorage* in `base.html` from endpoint
+`progress` in `base_view.py`. Scraper status card gets its value from that stored value in *localStorage*.
+
+### Home
+
+On home page are the most important things about Infobot - it's scrapping status and log entries.
+
+![Alt text](images/home.png?raw=true "Home")
+
+Progress bar tells user what is the progress of scrapping and description of current scraping phase.
+Progress bar is getting information from the same place as scraping status in the navigation bar.
+There are two states of progress bar: running (blue with progress percent) and error (red with *ERROR* message).
+
+![Alt text](images/scrape_bar.png?raw=true "Scrape progressbar")
+![Alt text](images/error_bar.png?raw=true "Error progressbar")
+
+Bellow progress bar are two buttons: **START** and **STOP**. Button **START** starts process of scraping in the `Scraper`
+class, while button **STOP** send *SIGINT* to process started in `Scraper` class.
+
+Logs are also very important aspect of Infobot application. Creating and managing logs is duty of
+`Logger` class. There are three types of logs:
+- <div class="text-green">
+  INFO
+</div>
+
+- <div class="text-orange">
+  WARNING
+</div>
+
+- <div class="text-red">
+  ERROR
+</div>
+
+Logs are sorted by the newest, so the fresh logs are always up top.
+**INFO** and **WARNING** logs can only be read, while **ERROR** log can be clicked which opens popup
+with stack trace of error for more detailed information.
+
+![Alt text](images/trace_log_popup.png?raw=true "Trace log popup")
+
+Data from popup is located in `src/log/application_trace.log` and log data from home page is located in `src/log/application_log.log`.
+**INFO** logs are events like starting or terminating scraping process and inserting a new element to database.
+**WARNING** logs are logs that describe events that are not crashing scraping process but are disturbing it, like not being
+able to log in on the web page to scrape data. **ERROR** logs are logs that log when errors in scrapping process occurred. 
 
 </details>
