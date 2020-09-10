@@ -31,6 +31,7 @@ Script installs these python packages:
 * sqlalchemy
 * psycopg2-binary
 * flask
+* flask_wtf
 
 ## Tools setup
 
