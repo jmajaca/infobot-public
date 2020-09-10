@@ -155,8 +155,11 @@ Infobot has following permissions on slack workspace:
 For program to be able to run locally you will need file **config.cfg** stored on path `src/resources/config.cfg`.
 If you don't have config file please contact project maintainer. Next step is to install Python requirements, this
 can easily be done with command `pip install -r src/resources/requirements.txt` from project root folder. Project entry 
-point is located in `start.py` in project root folder. Application is started by running `start.py`.
-By default config application is running on `http://localhost:9000` and is connected to test database on port `5432`.
+point is located in `start.py` in project root folder. 
+The last thing is to create log files which can be done from the project root folder with command
+`mkdir src/log touch src/log/{application_log.log,application_trace.log}`.
+Application is started by running `start.py`.
+By default config application is running on `http://localhost:9000` and is connected to test database on port `5431`.
 If config is not default these options can differ.
 
 ## Database info
@@ -337,18 +340,17 @@ Bellow progress bar are two buttons: **START** and **STOP**. Button **START** st
 class, while button **STOP** send *SIGINT* to process started in `Scraper` class.
 
 Logs are also very important aspect of Infobot application. Creating and managing logs is duty of
-`Logger` class. There are three types of logs:
-- <div class="text-green">
-  INFO
-</div>
+`Logger` class. 
+`Looger` class does not only create logs for scrapping process but for scanning process too.
+There are three types of logs:
 
-- <div class="text-orange">
-  WARNING
-</div>
+| type | description |
+| :--- | :---------- |
+| INFO | events like starting or terminating scraping/scanning process and inserting a new element to database |
+| WARNING | events that are not crashing scraping/scanning process but are disturbing it, like not being able to log in on the web page to scrape data |
+| ERROR | events that cause scrapping/scanning process to terminate |
 
-- <div class="text-red">
-  ERROR
-</div>
+> Important: Logs listed on the Home page are **not** only logs from `Scrapper`, but are logs for whole Infobot application
 
 Logs are sorted by the newest, so the fresh logs are always up top.
 **INFO** and **WARNING** logs can only be read, while **ERROR** log can be clicked which opens popup
@@ -357,8 +359,66 @@ with stack trace of error for more detailed information.
 ![Alt text](images/trace_log_popup.png?raw=true "Trace log popup")
 
 Data from popup is located in `src/log/application_trace.log` and log data from home page is located in `src/log/application_log.log`.
-**INFO** logs are events like starting or terminating scraping process and inserting a new element to database.
-**WARNING** logs are logs that describe events that are not crashing scraping process but are disturbing it, like not being
-able to log in on the web page to scrape data. **ERROR** logs are logs that log when errors in scrapping process occurred. 
+HTML and JavaScript for home page are located in `home.html` file. Backend logic is located in `home_view.py`.
+
+### Courses
+
+On the courses page there are tree tables: **Watch list**, **Unwatched list** and **Archived list**.
+
+| list | description |
+| :--- | :---------- |
+Watch | Courses for which corresponding channels exists and which the Scrapper **is** scraping
+Unwatched | Courses for which corresponding channels exists and which the Scrapper **is not** scraping
+Archived | Courses for which corresponding channels exists but are **archived** and which the Scrapper **is not** scraping
+
+Every list has following elements.
+
+| element | description |
+| :--- | :---------- |
+Name | Course name 
+Tag | Slack channel tag of channel in which Infobot is going to send notifications and reminders
+Url | Course url from which Infobot is scrapping data
+Watch | Toggle that defines if Infobot is going to scrape data from provided url for course and post messages to the Slack channel
+Actions | <ul><li>Save - save changes made for the course</li><li>Reset - reset any changes made on the course (if not saved)</li><li>Archive - archive Slack channel and remove course from the watch list</li><li>Unarchive - unarchive Slack channel (currently not working because Slack bot users can't unarchive channels)</li><li>Delete - delete course from database, but not the channel</li></ul>
+
+HTML and Javascript for this page is located in `course.html` and backend in `course_view.py`.
+
+#### Watch list
+
+![Alt text](images/course_watch_list.png?raw=true "Course Watch list")
+
+List shows all watched courses with option to edit certain attributes of each course.
+If users changes *Watch* attribute of the course then that course will move to Unwatched list and if user archives channel that course will go to Archived list.
+The last row is made for saving new course to Watch/Unwatched list, so it does not have action buttons for *Archive* and *Delete*.
+If there is currently no corresponding channel for a new course user can click on **+** icon in *Tags* section which will
+open popup for creating new Slack channel.
+
+![Alt text](images/create_new_channel.png?raw=true "Create a new Slack channel")
+
+When creating channel user can define channel tag, topic and users. Creator of the channel will be Infobot application in the Slack Workspace.
+
+If users whishes not to create special channel for the course then user can select one of the channel tags in the dropdown without creating new channel.
+In the channel tag dropdown are shown only channels that have no course connected to it plus channel `#general`.
+Channel `#general` can have as many connected courses to it as the user wants.
+This behaviour is only present for `#general` channel.
+
+#### Unwatched list
+
+![Alt text](images/course_unwatched_list.png?raw=true "Course Unwatched list")
+
+Unwatched list is almost the same as the Watched list with exception that Unwatched list shows only courses that have *Watch* attribute set to **Off**.
+There is still option to edit courses, but not to add any new course like on the Watch list.
+If users changes *Watch* attribute of the course then that course will move to Watch list and if user archives channel that course will go to Archived list.
+All list elements have all actions available except for courses that have channel tag `#general` which is to prevent user from archiving the `#general` channel.
+
+#### Archived list
+
+![Alt text](images/course_archived_list.png?raw=true "Course Unwatched list")
+
+Archived list contains courses for which channels are archived. For that reason every course has attribute *Watch* set to **Off**.
+User can edit every attribute of course except attribute *Watch* which is read only.
+In the actions section there is no archive action because channels is already archived but there is option for unarchiving the channel.
+Action that unarchives channel is not currently possible because of Slack API and it's limitations for bots.
+
 
 </details>
