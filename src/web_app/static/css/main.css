@@ -165,3 +165,7 @@
 	cursor: pointer;
 	outline: inherit;
 }
+
+.no-button:focus {
+    outline: none;
+}
