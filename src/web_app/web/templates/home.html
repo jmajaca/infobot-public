@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="content" class="card center-div">
+	<div id="progress" class="hidden-bar">
+		<div class="progress">
+			<div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+				<span id="progress-bar-label" class="progress-bar-label">0%</span>
+			</div>
+
+			<div id="progress-bar-error" class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+				<span class="progress-bar-label">ERROR</span>
+			</div>
+
+		</div>
+	</div>
+	<div class="progress" id="progress-placeholder">
+		<div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+			<span class="progress-bar-label"></span>
+		</div>
+	</div>
+	<div style="text-align: center" id="progress-bar-action">
+	</div>
+	<div style="margin: 2% auto;">
+            <button id="start" type="button" class="btn btn-success scraper-button" onclick="start()">
+                START
+            </button>
+            <button type="button" class="btn btn-danger scraper-button" onclick="stop()">
+                STOP
+            </button>
+        </div>
+	<div id="log-table">
+		<table class="table table-hover table-sm">
+			<thead>
+				<tr>
+					<th scope="col">Timestamp</th>
+					<th scope="col">Type</th>
+					<th scope="col">Message</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for log in logs %}
+
+					<tr {% if log.type == 'ERROR' %}
+						class="error-trace" data-toggle="modal" data-target="#traceModal"
+						data-id="{{trace_logs[log.trace_uuid]}}"
+						data-uuid="{{log.trace_uuid}}"
+						{% endif %}>
+						<td>{{log.timestamp}}</td>
+						{% if log.type == 'INFO'%}
+							<td class="info-text">{{log.type}}</td>
+						{% elif log.type == 'ERROR'%}
+							<td class="error-text">
+								{{log.type}}
+							</td>
+						{% elif log.type == 'WARNING'%}
+							<td class="warning-text">{{log.type}}</td>
+						{% else %}
+							<td>{{log.type}}</td>
+						{% endif %}
+						<td>{{log.message}}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+</div>
+
+<script>
+
+	var source = new EventSource("/ui/home/progress");
+	source.onmessage = function(event) {
+		const data = event.data.split(',')
+		$('#progress-bar').css('width', data[0]+'%').attr('aria-valuenow', data[0]);
+		$('#progress-bar-label').text(data[0]+'%');
+		$('#progress-bar-action').text(data[1])
+		localStorage.setItem('data', data)
+
+		if(data[2] === 'error') {
+			localStorage.setItem('error', '1')
+			location.reload();
+		} else if (data[2] === 'normal') {
+			localStorage.setItem('error', '0')
+			$('#progress-bar').show()
+			$('#progress-bar-error').hide()
+		}
+
+		if(data[0] === 100){
+			source.close()
+		}
+	}
+
+	$(document).on("click", ".error-trace", function () {
+		var trace = $(this).data('id');
+		var uuid = $(this).data('uuid')
+		$("#showTrace").val( trace );
+		$("#exampleModalLabel").text('Trace log ' + uuid)
+	});
+
+	// F5
+	$(document).ready(function(){
+		setTimeout(function () {
+			$('#progress-placeholder').remove()
+			$('#progress').removeClass('hidden-bar')
+		}, 0);
+		var data = localStorage.getItem('data').split(',');
+		if(localStorage.getItem("error")==="1") {
+			// localStorage.removeItem("error");
+			$('#progress-bar').hide()
+			$('#progress-bar-error').show()
+			$('#progress-bar-action').text(data[1])
+		} else if (localStorage.getItem("error")==="0") {
+			// localStorage.removeItem("error");
+			$('#progress-bar').css('width', data[0]+'%').attr('aria-valuenow', data[0]);
+			$('#progress-bar-label').text(data[0]+'%');
+			$('#progress-bar-action').text(data[1])
+
+			$('#progress-bar').show()
+			$('#progress-bar-error').hide()
+		}
+	});
+</script>
+<script>
+	// start stop buttons
+	function start() {
+		localStorage.setItem('error', '0');
+		$.get("/ui/home/scraper/start", function(data){},"json");
+	}
+
+	function stop() {
+		let response = confirm("Are you sure you want to forcefully stop the Scraper?");
+		if(response) {
+			$.get("/ui/home/scraper/stop", function(data){},"json");
+		}
+	}
+
+
+</script>
+<!-- Modal -->
+<div class="modal fade" id="traceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+			<textarea id="showTrace" disabled class="modal-data"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End modal -->
+
+{% endblock content %}

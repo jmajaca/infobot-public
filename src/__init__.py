@@ -1,7 +1,19 @@
+from enum import Enum
+from multiprocessing import Manager
 from src.logger import Logger
 from src import interrupt_handler
 import os
+
 config = dict()
+
+
+progress_queue = Manager().Queue()
+none_progress = 0
+init_progress = 5
+scrape_progress = 80
+save_progress = 15
+done_progress = 100
+progress_queue.put((none_progress, ''))
 
 current_path = os.path.dirname(os.path.realpath(__file__))
 

@@ -81,3 +81,54 @@
 .watch-label {
     margin-left: -1.2vw;
 }
+
+/*
+ home.html
+*/
+
+.info-text {
+    font-weight: bold;
+    color: green;
+}
+
+.error-text {
+    font-weight: bold;
+    color: red;
+}
+
+.warning-text {
+    font-weight: bold;
+    color: orange;
+}
+
+.trace-text {
+    font-weight: bold;
+    color: cornflowerblue;
+}
+
+.error-trace {
+    cursor: pointer;
+}
+
+.modal-data {
+    width: 100%;
+    height: 40vh;
+}
+
+.modal-dialog-custom {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+}
+
+.hidden-bar {
+    display: none;
+    background: aqua;
+    cursor: pointer;
+    background-color: aqua;
+}
+
+.scraper-button {
+    width: 35vw;
+}

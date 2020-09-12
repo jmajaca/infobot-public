@@ -1,4 +1,15 @@
-from src.main.main import start
+import multiprocessing
+import time
+
+from src import progress_queue
+from src.main.main import start_scraper_process
+from src.web_app.flask_app import start_app_windows, start_app
+
+
+def main():
+    start_app_windows()
+
 
 if __name__ == "__main__":
-    start()
+    main()
+
