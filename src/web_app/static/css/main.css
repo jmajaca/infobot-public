@@ -48,7 +48,6 @@
 
 .app-background {
     background-color: lightgrey;
-    margin-top:10vh;
 }
 
 .tag-add-position {
@@ -131,4 +130,39 @@
 
 .scraper-button {
     width: 35vw;
+}
+
+/*
+ * base.html
+ */
+
+.nav-bar {
+    margin-bottom: 10vh;
+}
+.nav-bar-buttons {
+    float: left;
+    position: absolute;
+    margin-left: 7vw;
+}
+
+.nav-bar-dropdown {
+    margin-left: 23rem;
+}
+
+.nav-bar-right-buttons {
+    float: right;
+}
+
+#status-badges {
+    display:none;
+}
+
+.no-button {
+    background: none;
+	color: white;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
 }

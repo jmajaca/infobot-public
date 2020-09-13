@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="https://i.imgur.com/lRDsnib.png">
     <meta charset="UTF-8">
     <title>Infobot</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css">
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.6.3/umd/react.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.6.3/umd/react-dom.production.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -17,12 +16,216 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
-
-
 </head>
 <body class="app-background">
+    {% set options = ['users', 'channels', 'reactions'] %}
+    <div class="nav-bar">
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand" href="/ui/home">
+                <img src="https://i.imgur.com/lRDsnib.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                Infobot
+            </a>
+            <div class="nav-bar-buttons">
+                <button type="button" class="btn btn-dark" onclick="home()">Home</button>
+                <button type="button" class="btn btn-dark" onclick="course()">Courses</button>
+                <button type="button" class="btn btn-dark" onclick="reminder()">Reminders</button>
+                <button type="button" class="btn btn-dark" onclick="reaction()">Reactions</button>
+                <button class="btn btn-dark" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Scan
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+                <div id="admin-dropdown" class="dropdown-menu" aria-labelledby="navbarDropdown" style="margin-left: 23rem; width: 13rem;">
+                    {% for option in options %}
+                        <a class="dropdown-item" onclick='scan("{{option}}")'>
+                        Scan for {{option}}.
+                        <div style="margin-top: 3px;" id="scan-{{option}}-spinner" class="spinner-border text-primary spinner-border-sm float-right" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <svg id="scan-{{option}}-error" width="1em" height="1em" style="float: right; margin-top: 3px;" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                        <svg id="scan-{{option}}-success" width="1em" height="1em" style="float: right; margin-top: 3px;" viewBox="0 0 16 16" class="bi bi-check-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                        </svg>
+                    </a>
+                    {% endfor %}
+                <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" onclick="completeScan()">
+                        Complete scan
+                        <div style="margin-top: 3px;" id="scan-complete-spinner" class="spinner-border text-primary spinner-border-sm float-right" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <svg id="scan-complete-error" width="1em" height="1em" style="float: right; margin-top: 3px;" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                        <svg id="scan-complete-success" width="1em" height="1em" style="float: right; margin-top: 3px;" viewBox="0 0 16 16" class="bi bi-check-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                        </svg>
+                    </a>
+                </div>
+                </button>
+            </div>
+            <div class="nav-bar-right-buttons">
+                <span id="status-badges" onclick="home()" style="cursor: pointer">
+                    <span id="status-normal" class="badge badge-pill badge-success">Scraping</span>
+                    <span id="status-error" class="badge badge-pill badge-danger">Error</span>
+                    <span id="status-warning" class="badge badge-pill badge-warning">Warning</span>
+                    <span id="status-sleep" class="badge badge-pill badge-info">Sleeping</span>
+                    <span id="status-off" class="badge badge-pill badge-secondary">Off</span>
+                </span>
+                <span style="color: white; cursor: pointer">
+                    <button data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="no-button">
+                        &nbsp;&nbsp;
+                        <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>
+                            <path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                            <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
+                        </svg>
+                        admin
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="margin-left: 91%;">
+                            <a class="dropdown-item">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z"/>
+                                    <path fill-rule="evenodd" d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z"/>
+                                </svg>
+                                &nbsp;
+                                Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box-arrow-in-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                                    <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                </svg>
+                                &nbsp;
+                                Logout
+                            </a>
+                        </div>
+                    </button>
+                </span>
+            </div>
+        </nav>
+    </div>
     {% block content %}
     {% endblock %}
 </body>
 </html>
+<script>
+
+    // redirect logic
+
+    function home() {
+        window.location.href = '/ui/home';
+    }
+    function course() {
+        window.location.href = '/ui/course';
+    }
+    function reaction() {
+        window.location.href = '/ui/reaction';
+    }
+    function reminder() {
+        window.location.href = '/ui/reminder';
+    }
+</script>
+<script>
+
+    // spinner logic
+
+    const SCAN_URL = '/scan/';
+    let completeScanFlag = false;
+    const LAST_OPTION = 'reactions';
+    const OPTION_CLICKS = {'users': false, 'channels': false, 'reactions': false, 'complete': false};
+
+    $(document).ready(function(){
+        completeScanFlag = false;
+        const OPTIONS = ['users', 'channels', 'reactions', 'complete']
+        OPTIONS.forEach(element => {
+            $('#scan-' + element + '-spinner').toggle();
+            $('#scan-' + element + '-error').hide();
+            $('#scan-' + element + '-success').hide();
+        })
+    });
+
+    $("#admin-dropdown").click(function(e){
+        e.stopPropagation();
+    })
+
+    function toggleSpinners(resource) {
+        $('#scan-' + resource + '-spinner').toggle();
+    }
+
+    function scan(resource) {
+        if (OPTION_CLICKS[resource] === true) return
+        else OPTION_CLICKS[resource] = true
+        toggleSpinners(resource);
+        $.ajax({
+            url  : SCAN_URL + resource,
+            type : 'get',
+            statusCode: {
+                500: function () {
+                    toggleSpinners(resource);
+                    $('#scan-' + resource + '-error').show();
+                    if(completeScanFlag && resource === LAST_OPTION) {
+                        toggleSpinners('complete');
+                        $('#scan-complete-error').show();
+                    }
+                },
+                200: function () {
+                    toggleSpinners(resource);
+                    $('#scan-' + resource + '-success').show();
+                    if(completeScanFlag && resource === LAST_OPTION) {
+                        toggleSpinners('complete');
+                        $('#scan-complete-success').show();
+                    }
+                }
+            }
+        });
+    }
+
+    function completeScan() {
+        if (OPTION_CLICKS['complete'] === true) return
+        else OPTION_CLICKS['complete'] = true
+        completeScanFlag = true;
+        $('#scan-complete-spinner').toggle();
+        ['users', 'channels', 'reactions'].forEach(element => {
+            scan(element);
+        });
+    }
+</script>
+<script>
+
+    // bot status logic
+
+    $(document).ready(function(){
+        $("#status-badges").delay(1000).fadeIn(500);
+        hideStatuses();
+        if (localStorage.getItem('error') === null) localStorage.setItem('error', '0');
+    });
+
+    function hideStatuses() {
+        const STATUS = ['normal', 'error', 'warning', 'sleep', 'off'];
+        STATUS.forEach(element => {
+            $('#status-' + element).hide();
+        });
+    }
+
+    window.setInterval(function(){
+        let data = localStorage.getItem('data').split(',');
+        hideStatuses();
+        $('#status-' + data[2]).show().fadeIn(500);
+    }, 500);
+
+    let source = new EventSource("/scraper/progress");
+	source.onmessage = function (event) {
+        localStorage.setItem('data', event.data);
+    }
+
+</script>

@@ -9,11 +9,11 @@ from src.web_app.web.forms import WatchlistForm
 from src.main import client
 
 app_course = Blueprint('app_course', __name__, template_folder='templates')
+session = Session()
 
 
 @app_course.route('/ui/course', methods=['GET', 'POST'])
 def course_handler():
-    session = Session()
     form = WatchlistForm()
     courses = session.query(Course).all()
     archived_channel_tags = [channel.tag for channel in session.query(Channel).filter(Channel.archived == True).all()]
@@ -108,7 +108,7 @@ def unarchive_channel():
     channel_tag = '#' + request.args.get('tag')
     channel = session.query(Channel).filter(Channel.tag == channel_tag).first()
     try:
-        # client.conversations_join(channel=channel.id)
+        client.conversations_join(channel=channel.id)
         client.conversations_unarchive(channel=channel.id)
     except Exception as e:
         print(e)
