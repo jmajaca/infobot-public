@@ -1,12 +1,13 @@
 from datetime import datetime
+
 from flask import Blueprint, render_template, request, redirect, url_for
 
-from src.models.base import DataBase, Session
+from src.main import client
+from src.models.base import Session
 from src.models.channel import Channel
 from src.models.course import Course
 from src.models.slack_user import SlackUser
 from src.web_app.web.forms import WatchlistForm
-from src.main import client
 
 app_course = Blueprint('app_course', __name__, template_folder='templates')
 session = Session()

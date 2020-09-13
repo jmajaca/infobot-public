@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, Response, request
 
-from main import client
-from main.objects.reaction_manager import ReactionManager
-from models.base import DataBase
+from src.main import client
+from src.main.objects.reaction_manager import ReactionManager
+from src.models.base import DataBase
 from src import Logger
 
 import re

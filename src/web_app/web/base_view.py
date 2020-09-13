@@ -30,4 +30,5 @@ def progress():
             if len(data) >= 3 and data[2] is not None:
                 state = data[2]
             yield "data:" + str(progress_num) + ',' + action + ',' + state + "\n\n"
+
     return Response(generate(), mimetype='text/event-stream')
