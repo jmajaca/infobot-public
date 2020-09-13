@@ -1,7 +1,11 @@
+import time
+
 from slack import WebClient
-from models.base import DataBase
-from models.model_list import Reaction, SlackUser
+from src.models.base import DataBase
+from src.models.model_list import Reaction, SlackUser
 from src import Logger
+from multiprocessing import Process
+from datetime import datetime
 
 
 class ReactionManager:
@@ -16,17 +20,64 @@ class ReactionManager:
         a objects that is responsible for communicating with database
     logger : Logger
         a object that is saving scanner logs to a predefined file
+    scan_hour: int
+        value of a hour on which to start automatic scanning for new reactions
+    scan_minute: int
+        value of a minute on which to start automatic scanning for new reactions
+    process: Process
+        process that is executing the automatic scanning for new reactions
 
     Methods
     -------
+    start()
+        Start async child process for automatic reaction scanning
+    _start_process()
+        Infinite loop that checks if time has come to start automatic reaction scanning
+    is_alive() -> bool
+        Method that returns boolean value that represent if automatic scraping process is alive
+    close()
+        Ends async child process for automatic reaction scanning
     count()
         Scans for new reactions in Slack Workspace and saves them in the database
     generate_slack_message(target_reaction) -> str
         Method for generating Slack message that contains top list (sender and receiver) for target reaction
     """
 
+    process: Process = None
+
     def __init__(self, client: WebClient, database: DataBase, logger: Logger):
         self.client, self.database, self.logger = client, database, logger
+        self.scan_hour, self.scan_minute = 0, 0
+
+    def start(self):
+        self.process = Process(target=self._start_process)
+        self.logger.info_log('Started process of automatic reaction scanning.')
+        self.process.start()
+
+    def _start_process(self):
+        last_date = None
+        while True:
+            current_time = datetime.now().time()
+            if current_time.hour >= self.scan_hour and current_time.minute >= self.scan_minute and \
+                    (last_date is None or datetime.now().date() > last_date):
+                last_date = datetime.now().date()
+                try:
+                    self.count()
+                except Exception as e:
+                    self.logger.error_log(e)
+                    raise e
+            time.sleep(600)
+
+    def is_alive(self) -> bool:
+        if self.process:
+            return self.process.is_alive()
+        else:
+            return False
+
+    def close(self):
+        self.process.kill()
+        # self.process.close()
+        self.logger.info_log('Killed process of automatic reaction scanning.')
 
     def count(self):
         self.logger.info_log('Started counting reactions.')

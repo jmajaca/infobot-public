@@ -1,7 +1,7 @@
 import multiprocessing
 import re
 
-from main.main import start_scraper_process
+from src.main.main import start_scraper_process
 from src import logger, progress_queue, none_progress
 from flask import Blueprint, render_template, redirect, url_for
 

@@ -5,3 +5,4 @@ bs4
 sqlalchemy
 psycopg2-binary
 flask
+flask_wtf
