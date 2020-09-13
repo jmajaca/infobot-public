@@ -1,8 +1,8 @@
 import time
 
 from slack import WebClient
-from models.base import DataBase
-from models.model_list import Reaction, SlackUser
+from src.models.base import DataBase
+from src.models.model_list import Reaction, SlackUser
 from src import Logger
 from multiprocessing import Process
 from datetime import datetime
