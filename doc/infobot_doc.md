@@ -1,7 +1,13 @@
-# Initial setup
+# Initial server setup
 
 > Notice: all scripts bellow (w/o python installation on server) can be run at once with 
 > `sudo bash start_application.sh [file_id]`
+
+> Important: if you are not initializing project on a server but on your local device you can skip some steps from this
+> file and just
+> [download git project](https://github.com/jmajaca/infobot-public/blob/master/doc/infobot_doc.md#download-git-project)
+> and then do steps for
+> [local init](https://github.com/jmajaca/infobot-public/blob/master/doc/infobot_doc.md#local-init)
 
 ## Download git project
 
