@@ -3,11 +3,11 @@ from flask import Blueprint, Response, get_template_attribute
 from main import client
 from main.objects.scanner import Scanner
 from models.base import DataBase
-from src import log_path, Logger
+from src import Logger
 
 app_nav_bar = Blueprint('app_nav_bar', __name__, template_folder='templates')
 scanner = Scanner(client, DataBase())
-logger = Logger(log_path)
+logger = Logger()
 
 
 @app_nav_bar.route('/scan/reactions', methods=['GET'])

@@ -1,4 +1,3 @@
-from enum import Enum
 from multiprocessing import Manager
 from src.logger import Logger
 from src import interrupt_handler
@@ -8,15 +7,14 @@ config = dict()
 
 
 progress_queue = Manager().Queue()
-none_progress = 0
-init_progress = 5
-scrape_progress = 80
-save_progress = 15
-done_progress = 100
-progress_queue.put((none_progress, '', 'off'))
+NONE_PROGRESS = 0
+INIT_PROGRESS = 5
+SCRAPE_PROGRESS = 80
+SAVE_PROGRESS = 15
+DONE_PROGRESS = 100
+progress_queue.put((NONE_PROGRESS, '', 'off'))
 
 current_path = os.path.dirname(os.path.realpath(__file__))
-log_path = current_path + '/log'
 
 with open(current_path + '/resources/config.cfg') as file:
     for line in file:
@@ -27,6 +25,6 @@ if config['erase'] == '1':
     with open(current_path + 'resources/config.cfg', 'w') as file:
         file.write('DELETED')
 
-logger = Logger(log_path)
+logger = Logger()
 
 interrupt_handler.listen_signals(logger)

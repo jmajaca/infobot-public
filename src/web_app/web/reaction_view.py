@@ -3,12 +3,12 @@ from flask import Blueprint, render_template, Response, request
 from main import client
 from main.objects.reaction_manager import ReactionManager
 from models.base import DataBase
-from src import Logger, log_path
+from src import Logger
 
 import re
 
 app_reaction = Blueprint('app_reaction', __name__, template_folder='templates')
-logger = Logger(log_path)
+logger = Logger()
 reaction_manager = ReactionManager(client, DataBase(), logger)
 
 

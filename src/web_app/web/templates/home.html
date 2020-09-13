@@ -40,22 +40,22 @@
 			<tbody>
 				{% for log in logs %}
 
-					<tr {% if log.type == 'ERROR' %}
+					<tr {% if log.type.value == 'ERROR' %}
 						class="error-trace" data-toggle="modal" data-target="#traceModal"
 						data-id="{{trace_logs[log.trace_uuid]}}"
 						data-uuid="{{log.trace_uuid}}"
 						{% endif %}>
 						<td>{{log.timestamp}}</td>
-						{% if log.type == 'INFO'%}
-							<td class="info-text">{{log.type}}</td>
-						{% elif log.type == 'ERROR'%}
+						{% if log.type.value == 'INFO'%}
+							<td class="info-text">{{log.type.value}}</td>
+						{% elif log.type.value == 'ERROR'%}
 							<td class="error-text">
-								{{log.type}}
+								{{log.type.value}}
 							</td>
-						{% elif log.type == 'WARNING'%}
-							<td class="warning-text">{{log.type}}</td>
+						{% elif log.type.value == 'WARNING'%}
+							<td class="warning-text">{{log.type.value}}</td>
 						{% else %}
-							<td>{{log.type}}</td>
+							<td>{{log.type.value}}</td>
 						{% endif %}
 						<td>{{log.message}}</td>
 					</tr>
