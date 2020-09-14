@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List
-from application_log import ApplicationLogType, ApplicationLog
+from src.application_log import ApplicationLogType, ApplicationLog
 import uuid
 import traceback
 import re

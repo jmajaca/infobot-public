@@ -1,7 +1,7 @@
 from slack import WebClient
-from main.objects.reaction_manager import ReactionManager
-from models.base import DataBase
-from models.model_list import Channel, SlackUser
+from src.main.objects.reaction_manager import ReactionManager
+from src.models.base import DataBase
+from src.models.model_list import Channel, SlackUser
 from src import Logger
 from datetime import datetime
 
