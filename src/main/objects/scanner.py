@@ -1,5 +1,5 @@
 from slack import WebClient
-from src.main.objects.reaction_manager import ReactionManager
+from src.main.objects.reaction_scrapper import ReactionScrapper
 from src.models.base import DataBase
 from src.models.model_list import Channel, SlackUser
 from src import Logger
@@ -18,7 +18,7 @@ class Scanner:
         a objects that is responsible for communicating with database
     logger : Logger
         a object that is saving scanner logs to a predefined file
-    reaction_manager : ReactionManager
+    reaction_manager : ReactionScrapper
         a object that is responsible for managing reactions from Slack Workspace
 
     Methods
@@ -36,7 +36,7 @@ class Scanner:
     def __init__(self, client: WebClient, database: DataBase):
         self.client, self.database = client, database
         self.logger = Logger()
-        self.reaction_manager = ReactionManager(self.client, self.database, self.logger)
+        self.reaction_manager = ReactionScrapper(self.client, self.database, self.logger)
 
     def scan_users(self):
         self.logger.info_log('Started scanning for user.')
