@@ -150,6 +150,30 @@
                             Top channels
                         </h6>
                     </div>
+                   <ul class="list-group list-group-flush d-flex justify-content-center">
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col">
+                                    <b>Channel</b>
+                                </div>
+                                <div class="col d-flex justify-content-center">
+                                    <b>Count</b>
+                                </div>
+                            </div>
+                        </li>
+                        {% for channel, count in top_channels %}
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col">
+                                        {{ channel }}
+                                    </div>
+                                    <div class="col d-flex justify-content-center">
+                                        {{ count }}
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
             <div class="col container">

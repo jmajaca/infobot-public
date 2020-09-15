@@ -17,7 +17,8 @@ reaction_manager = ReactionManager(logger)
 def get_reactions():
     senders = reaction_manager.get_top_senders()
     receivers = reaction_manager.get_top_receivers()
-    return render_template('reaction.html', senders=senders, receivers=receivers,
+    top_channels = reaction_manager.get_top_channels()
+    return render_template('reaction.html', senders=senders, receivers=receivers, top_channels=top_channels,
                            alive=reaction_scrapper.is_alive()), 200
     # return render_template('reaction.html', alive=reaction_scrapper.is_alive()), 200
 
