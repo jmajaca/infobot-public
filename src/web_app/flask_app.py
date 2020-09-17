@@ -8,6 +8,7 @@ from src.web_app.web.home_view import app_home
 from src.web_app.web.base_view import app_base
 from src.web_app.web.nav_bar_view import app_nav_bar
 from src.web_app.web.reaction_view import app_reaction
+from src.web_app.web.reminder_view import app_reminder
 
 app = Flask(__name__, template_folder='application/templates')
 app.config['SECRET_KEY'] = 'you-will-never-guess'
@@ -16,6 +17,7 @@ app.register_blueprint(app_home)
 app.register_blueprint(app_base)
 app.register_blueprint(app_nav_bar)
 app.register_blueprint(app_reaction)
+app.register_blueprint(app_reminder)
 
 
 def start_app():
