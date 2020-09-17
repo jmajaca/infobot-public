@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css">
+<script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
+
+<div class="container mx-auto my-5 bg-white">
+
+	<div class="row my-4 justify-content-center">
+		<h4 class="my-1">Filters</h4>
+	</div>
+
+	<div class="row my-4">
+		<div class="col-sm-auto">
+			<label class="label" for="btn-course">Course:</label>
+		</div>
+		<div class="col-sm">
+			<button class="btn btn-secondary dropdown-toggle btn-block" type="button" data-toggle="dropdown" id="btn-course"></button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item">Choice A</a>
+				<a class="dropdown-item">Choice B</a>
+			</div>
+		</div>
+
+		<div class="col-sm-auto">
+			<label class="label" for="btn-author">Author:</label>
+		</div>
+		<div class="col-sm">
+			<button class="btn btn-secondary dropdown-toggle btn-block mr-4" type="button" data-toggle="dropdown" id="btn-author"></button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item">Choice A</a>
+				<a class="dropdown-item">Choice B</a>
+			</div>
+		</div>
+
+		<div class="col-sm-auto">
+			<label class="label" for="btn-from">From:</label>
+		</div>
+		<div class="col-sm">
+			<button class="btn btn-secondary dropdown-toggle btn-block mr-4" type="button" data-toggle="dropdown" id="btn-from"></button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item">Choice A</a>
+				<a class="dropdown-item">Choice B</a>
+			</div>
+		</div>
+
+		<div class="col-sm-auto">
+			<label class="label" for="btn-to">To:</label>
+		</div>
+		<div class="col-sm">
+			<button class="btn btn-secondary dropdown-toggle btn-block mr-4" type="button" data-toggle="dropdown" id="btn-to"></button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item">Choice A</a>
+				<a class="dropdown-item">Choice B</a>
+			</div>
+		</div>
+		<div class="col-sm-auto">
+				<label class="custom-check-label" for="check">Posted</label>
+		</div>
+		<div class="col-sm-auto">
+			<input type="checkbox" class="custom-check-input" id="check">
+		</div>
+	</div>
+
+	<div class="row my-4 justify-content-end">
+			<button type="button" class="btn btn-danger mx-1 my-1">Cancel</button>
+			<button type="button" class="btn btn-primary mx-1 my-1">Apply</button>
+	</div>
+
+</div>
+
+<div class="container mx-auto my-5 bg-white">
+	<table data-toggle="table" data-sort-order="desc">
+		<thead>
+			<tr>
+				<th data-sortable="true">End date</th>
+				<th data-sortable="true">Timer</th>
+				<th data-sortable="true">Text</th>
+				<th data-sortable="true">Posted</th>
+			</tr>
+		</thead>
+	</table>
+</div>
+{% endblock content %}
