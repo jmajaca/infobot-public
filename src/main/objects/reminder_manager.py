@@ -1,6 +1,6 @@
 from slack import WebClient
 from src.models.base import DataBase
-from src.models.model_list import Reminder
+from src.models.model_list import Reminder, Author, Course
 from src import Logger
 
 
@@ -17,11 +17,21 @@ class ReminderManager:
     logger : Logger
         a object that is saving scanner logs to a predefined file
 
+    Methods
+    ---------
+    get_all_reminders()
+        returns all reminders from database
+    get_filter_options()
+        returns courses and authors to be used in filter option
 	"""
 
 	def __init__(self, client: WebClient, database: DataBase, logger: Logger):
 		self.client, self.database, self.logger = client, database, logger
 
-	def get_all(self):
+	def get_all_reminders(self):
 		self.logger.info_log('Pulled all reminders')
 		return self.database.select_many(Reminder)
+
+	def get_filter_options(self):
+		self.logger.info_log('Pulling all courses and authors')
+		return self.database.select_many(Author), self.database.select_many(Course)
