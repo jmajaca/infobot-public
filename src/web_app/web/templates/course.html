@@ -371,49 +371,6 @@
 
     </div>
 </div>
-
-<!-- JS SCRIPTS -->
-
-<script type=text/javascript>
-    function delete_course(id) {
-        let response = confirm("Are you sure you want to delete this course from database?");
-        if (response) {
-            $.post("/ui/course/delete?id=" + id, function(data){},"json");
-            setTimeout(refresh_page, 500);
-        }
-    }
-
-    function archive(tag) {
-        let response = confirm("Are you sure you want to archive this channel?");
-        if (response) {
-            console.log(tag)
-            $.post("/ui/channel/archive?tag=" + tag.substr(1), function(data){},"json");
-            setTimeout(refresh_page, 500);
-        }
-    }
-
-    function unarchive(tag) {
-        let response = confirm("Are you sure you want to unarchive this channel?");
-        if (response) {
-            console.log(tag)
-            $.post("/ui/channel/unarchive?tag=" + tag.substr(1), function(data){},"json");
-            setTimeout(refresh_page, 500);
-        }
-    }
-
-    function refresh_page() {
-        window.location.href = '/ui/course';
-    }
-</script>
-
-<script>
-    $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-</script>
-
-<!-- END JS SCRIPTS -->
-
 <!-- Modal -->
 <div class="modal fade" id="tagModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -463,4 +420,5 @@
   </div>
 </div>
 <!-- End modal -->
+<script src="../../static/js/course.js" type="application/javascript"></script>
 {% endblock content %}
