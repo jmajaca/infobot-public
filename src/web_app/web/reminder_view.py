@@ -11,5 +11,6 @@ reminder_manager = ReminderManager(client, DataBase(), logger)
 
 @app_reminder.route('/ui/reminder', methods=['GET'])
 def get_reminders():
-	reminders = reminder_manager.get_all()
-	return render_template('reminder.html', reminders=reminders), 200
+	reminders = reminder_manager.get_all_reminders()
+	authors, courses = reminder_manager.get_filter_options()
+	return render_template('reminder.html', courses=courses, authors=authors, reminders=reminders), 200
