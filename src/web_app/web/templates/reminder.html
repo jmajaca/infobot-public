@@ -14,7 +14,7 @@
 			<label class="label" for="course">Course:</label>
 		</div>
 		<div class="col-xs-auto mx-1">
-				<select class="selectpicker" id="course" data-style="btn-secondary">
+				<select class="selectpicker" id="course" data-style="btn-secondary" data-live-search="true">
 					{% for course in courses %}
 						<option>{{ course.name }}</option>
 					{% endfor %}
@@ -25,7 +25,7 @@
 			<label class="label" for="author">Author:</label>
 		</div>
 		<div class="col-xs-auto mx-1">
-				<select class="selectpicker" id="author" data-style="btn-secondary">
+				<select class="selectpicker" id="author" data-style="btn-secondary" data-live-search="true">
 					{% for author in authors %}
 						<option>{{ author.first_name ~ " " ~ author.last_name }}</option>
 					{% endfor %}
