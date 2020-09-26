@@ -13,14 +13,9 @@ reaction_scrapper = ReactionScrapper(client, DataBase(), logger)
 reaction_manager = ReactionManager(logger)
 
 
-@app_reaction.route('/ui/reaction/', methods=['GET', 'POST'])
-def get_reactions():
-    reaction_name = 'default'
-    if request.method == 'POST':
-        reaction_name = request.args.get('name')
-        if reaction_name == '':
-            reaction_name = 'default'
-    senders, receivers, top_channels = reaction_manager.get_top_all(search_filter=reaction_name)
+@app_reaction.route('/ui/reaction/<name>', methods=['GET', 'POST'])
+def get_reactions(name):
+    senders, receivers, top_channels = reaction_manager.get_top_all(search_filter=name)
     return render_template('reaction.html', senders=senders, receivers=receivers, top_channels=top_channels,
                            alive=reaction_scrapper.is_alive()), 200
 
