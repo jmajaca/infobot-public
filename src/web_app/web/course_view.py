@@ -14,6 +14,7 @@ session = Session()
 
 @app_course.route('/ui/course', methods=['GET', 'POST'])
 def course_handler():
+    default_course_url = 'www.fer.unizg.hr/predmet/'
     form = WatchlistForm()
     courses = session.query(Course).all()
     archived_channel_tags = [channel.tag for channel in session.query(Channel).filter(Channel.archived == True).all()]
@@ -24,14 +25,14 @@ def course_handler():
         if request.form.get('watch_input') == 'on':
             watch = True
         if form.id.data == -1:
-            new_course = Course(form.name.data, request.form.get('tag_select'), form.url.data, watch)
+            new_course = Course(form.name.data, request.form.get('tag_select'), default_course_url + form.url.data, watch)
             session.add(new_course)
             session.commit()
             session.flush()
         else:
             course = session.query(Course).filter(Course.id == form.id.data).first()
             course.name = form.name.data
-            course.url = form.url.data
+            course.url = default_course_url + form.url.data
             course.channel_tag = request.form.get('tag_select')
             course.watch = watch
             session.commit()
