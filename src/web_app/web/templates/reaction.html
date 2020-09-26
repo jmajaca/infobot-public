@@ -66,12 +66,23 @@
                 REACTIONS OVERVIEW
             </h4>
         </div>
-        <!--
-        <div class="row d-flex justify-content-center">
-            <button class="btn btn-primary" onclick="refreshView()">Refresh overview</button>
-        </div>
-        -->
-        <div class="row">
+        <form name="reaction_filter" action="" method="POST">
+            <div class="row" style="margin-top: 2%; margin-bottom: 2%">
+                <div class="col d-flex justify-content-center">
+                    <label>
+                        Reaction name
+                    </label>
+                </div>
+                 <div class="col d-flex justify-content-center">
+                    <input type="text" name="reaction_name" id="reaction_name">
+                 </div>
+                <div class="col d-flex justify-content-center">
+                    <button class="btn btn-primary" id="submit_btn" type="submit" onclick="reactionNameSend();">Submit</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="row" id="data_output">
             <div class="col container">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center">
@@ -257,6 +268,17 @@
         });
     }
 </script>
+    <script>
+    function reactionNameSend() {
+        let name = $("#reaction_name").val()
+        name = name.replace('+', '%2b')
+        console.log(name)
+        $.ajax({
+            url: '/ui/reaction?name=' + name,
+            type: 'post'
+        });
+    }
+    </script>
 <script>
      function refreshView() {
     $.ajax({

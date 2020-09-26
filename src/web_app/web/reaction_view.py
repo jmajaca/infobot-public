@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, Response, request
+from flask import Blueprint, render_template, Response, request, redirect, url_for
 
 from src.main import client
 from src.main.objects.reaction_scrapper import ReactionScrapper
@@ -13,14 +13,16 @@ reaction_scrapper = ReactionScrapper(client, DataBase(), logger)
 reaction_manager = ReactionManager(logger)
 
 
-@app_reaction.route('/ui/reaction', methods=['GET'])
+@app_reaction.route('/ui/reaction/', methods=['GET', 'POST'])
 def get_reactions():
-    senders = reaction_manager.get_top_senders()
-    receivers = reaction_manager.get_top_receivers()
-    top_channels = reaction_manager.get_top_channels()
+    reaction_name = 'default'
+    if request.method == 'POST':
+        reaction_name = request.args.get('name')
+        if reaction_name == '':
+            reaction_name = 'default'
+    senders, receivers, top_channels = reaction_manager.get_top_all(search_filter=reaction_name)
     return render_template('reaction.html', senders=senders, receivers=receivers, top_channels=top_channels,
                            alive=reaction_scrapper.is_alive()), 200
-    # return render_template('reaction.html', alive=reaction_scrapper.is_alive()), 200
 
 
 @app_reaction.route('/ui/reaction/scan', methods=['GET'])
@@ -55,10 +57,3 @@ def get_reaction_manager_process_status():
         return {'status': '1'}
     else:
         return {'status': '0'}
-
-
-@app_reaction.route('/ui/reaction/refreshView', methods=['GET', 'POST'])
-def refresh_view():
-    senders = reaction_manager.get_top_senders()
-    receivers = reaction_manager.get_top_receivers()
-    return render_template('reaction.html', senders=senders, receivers=receivers)
