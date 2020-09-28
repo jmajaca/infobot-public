@@ -19,19 +19,24 @@ class ReminderManager:
 
     Methods
     ---------
-    get_all_reminders()
-        returns all reminders from database
+    get_reminders()
+        returns reminders from database
+        kwargs: course, author, from and to dates
+        default is return all
     get_filter_options()
-        returns courses and authors to be used in filter option
+        returns all authors and courses
 	"""
 
 	def __init__(self, client: WebClient, database: DataBase, logger: Logger):
 		self.client, self.database, self.logger = client, database, logger
 
-	def get_all_reminders(self):
-		self.logger.info_log('Pulled all reminders')
-		return self.database.select_many(Reminder)
+	def get_reminders(self, **kwargs):
+		self.logger.info_log('Pulling reminders')
+		if not kwargs:
+			return self.database.select_many(Reminder)
+		else:
+			return self.database.select_many(Reminder)
 
 	def get_filter_options(self):
 		self.logger.info_log('Pulling all courses and authors')
-		return self.database.select_many(Author), self.database.select_many(Course)
+		return self.database.select_many(Course), self.database.select_many(Author)
