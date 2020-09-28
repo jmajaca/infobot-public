@@ -1,4 +1,6 @@
 from sqlalchemy import func
+from sqlalchemy.orm import aliased
+
 from src.models.base import Session
 from datetime import datetime
 from multiprocessing import Process
@@ -63,8 +65,31 @@ class ReactionManager:
         # self.logger.info_log("Retrieved top channels.")
         return top_channels[0:number_of_channels]
 
+    def get_latest_reactions(self, number_of_top: int = default_number, search_filter="default"):
+        slackUserR = aliased(SlackUser)
+        slackUserS = aliased(SlackUser)
+        if search_filter == "default":
+            latest_reactions = self.session.query(slackUserS.name, slackUserR.name, Channel.tag,
+                                                  Reaction.timestamp).join(slackUserS,
+                                                                           slackUserS.id == Reaction.sender). \
+                join(slackUserR, slackUserR.id == Reaction.receiver).join(Channel, Channel.id == Reaction.channel).\
+                all()
+        else:
+            latest_reactions = self.session.query(slackUserS.name, slackUserR.name, Channel.tag,
+                                                  Reaction.timestamp).join(slackUserS, slackUserS.id == Reaction.sender).\
+                join(slackUserR, slackUserR.id == Reaction.receiver).join(Channel, Channel.id == Reaction.channel)\
+                .filter(Reaction.name == search_filter).all()
+
+        for i in range(len(latest_reactions)):
+            real_time = datetime.fromtimestamp(latest_reactions[i][3])
+            latest_reactions[i] = latest_reactions[i][:3]
+            latest_reactions[i] += (str(real_time)[:-7],)
+
+        return latest_reactions[0:number_of_top]
+
     def get_top_all(self, number_of_top: int = default_number, search_filter="default"):
         senders = self.get_top_senders(number_of_top, search_filter)
         receivers = self.get_top_receivers(number_of_top, search_filter)
         channels = self.get_top_channels(number_of_top, search_filter)
-        return senders, receivers, channels
+        latest_reactions = self.get_latest_reactions(number_of_top, search_filter)
+        return senders, receivers, channels, latest_reactions

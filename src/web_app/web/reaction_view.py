@@ -15,9 +15,9 @@ reaction_manager = ReactionManager(logger)
 
 @app_reaction.route('/ui/reaction/<name>', methods=['GET', 'POST'])
 def get_reactions(name):
-    senders, receivers, top_channels = reaction_manager.get_top_all(search_filter=name)
+    senders, receivers, top_channels, latest_reactions = reaction_manager.get_top_all(search_filter=name)
     return render_template('reaction.html', senders=senders, receivers=receivers, top_channels=top_channels,
-                           alive=reaction_scrapper.is_alive()), 200
+                           latest_reactions=latest_reactions, alive=reaction_scrapper.is_alive()), 200
 
 
 @app_reaction.route('/ui/reaction/scan', methods=['GET'])

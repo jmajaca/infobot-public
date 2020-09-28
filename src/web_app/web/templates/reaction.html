@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container">
+<div class="container-fluid">
    <div class="card center-div">
        <div class="card-header">
             <h4 data-toggle="tooltip" data-placement="top"
@@ -151,9 +151,7 @@
                     </ul>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col container">
+        <div class="col container">
                <div class="card">
                     <div class="card-header d-flex justify-content-center">
                         <h6 data-toggle="tooltip" data-placement="top"
@@ -187,6 +185,8 @@
                     </ul>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col container">
                 <div class="card">
                     <div class="card-header d-flex justify-content-center">
@@ -194,6 +194,43 @@
                             title="Controls for reaction scanner">
                             Latest reactions
                         </h6>
+                    </div>
+                    <ul class="list-group list-group-flush d-flex justify-content-center">
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col">
+                                    <b>Sender</b>
+                                </div>
+                                <div class="col">
+                                    <b>Receiver</b>
+                                </div>
+                                <div class="col">
+                                    <b>Channel</b>
+                                </div>
+                                <div class="col">
+                                    <b>Time</b>
+                                </div>
+                            </div>
+                        </li>
+                        {% for sender, receiver, channel, time in latest_reactions %}
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col">
+                                        {{ sender }}
+                                    </div>
+                                    <div class="col">
+                                        {{ receiver }}
+                                    </div>
+                                    <div class="col">
+                                        {{ channel }}
+                                    </div>
+                                    <div class="col">
+                                        {{ time }}
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
                     </div>
                 </div>
             </div>
@@ -270,8 +307,11 @@
 </script>
 <script>
 function reactionNameSend() {
-    let name = $("#reaction_name").val()
-    name = name.replace('+', '%2b')
+    let name = $("#reaction_name").val();
+    name = name.replace('+', '%2b');
+    if(name === ''){
+        name = 'default';
+    }
     window.location.href = '/ui/reaction/' + name;
 }
 </script>
