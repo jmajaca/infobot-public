@@ -17,6 +17,7 @@ reaction_manager = ReactionManager(logger)
 def get_reactions(name):
     senders, receivers, top_channels, latest_reactions = reaction_manager.get_top_all(search_filter=name)
     return render_template('reaction.html', senders=senders, receivers=receivers, top_channels=top_channels,
+                           name=name,
                            latest_reactions=latest_reactions, alive=reaction_scrapper.is_alive()), 200
 
 
