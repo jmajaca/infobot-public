@@ -18,11 +18,11 @@ def get_reminders():
 @app_reminder.route('/ui/reminder/filter', methods=['POST'])
 def filter_reminders():
 	filters = dict()
-	for elem in ['course', 'author', 'from', 'to', 'posted']:
-		filters[elem] = request.form.get(elem)
+	for elem in ['name', 'author', 'from', 'to', 'posted']:
+		filters[elem] = request.args.get(elem)
 
 	# validation
-	filters.pop('course') if filters['course'] == "Nothing selected" else None
+	filters.pop('name') if filters['name'] == "Nothing selected" else None
 	filters.pop('author') if filters['author'] == "Nothing selected" else None
 	filters.pop('from') if not filters['from'] else None    # default is empty string
 	filters.pop('to') if not filters['to'] else None

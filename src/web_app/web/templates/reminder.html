@@ -16,6 +16,7 @@
 		</div>
 		<div class="col-xs mx-2">
 				<select class="selectpicker" id="course" data-style="btn-secondary" data-live-search="true">
+					<option selected>Nothing selected</option>
 					{% for course in courses %}
 						<option>{{ course.name }}</option>
 					{% endfor %}
@@ -27,6 +28,7 @@
 		</div>
 		<div class="col-xs mx-2">
 				<select class="selectpicker" id="author" data-style="btn-secondary" data-live-search="true">
+					<option selected>Nothing selected</option>
 					{% for author in authors %}
 						<option>{{ author.first_name ~ " " ~ author.last_name }}</option>
 					{% endfor %}
@@ -65,7 +67,7 @@
 </div>
 
 <div class="container mx-auto my-5 bg-white">
-	<table data-toggle="table" data-sort-order="desc">
+	<table data-toggle="table" data-sort-order="desc" id="table">
 		<thead>
 			<tr>
 				<th>End date</th>
