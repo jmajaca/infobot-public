@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css">
-<script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
-<script type="text/javascript" src="../../static/js/reminder.js"></script>
 
 <div class="container mx-auto my-5 bg-white">
 
@@ -67,13 +65,13 @@
 </div>
 
 <div class="container mx-auto my-5 bg-white">
-	<table data-toggle="table" data-sort-order="desc" id="table">
+	<table class="table" data-toggle="table" data-sort-order="desc" id="reminders-table">
 		<thead>
 			<tr>
-				<th>End date</th>
-				<th data-sortable="true">Countdown</th>
-				<th>Text</th>
-				<th data-sortable="true">Posted</th>
+				<th data-field="end_date">End date</th>
+				<th data-field="timer" data-sortable="true">Countdown</th>
+				<th data-field="text">Text</th>
+				<th data-field="posted" data-sortable="true">Posted</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -88,4 +86,6 @@
 		</tbody>
 	</table>
 </div>
+<script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="../../static/js/reminder.js"></script>
 {% endblock content %}
