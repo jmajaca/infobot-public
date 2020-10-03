@@ -6,9 +6,13 @@ function getFilters(){
 	let to_date = $('#to').val()
 	let posted = $('#check').is(':checked')
 	$.post('/ui/reminder/filter?name=' + course + '&author=' + author + '&from=' + from_date + '&to=' + to_date + '&posted=' + posted,
-		function(response){}, 'json')
+		updateTable, 'json')
+}
+
+function updateTable(data){
+	$('#reminders-table').bootstrapTable('load', data)
 }
 
 function resetFilters(){
-	window.location.href = 'ui/reminder'
+	$.post('/ui/reminder/filter', updateTable, 'json')
 }
