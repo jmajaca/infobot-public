@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css">
+<link rel="stylesheet" href="../../static/css/reminder.css">
 
 <div class="container mx-auto my-5 bg-white">
 
@@ -13,7 +14,7 @@
 			<label class="label" for="course">Course:</label>
 		</div>
 		<div class="col-xs mx-2">
-				<select class="selectpicker" id="course" data-style="btn-secondary" data-live-search="true">
+				<select class="selectpicker" id="course" data-style="btn-dark" data-live-search="true">
 					<option selected>Nothing selected</option>
 					{% for course in courses %}
 						<option>{{ course.name }}</option>
@@ -25,7 +26,7 @@
 			<label class="label" for="author">Author:</label>
 		</div>
 		<div class="col-xs mx-2">
-				<select class="selectpicker" id="author" data-style="btn-secondary" data-live-search="true">
+				<select class="selectpicker" id="author" data-style="btn-dark" data-live-search="true">
 					<option selected>Nothing selected</option>
 					{% for author in authors %}
 						<option>{{ author.first_name ~ " " ~ author.last_name }}</option>
@@ -65,26 +66,28 @@
 </div>
 
 <div class="container mx-auto my-5 bg-white">
-	<table class="table" data-toggle="table" data-sort-order="desc" id="reminders-table">
-		<thead>
-			<tr>
-				<th data-field="end_date">End date</th>
-				<th data-field="timer" data-sortable="true">Countdown</th>
-				<th data-field="text">Text</th>
-				<th data-field="posted" data-sortable="true">Posted</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for reminder in reminders %}
-			<tr>
-				<td>{{ reminder.end_date }}</td>
-				<td>{{ reminder.timer }}</td>
-				<td>{{ reminder.text }}</td>
-				<td>{{ reminder.posted }}</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-bordered table-hover" data-toggle="table" data-sort-order="desc" id="reminders-table">
+			<thead class="thead-dark">
+				<tr>
+					<th data-field="end_date">End date</th>
+					<th data-field="timer" data-sortable="true">Countdown</th>
+					<th data-field="text">Text</th>
+					<th data-field="posted" data-sortable="true">Posted</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for reminder in reminders %}
+				<tr>
+					<td>{{ reminder.end_date }}</td>
+					<td>{{ reminder.timer }}</td>
+					<td>{{ reminder.text }}</td>
+					<td>{{ reminder.posted }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 </div>
 <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
 <script type="text/javascript" src="../../static/js/reminder.js"></script>
