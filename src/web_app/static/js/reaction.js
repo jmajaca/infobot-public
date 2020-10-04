@@ -27,7 +27,6 @@ function startReactionScan() {
     })
 }
 
-$('#time_picker').timepicker();
 
 function saveNewTime() {
     $.ajax({
@@ -40,15 +39,15 @@ function saveNewTime() {
 
 
 $(document).ready(function() {
-setInterval(function(){
-    $.getJSON('/ui/reaction/automatic', function (data) {
-        if (data.status === '1') {
+    setInterval(function(){
+        $.getJSON('/ui/reaction/automatic', function (data) {
+            if (data.status === '1') {
 
-        } else if (data.status === '0' && $('#scan-toggle').is(':checked')) {
-            location.reload();
-        }
-    });
-},10000)
+            } else if (data.status === '0' && $('#scan-toggle').is(':checked')) {
+                location.reload();
+            }
+        });
+    },10000)
 });
 
 function toggleAutomaticReactionScan() {
