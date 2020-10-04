@@ -29,7 +29,7 @@ class ReactionManager:
         returns top number_of_receivers reactions receivers by number of received reactions
     get_top_channels(number_of_channels: int = default_number, reaction_name="default") -> str[]
         returns top number_of_channels channels by reactions exchanged
-    get_latest_reactions(number_of_top: int = default_number, reaction_name="default") -> tuple(sender, receiver, channel, time)
+    get_latest_reactions(number_of_top: int = default_number, reaction_name="default") -> tuple(sender: str, receiver: str, channel: str, time: str)
         returns tuple with information about latest reaction sender, receiver, channel and time of reaction exchange
     get_top_all(number_of_top: int = default_number, reaction_name="default")
         calls get_top_senders, get_top_receivers(), get_top_receivers(), get_top_channels(), get_latest_reactions()
