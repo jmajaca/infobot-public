@@ -38,5 +38,8 @@ def filter_reminders():
 	# turn a list of reminders into a list of reminder attributes in dict form
 	# end_date and timer are parsed to string because timestamp and interval are not json serializable
 	for i,reminder in enumerate(reminders):
-		reminders_json.append({'end_date': str(reminder.end_date), 'timer': str(reminder.timer), 'text': reminder.text, 'posted': reminder.posted})
+		reminders_json.append({'end_date': str(reminder.end_date),
+		                       'timer': str(reminder.timer),
+		                       'text': reminder.text,
+		                       'posted': reminder.posted})
 	return {'result': len(reminders_json), 'rows': reminders_json}

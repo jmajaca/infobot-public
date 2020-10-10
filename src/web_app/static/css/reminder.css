@@ -4,3 +4,8 @@ td {
 	text-overflow: ellipsis;
 	max-width: 400px;
 }
+
+tr > td:hover {
+    overflow: visible;
+    white-space: unset;
+}
