@@ -1,116 +1,105 @@
-import time
+from sqlalchemy import func
+from sqlalchemy.orm import aliased
 
-from slack import WebClient
-from src.models.base import DataBase
-from src.models.model_list import Reaction, SlackUser
-from src import Logger
-from multiprocessing import Process
+from src.models.base import Session
 from datetime import datetime
+from multiprocessing import Process
+from src import Logger
+from src.models.model_list import Reaction, SlackUser, Channel
 
 
 class ReactionManager:
     """
-    A class that is responsible for handling all actions regarding Slack Workspace reactions
+    A class responsible for handling all actions related to reactions in database
 
     Attributes
     ----------
-    client : WebClient
-        a Slack WebClient via getting reactions from Slack Workspace is done
-    database : DataBase
-        a objects that is responsible for communicating with database
     logger : Logger
         a object that is saving scanner logs to a predefined file
-    scan_hour: int
-        value of a hour on which to start automatic scanning for new reactions
-    scan_minute: int
-        value of a minute on which to start automatic scanning for new reactions
-    process: Process
-        process that is executing the automatic scanning for new reactions
+    default_number: int
+        the number of senders/receivers/channels etc. that will be selected for display
+    reaction_name: str = 'default'
+        Name of reaction user wants to view, defaults to "default"
 
     Methods
-    -------
-    start()
-        Start async child process for automatic reaction scanning
-    _start_process()
-        Infinite loop that checks if time has come to start automatic reaction scanning
-    is_alive() -> bool
-        Method that returns boolean value that represent if automatic scraping process is alive
-    close()
-        Ends async child process for automatic reaction scanning
-    count()
-        Scans for new reactions in Slack Workspace and saves them in the database
-    generate_slack_message(target_reaction) -> str
-        Method for generating Slack message that contains top list (sender and receiver) for target reaction
+    ----------
+    get_top_senders(number_of_senders: int = default_number, reaction_name="default") -> str[]
+        returns top number_of_senders reactions senders by number of sent reactions
+    get_top_receivers(number_of_receivers: int = default_number, reaction_name="default") -> str[]
+        returns top number_of_receivers reactions receivers by number of received reactions
+    get_top_channels(number_of_channels: int = default_number, reaction_name="default") -> str[]
+        returns top number_of_channels channels by reactions exchanged
+    get_latest_reactions(number_of_top: int = default_number, reaction_name="default") -> tuple(sender: str, receiver: str, channel: str, time: str)
+        returns tuple with information about latest reaction sender, receiver, channel and time of reaction exchange
+    get_top_all(number_of_top: int = default_number, reaction_name="default")
+        calls get_top_senders, get_top_receivers(), get_top_receivers(), get_top_channels(), get_latest_reactions()
     """
 
-    process: Process = None
+    default_number = 5
 
-    def __init__(self, client: WebClient, database: DataBase, logger: Logger):
-        self.client, self.database, self.logger = client, database, logger
-        self.scan_hour, self.scan_minute = 0, 0
+    def __init__(self, logger: Logger, default_number: int = default_number):
+        self.session = Session()
+        self.logger = logger
+        self.default_number = default_number
 
-    def start(self):
-        self.process = Process(target=self._start_process)
-        self.logger.info_log('Started process of automatic reaction scanning.')
-        self.process.start()
-
-    def _start_process(self):
-        last_date = None
-        while True:
-            current_time = datetime.now().time()
-            if current_time.hour >= self.scan_hour and current_time.minute >= self.scan_minute and \
-                    (last_date is None or datetime.now().date() > last_date):
-                last_date = datetime.now().date()
-                try:
-                    self.count()
-                except Exception as e:
-                    self.logger.error_log(e)
-                    raise e
-            time.sleep(600)
-
-    def is_alive(self) -> bool:
-        if self.process:
-            return self.process.is_alive()
+    def get_top_senders(self, number_of_senders: int = default_number, reaction_name="default"):
+        if reaction_name == "default":
+            senders = self.session.query(SlackUser.name, func.count(SlackUser.name)).join(
+                Reaction, Reaction.sender == SlackUser.id).group_by(SlackUser.name).order_by(
+                func.count(SlackUser.name).desc()).all()
         else:
-            return False
+            senders = self.session.query(SlackUser.name, func.count(SlackUser.name)).join(
+                Reaction, Reaction.sender == SlackUser.id).filter(Reaction.name == reaction_name).group_by(
+                SlackUser.name).order_by(func.count(SlackUser.name).desc()).all()
+        return senders[0:number_of_senders]
 
-    def close(self):
-        self.process.kill()
-        # self.process.close()
-        self.logger.info_log('Killed process of automatic reaction scanning.')
+    def get_top_receivers(self, number_of_receivers: int = default_number, reaction_name="default"):
+        if reaction_name == "default":
+            receivers = self.session.query(SlackUser.name, func.count(SlackUser.name)).join(
+                Reaction, Reaction.receiver == SlackUser.id).group_by(SlackUser.name).order_by(
+                func.count(SlackUser.name).desc()).all()
+        else:
+            receivers = self.session.query(SlackUser.name, func.count(SlackUser.name)).join(
+                Reaction, Reaction.receiver == SlackUser.id).filter(Reaction.name == reaction_name).group_by(
+                SlackUser.name).order_by(func.count(SlackUser.name).desc()).all()
+        return receivers[0:number_of_receivers]
 
-    def count(self):
-        self.logger.info_log('Started counting reactions.')
-        for user in self.database.select_many(SlackUser):
-            reactions_response = self.client.reactions_list(user=user.id)
-            items = reactions_response.data['items']
-            for item in items:
-                channel = item['channel']
-                message = item['message']
-                ts = message['ts']
-                author = message['user']
-                reactions = message['reactions']
-                for reaction in reactions:
-                    if user.id in reaction['users']:
-                        reaction_code = reaction['name'].split(':')[0]
-                        if self.database.select(Reaction, channel=channel, timestamp=ts, sender=user.id,
-                                                receiver=author, name=reaction_code) is None:
-                            slack_reaction = Reaction(channel, ts, reaction_code, user.id, author)
-                            self.database.insert(slack_reaction)
-                            self.logger.info_log('Database insert {}'.format(slack_reaction))
-        self.logger.info_log('Finished counting reactions.')
+    def get_top_channels(self, number_of_channels: int = default_number, reaction_name="default"):
+        if reaction_name == "default":
+            top_channels = self.session.query(Channel.tag, func.count(Channel.tag)).join(
+                Reaction, Reaction.channel == Channel.id).group_by(Channel.tag).order_by(
+                func.count(Channel.tag).desc()).all()
+        else:
+            top_channels = self.session.query(Channel.tag, func.count(Channel.tag)).join(
+                Reaction, Reaction.channel == Channel.id).filter(Reaction.name == reaction_name).group_by(
+                Channel.tag).order_by(func.count(Channel.tag).desc()).all()
+        return top_channels[0:number_of_channels]
 
-    def generate_slack_message(self, target_reaction) -> str:
-        reactions = []
-        for user in self.database.select_many(SlackUser):
-            sent_count = len(self.database.select_many(Reaction, sender=user.id, name=target_reaction))
-            received_count = len(self.database.select_many(Reaction, receiver=user.id, name=target_reaction))
-            reactions.append((user.id, received_count, sent_count))
-        results = sorted(reactions, key=lambda x: x[1])
-        results.reverse()
-        slack_message = 'Here is top chart for :{}:\n\n'.format(target_reaction)
-        for i in range(len(results)):
-            item = results[i]
-            slack_message += '{}. <@{}> with {} total reaction received (sent {})\n'.format(i+1, item[0], item[1],
-                                                                                            item[2])
-        return slack_message
+    def get_latest_reactions(self, number_of_top: int = default_number, reaction_name="default"):
+        slackUserR = aliased(SlackUser)
+        slackUserS = aliased(SlackUser)
+        if reaction_name == "default":
+            latest_reactions = self.session.query(slackUserS.name, slackUserR.name, Channel.tag,
+                                                  Reaction.timestamp).join(
+                slackUserS, slackUserS.id == Reaction.sender).join(
+                slackUserR, slackUserR.id == Reaction.receiver).join(Channel, Channel.id == Reaction.channel).all()
+        else:
+            latest_reactions = self.session.query(slackUserS.name, slackUserR.name, Channel.tag,
+                                                  Reaction.timestamp).join(
+                slackUserS, slackUserS.id == Reaction.sender).join(
+                slackUserR, slackUserR.id == Reaction.receiver).join(Channel, Channel.id == Reaction.channel).filter(
+                Reaction.name == reaction_name).all()
+
+        for i in range(len(latest_reactions)):
+            real_time = datetime.fromtimestamp(latest_reactions[i][3])
+            latest_reactions[i] = latest_reactions[i][:3]
+            latest_reactions[i] += (str(real_time)[:-7],)
+
+        return latest_reactions[0:number_of_top]
+
+    def get_top_all(self, number_of_top: int = default_number, reaction_name="default"):
+        senders = self.get_top_senders(number_of_top, reaction_name)
+        receivers = self.get_top_receivers(number_of_top, reaction_name)
+        channels = self.get_top_channels(number_of_top, reaction_name)
+        latest_reactions = self.get_latest_reactions(number_of_top, reaction_name)
+        return senders, receivers, channels, latest_reactions

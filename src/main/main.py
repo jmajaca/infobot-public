@@ -1,7 +1,7 @@
 import gc
 import time
 
-from src import logger, progress_queue, init_progress, scrape_progress, save_progress, none_progress, done_progress
+from src import logger, progress_queue, INIT_PROGRESS, SCRAPE_PROGRESS, SAVE_PROGRESS, NONE_PROGRESS, DONE_PROGRESS
 from src.main import client, scraper
 from src.main import refresh_active_courses
 from src.main.helper import *
@@ -11,7 +11,7 @@ from src.models.model_list import Notification, Course, Channel
 
 
 def start_scraper_process():
-    progress_queue.put((none_progress, 'Starting scraper'))
+    progress_queue.put((NONE_PROGRESS, 'Starting scraper'))
     database = DataBase()
     logger.info_log('Program started.')
     # refresh_active_courses.start()
@@ -27,7 +27,7 @@ def start_scraper_process():
             print('Scraping phase done.')
             # TODO catch exception do in main
             if notifications is None:
-                progress_queue.put((init_progress + scrape_progress), None, 'warning')
+                progress_queue.put((INIT_PROGRESS + SCRAPE_PROGRESS), None, 'warning')
                 timeout *= 2
                 time.sleep(min(timeout, 2400))
                 notifications = []
@@ -53,19 +53,19 @@ def start_scraper_process():
                         # https://api.slack.com/methods/pins.add
                         client.pins_add(channel=response['channel'], timestamp=response['ts'])
                         # database.insert(Pin(datetime.now(), timedelta(hours=24), response['channel'], response['ts']))
-                progress_queue.put((init_progress + scrape_progress + int(save_progress/(len(notifications))) * (i+1), None))
+                progress_queue.put((INIT_PROGRESS + SCRAPE_PROGRESS + int(SAVE_PROGRESS/(len(notifications))) * (i+1), None))
             gc.collect()
             if loop_count == 10:
                 count_reactions(client)
                 loop_count = 0
-            progress_queue.put((done_progress, 'Scraping done', 'sleep'))
+            progress_queue.put((DONE_PROGRESS, 'Scraping done', 'sleep'))
             time.sleep(60)
-            progress_queue.put((none_progress, 'Starting scraper'))
+            progress_queue.put((NONE_PROGRESS, 'Starting scraper'))
     except Exception as e:
         logger.error_log(e)
     finally:
         error_channel = '#random'
         client.chat_postMessage(channel=error_channel, text='I am dead.')
         logger.info_log('Program finished with exit code 1.')
-        progress_queue.put((none_progress, 'Program finished with exit code 1', 'error'))
+        progress_queue.put((NONE_PROGRESS, 'Program finished with exit code 1', 'error'))
         exit(1)
