@@ -67,29 +67,29 @@
 
 <div class="container mx-auto my-5 bg-white">
 	<div class="table-responsive">
-		<table class="table table-bordered table-hover" data-toggle="table" data-sort-order="desc" id="reminders-table" data-unique-id="id">
+		<table class="table table-bordered table-hover" data-toggle="table" data-sort-order="desc" id="reminders-table">
 			<thead class="thead-dark">
 				<tr>
-					<th data-field="id" data-visible="false"></th>
 					<th data-field="end_date">End date</th>
 					<th data-field="timer" data-sortable="true">Countdown</th>
 					<th data-field="text">Text</th>
 					<th data-field="posted" data-sortable="true">Posted</th>
-					<th data-field="options">Options</th>
+					<th data-field="options"></th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for reminder in reminders %}
 				<tr>
-					<td>{{ loop.index - 1 }}</td>
-					<td>{{ reminder.end_date }}</td>
-					<td>{{ reminder.timer }}</td>
-					<td>{{ reminder.text }}</td>
-					<td>{{ reminder.posted }}</td>
-					<td>
-						<a class="mx-1" href="#" onclick="editReminder(this)">Edit</a>
-						<a class="mx-1">or</a>
-						<a class="mx-1" href="#" onclick="deleteReminder(this)">Delete</a>
+					<td id="end_date">{{ reminder.end_date }}</td>
+					<td id="timer">{{ reminder.timer }}</td>
+					<td id="text">{{ reminder.text }}</td>
+					<td id="posted">{{ reminder.posted }}</td>
+					<td class="btn w-100" data-toggle="dropdown" id="options">&hellip;
+						<div class="dropdown-menu" id="menu">
+							<a class="ml-3 mr-2" href="#" onclick="editReminder(this)">Edit</a>
+							<a class="mx-1">or</a>
+							<a class="mr-3 ml-2" href="#" onclick="deleteReminder(this)">Delete</a>
+						</div>
 					</td>
 				</tr>
 				{% endfor %}
