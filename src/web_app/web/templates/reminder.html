@@ -80,12 +80,12 @@
 			<tbody>
 				{% for reminder in reminders %}
 				<tr>
-					<td id="end_date">{{ reminder.end_date }}</td>
-					<td id="timer">{{ reminder.timer }}</td>
-					<td id="text">{{ reminder.text }}</td>
-					<td id="posted">{{ reminder.posted }}</td>
-					<td class="btn w-100" data-toggle="dropdown" id="options">&hellip;
-						<div class="dropdown-menu" id="menu">
+					<td class="end_date">{{ reminder.end_date }}</td>
+					<td class="timer">{{ reminder.timer }}</td>
+					<td class="text">{{ reminder.text }}</td>
+					<td class="posted">{{ reminder.posted }}</td>
+					<td class="btn w-100" data-toggle="dropdown">&hellip;
+						<div class="dropdown-menu menu">
 							<a class="ml-3 mr-2" href="#" onclick="editReminder(this)">Edit</a>
 							<a class="mx-1">or</a>
 							<a class="mr-3 ml-2" href="#" onclick="deleteReminder(this)">Delete</a>
