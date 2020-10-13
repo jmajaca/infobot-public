@@ -1,4 +1,5 @@
 from slack import WebClient
+
 from src.models.base import DataBase, Session
 from src.models.model_list import Reminder, Author, Course, Notification
 from src import Logger
@@ -25,6 +26,9 @@ class ReminderManager:
         default is return all
     get_filter_options()
         returns all authors and courses
+    save()
+        saves a changed reminder
+		returns result of saving
 	"""
 
 	def __init__(self, client: WebClient, database: DataBase, logger: Logger):
@@ -54,3 +58,6 @@ class ReminderManager:
 	def get_filter_options(self):
 		self.logger.info_log('Pulling all courses and authors')
 		return self.database.select_many(Course), self.database.select_many(Author)
+
+	def save(self, **kwargs):
+		pass

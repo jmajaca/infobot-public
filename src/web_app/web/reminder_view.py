@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, make_response
 
 from src import Logger, log_path
 from src.main import client
@@ -43,3 +43,19 @@ def filter_reminders():
 		                       'text': reminder.text,
 		                       'posted': reminder.posted})
 	return {'result': len(reminders_json), 'rows': reminders_json}
+
+@app_reminder.route('/ui/reminder/save', methods=['POST'])
+def save_reminder():
+	reminder_data = dict()
+	for elem in ['end_date', 'timer', 'text', 'posted']:
+		reminder_data[elem] = request.args.get(elem)
+
+	# validation timer=positive integer
+	if not reminder_data['timer']:  # empty string
+		return make_response(400)
+	for value in reminder_data['timer'].split(':'):
+		try:
+			if int(value) < 0:
+				return make_response(400)
+		except ValueError:
+			return make_response(400)
