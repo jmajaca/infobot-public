@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from slack import WebClient
+from sqlalchemy.exc import SQLAlchemyError
 
 from src.models.base import DataBase, Session
 from src.models.model_list import Reminder, Author, Course, Notification
@@ -67,9 +68,13 @@ class ReminderManager:
 		# parse string data
 		year, month, day = kwargs['end_date'].split(' ')[0].split('-')
 		hour, minute, second = kwargs['end_date'].split(' ')[1].split(':')
-		reminder.end_date = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
-		reminder.timer = timedelta(seconds=kwargs['timer'])
-		reminder.text = kwargs['text']
-		reminder.posted = True if kwargs['posted'] is True else False
-		self.session.commit()
-		return
+		try:
+			reminder.end_date = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
+			reminder.timer = timedelta(seconds=kwargs['timer'])
+			reminder.text = kwargs['text']
+			reminder.posted = True if kwargs['posted'] is True else False
+			self.session.commit()
+		except SQLAlchemyError as e:
+			self.logger.info_log('Error when updating:' + str(type(e)))
+			return False
+		return True

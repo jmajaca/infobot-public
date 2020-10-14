@@ -93,7 +93,7 @@ function save(eventObject){
 					cancel(eventObject)
 				},
 				500: function () {
-					alert("There was a problem with updating reminder. We apologise.")
+					alert("There was a problem while updating reminder. We apologise.")
 					cancel(eventObject)
 				}
 			}
