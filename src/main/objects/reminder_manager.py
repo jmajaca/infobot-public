@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from slack import WebClient
 
 from src.models.base import DataBase, Session
@@ -60,4 +62,14 @@ class ReminderManager:
 		return self.database.select_many(Course), self.database.select_many(Author)
 
 	def save(self, **kwargs):
-		pass
+		self.logger.info_log('Updating reminder with id: ' + kwargs['id'])
+		reminder = self.session.query(Reminder).get(kwargs['id'])
+		# parse string data
+		year, month, day = kwargs['end_date'].split(' ')[0].split('-')
+		hour, minute, second = kwargs['end_date'].split(' ')[1].split(':')
+		reminder.end_date = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
+		reminder.timer = timedelta(seconds=kwargs['timer'])
+		reminder.text = kwargs['text']
+		reminder.posted = True if kwargs['posted'] is True else False
+		self.session.commit()
+		return
