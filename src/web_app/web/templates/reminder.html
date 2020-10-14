@@ -70,6 +70,7 @@
 		<table class="table table-bordered table-hover" data-toggle="table" data-sort-order="desc" id="reminders-table">
 			<thead class="thead-dark">
 				<tr>
+					<th data-field="id">#</th>
 					<th data-field="end_date">End date</th>
 					<th data-field="timer" data-sortable="true">Countdown</th>
 					<th data-field="text">Text</th>
@@ -80,6 +81,7 @@
 			<tbody>
 				{% for reminder in reminders %}
 				<tr>
+					<td class="reminder-id">{{ reminder.id }}</td>
 					<td class="end_date">{{ reminder.end_date }}</td>
 					<td class="timer">{{ reminder.timer }}</td>
 					<td class="text">{{ reminder.text }}</td>

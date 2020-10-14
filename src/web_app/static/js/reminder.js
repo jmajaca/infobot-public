@@ -19,19 +19,19 @@ function updateTable(data){
 	$("table#reminders-table tr").each(function() {
 		$("td", this).each(function(j) {
 			switch(j){
-				case 0:
+				case 1:
 					this.setAttribute('class', 'end_date')
 					break;
-				case 1:
+				case 2:
 					this.setAttribute('class', 'timer')
 					break;
-				case 2:
+				case 3:
 					this.setAttribute('class', 'text')
 					break;
-				case 3:
+				case 4:
 					this.setAttribute('class', 'posted')
 					break;
-				case 4:
+				case 5:
 					this.setAttribute('class', 'btn w-100')
 					this.setAttribute('data-toggle', 'dropdown')
 					break;
@@ -76,15 +76,31 @@ function cancel(eventObject) {
 
 function save(eventObject){
 	let index = eventObject.parentElement.parentElement.parentElement.attributes[0].value
+	let id = $('.reminder-id')[index].textContent
 	let endDate = $('.end_date')[index].textContent
 	let timer = $('.timer')[index].textContent
 	let text = $('.text')[index].textContent
 	let posted = $('.posted')[index].textContent
 	// if there were no changes don't save
-	if(rowDataBeforeEdit['end_date'] !== endDate || rowDataBeforeEdit['timer'] !== timer || rowDataBeforeEdit['text'] !== text || rowDataBeforeEdit['posted'] !== posted){
-		$.post('/ui/reminder/save?end_date=' + endDate + "timer=" + timer + "text=" + text + "posted=" + posted, function res(data){}, 'json')
+	if(rowDataBeforeEdit['end_date'] !== endDate || rowDataBeforeEdit['timer'] !== timer || rowDataBeforeEdit['text'] !== text || rowDataBeforeEdit['posted'] !== posted) {
+		$.ajax({
+			url: '/ui/reminder/save?id=' + id + '&end_date=' + endDate + "&timer=" + timer + "&text=" + text + "&posted=" + posted,
+			method: 'POST',
+			statusCode: {
+				200: finishEditing(index),
+				400: function () {
+					alert("Timer must be a positive number representing time in seconds or in format days:hours:minutes:seconds!")
+					cancel(eventObject)
+				},
+				500: function () {
+					alert("There was a problem with updating reminder. We apologise.")
+					cancel(eventObject)
+				}
+			}
+		})
+	} else {
+		finishEditing(index)
 	}
-	finishEditing(index)
 }
 
 function finishEditing(index){
