@@ -17,6 +17,7 @@ def get_reminders():
 	courses, authors = reminder_manager.get_filter_options()
 	return render_template('reminder.html', courses=courses, authors=authors, reminders=reminders), 200
 
+
 @app_reminder.route('/ui/reminder/filter', methods=['POST'])
 def filter_reminders():
 	filters = dict()
@@ -46,6 +47,7 @@ def filter_reminders():
 		                       'text': reminder.text,
 		                       'posted': reminder.posted})
 	return {'result': len(reminders_json), 'rows': reminders_json}
+
 
 @app_reminder.route('/ui/reminder/save', methods=['POST'])
 def save_reminder():
@@ -98,6 +100,15 @@ def save_reminder():
 	reminder_data['timer'] = timer_in_seconds
 
 	if reminder_manager.save(**reminder_data):
+		return Response(status=200, mimetype='application/json')
+	else:
+		return Response(status=500, mimetype='application/json')
+
+
+@app_reminder.route('/ui/reminder/delete', methods=['POST'])
+def delete():
+	reminder_id = request.args.get('id')
+	if reminder_manager.delete(reminder_id):
 		return Response(status=200, mimetype='application/json')
 	else:
 		return Response(status=500, mimetype='application/json')
