@@ -10,15 +10,28 @@ function getFilters(){
 }
 
 function updateTable(data){
+	let optionsHTML = "&hellip;<div class=\"dropdown-menu menu\">\n" +
+						"<a class=\"ml-3 mr-2\" href=\"#\" onclick=\"editReminder(this)\">Edit</a>\n" +
+						"<a class=\"mx-1\">or</a>\n" +
+						"<a class=\"mr-3 ml-2\" href=\"#\" onclick=\"deleteReminder(this)\">Delete</a>\n" +
+						"</div>"
 	for(let i=0; i<data.result; i++){
-		data.rows[i].options = $('#reminders-table').bootstrapTable('getData')[0].options
+		data.rows[i].posted = data.rows[i].posted ? 'True' : 'False'
+		data.rows[i].options = optionsHTML
 	}
 	$('#reminders-table').bootstrapTable('load', data)
+	setClasses()
+}
+
+function setClasses(){
 	// set ids for each column
 	// make 4th column a dropdown button
 	$("table#reminders-table tr").each(function() {
 		$("td", this).each(function(j) {
 			switch(j){
+				case 0:
+					this.setAttribute('class', 'reminder-id')
+					break;
 				case 1:
 					this.setAttribute('class', 'end_date')
 					break;
@@ -120,6 +133,20 @@ function finishEditing(index){
 	})
 }
 
-function deleteReminder(){
-
+function deleteReminder(eventObject){
+	let index = eventObject.parentElement.parentElement.parentElement.attributes[0].value
+	let id = $('.reminder-id')[index].textContent
+	$.ajax({
+			url: '/ui/reminder/delete?id=' + id,
+			method: 'POST',
+			statusCode: {
+				200: function(){
+					$('#reminders-table').bootstrapTable('remove', {field: '$index', values: index})
+					setClasses()
+				},
+				500: function () {
+					alert("There was a problem while deleting reminder. We apologise.")
+				}
+			}
+		})
 }
