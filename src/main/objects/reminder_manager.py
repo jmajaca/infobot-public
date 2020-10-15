@@ -31,7 +31,10 @@ class ReminderManager:
         returns all authors and courses
     save()
         saves a changed reminder
-		returns result of saving
+        returns result of saving
+    delete()
+        deletes reminder with given id from database
+        return result of deletion
 	"""
 
 	def __init__(self, client: WebClient, database: DataBase, logger: Logger):
@@ -76,5 +79,15 @@ class ReminderManager:
 			self.session.commit()
 		except SQLAlchemyError as e:
 			self.logger.info_log('Error when updating:' + str(type(e)))
+			return False
+		return True
+
+	def delete(self, reminder_id):
+		self.logger.info_log("Removing reminder with id: " + reminder_id)
+		try:
+			self.session.query(Reminder).filter_by(id=reminder_id).delete()
+			self.session.commit()
+		except SQLAlchemyError as e:
+			self.logger.info_log('Error when deleting:' + str(type(e)))
 			return False
 		return True
