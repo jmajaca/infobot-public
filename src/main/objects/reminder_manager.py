@@ -33,8 +33,9 @@ class ReminderManager:
         saves a changed reminder
         returns result of saving
     delete()
-        deletes reminder with given id from database
-        return result of deletion
+        removes reminder from database
+        params: id of the reminder
+        return result of removal
 	"""
 
 	def __init__(self, client: WebClient, database: DataBase, logger: Logger):

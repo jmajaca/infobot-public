@@ -9,10 +9,13 @@ from src.models.base import DataBase
 
 app_reminder = Blueprint('app_reminder', __name__, template_folder='templates')
 logger = Logger(log_path)
-reminder_manager = ReminderManager(client, DataBase(), logger)
+reminder_manager = ReminderManager(client, DataBase(), logger)  # used for all interactions with database
 
 @app_reminder.route('/ui/reminder', methods=['GET'])
 def get_reminders():
+	"""
+	default mapping with all reminders
+	"""
 	reminders = reminder_manager.get_reminders()
 	courses, authors = reminder_manager.get_filter_options()
 	return render_template('reminder.html', courses=courses, authors=authors, reminders=reminders), 200
@@ -20,6 +23,17 @@ def get_reminders():
 
 @app_reminder.route('/ui/reminder/filter', methods=['POST'])
 def filter_reminders():
+	"""
+	mapping for returning only filtered reminders
+	params: name : name of the course
+			author : first and last name of the author
+			from : all dates after it
+			to : all dates after it
+			posted : true or false, reminder posted in workspace or not
+	returns: dict that has form for loading bootstrap table
+			result : number of reminders
+			rows : all data for reminders, must be JSON serializable
+	"""
 	filters = dict()
 	if len(request.args) != 0:
 		for elem in ['name', 'author', 'from', 'to', 'posted']:
@@ -51,12 +65,22 @@ def filter_reminders():
 
 @app_reminder.route('/ui/reminder/save', methods=['POST'])
 def save_reminder():
+	"""
+	mapping for saving edited reminder data to database
+	params: id : id of reminder
+			end_date : that of the event
+			timer : time left until end_date
+			text : description of the reminder
+			posted : reminder posted in workspace or not
+	returns: 400 if new data doesn't pass validation
+			 500 in case of database error
+			 200 otherwise
+	"""
 	reminder_data = dict()
 	for elem in ['id' ,'end_date', 'timer', 'text', 'posted']:
 		if elem == 'timer':
-			# default format includes string "days"
-			reminder_data[elem] = re.sub( r'[a-zA-Z\s]', r'', request.args.get(elem))
-			reminder_data[elem] = reminder_data[elem].replace(',',':')
+			# default format includes string "days", remove it and split data by :
+			reminder_data[elem] = request.args.get(elem).replace(' days, ', ':')
 			continue
 		reminder_data[elem] = request.args.get(elem)
 
@@ -67,7 +91,7 @@ def save_reminder():
 		# can't be empty string
 		if not reminder_data['timer']:
 			return error_response
-		# days:hour:minutes:seconds, all > 0
+		# days:hours:minutes:seconds
 		elif ':' in reminder_data['timer']:
 			values = reminder_data['timer'].split(':')
 			for i,value in enumerate(values):
