@@ -141,7 +141,7 @@ function deleteReminder(eventObject){
 			method: 'POST',
 			statusCode: {
 				200: function(){
-					$('#reminders-table').bootstrapTable('remove', {field: '$index', values: index})
+					$('#reminders-table').bootstrapTable('remove', {field: 'id', values: id})
 					setClasses()
 				},
 				500: function () {
@@ -149,4 +149,20 @@ function deleteReminder(eventObject){
 				}
 			}
 		})
+}
+
+function countdownSorter(a,b){
+	let parsedDateA = a.replace(' days, ', ':').split(':')
+	let dateA = parsedDateA.length === 4 ?
+		new Date(0,0,parseInt(parsedDateA[0]), parseInt(parsedDateA[1]), parseInt(parsedDateA[2]), parseInt(parsedDateA[3])) :
+		new Date(0,0,0, parseInt(parsedDateA[0]), parseInt(parsedDateA[1]), parseInt(parsedDateA[2]))
+
+	let parsedDateB = b.replace(' days, ', ':').split(':')
+	let dateB = parsedDateB.length === 4 ?
+		new Date(0,0,parseInt(parsedDateB[0]), parseInt(parsedDateB[1]), parseInt(parsedDateB[2]), parseInt(parsedDateB[3])) :
+		new Date(0,0,0, parseInt(parsedDateB[0]), parseInt(parsedDateB[1]), parseInt(parsedDateB[2]))
+	console.log(dateA,dateB)
+	if(dateA < dateB) return -1
+	else if(dateA > dateB) return 1
+	else return 0
 }
