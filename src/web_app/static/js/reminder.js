@@ -1,4 +1,11 @@
 
+// classes disappear after applying filters and then sorting
+// so reset them after table body rendering
+$(document).ready(function (){
+	$('#reminders-table').on('post-body.bs.table', setClasses)
+})
+
+
 // passes all filter fields to the back
 function getFilters(){
 	let course = $('#course').val()
