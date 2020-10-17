@@ -1,6 +1,4 @@
-import re
-
-from flask import Blueprint, render_template, request, make_response, Response
+from flask import Blueprint, render_template, request, Response
 
 from src import Logger, log_path
 from src.main import client
@@ -54,7 +52,7 @@ def filter_reminders():
 	reminders_json = list()
 	# turn a list of reminders into a list of reminder attributes in dict form
 	# end_date and timer are parsed to string because timestamp and interval are not json serializable
-	for i,reminder in enumerate(reminders):
+	for reminder in reminders:
 		reminders_json.append({'id': reminder.id,
 		                       'end_date': str(reminder.end_date),
 		                       'timer': str(reminder.timer),
@@ -77,7 +75,7 @@ def save_reminder():
 			 200 otherwise
 	"""
 	reminder_data = dict()
-	for elem in ['id' ,'end_date', 'timer', 'text', 'posted']:
+	for elem in ['id', 'end_date', 'timer', 'text', 'posted']:
 		if elem == 'timer':
 			# default format includes string "days", remove it and split data by :
 			reminder_data[elem] = request.args.get(elem).replace(' days, ', ':')
@@ -94,23 +92,23 @@ def save_reminder():
 		# days:hours:minutes:seconds
 		elif ':' in reminder_data['timer']:
 			values = reminder_data['timer'].split(':')
-			for i,value in enumerate(values):
+			for i, value in enumerate(values):
 					if int(value) < 0 or int(value) > 999999999:
 						return error_response
 					else:
 						# hours:minutes:seconds
 						if len(values) == 3:
-							i +=1
+							i += 1
 						# minutes:seconds
 						elif len(values) == 2:
-							i +=2
-						if i==0:    # days -> seconds
+							i += 2
+						if i == 0:    # days -> seconds
 							timer_in_seconds += int(value)*24*60*60
-						elif i==1:  # hours -> seconds
+						elif i == 1:  # hours -> seconds
 							timer_in_seconds += int(value)*60*60
-						elif i==2:  # minutes -> seconds
+						elif i == 2:  # minutes -> seconds
 							timer_in_seconds += int(value)*60
-						elif i==3:  # seconds -> seconds
+						elif i == 3:  # seconds -> seconds
 							timer_in_seconds += int(value)
 						else:
 							return error_response
