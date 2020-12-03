@@ -111,7 +111,7 @@ function save(eventObject){
 	let index = eventObject.parentElement.parentElement.parentElement.attributes[0].value
 	let id = $('.reminder-id')[index].textContent
 	let endDate = $('.end_date')[index].textContent
-	let timer = $('.timer')[index].textContent
+	let timer = $('.timer')[index].textContent.replace(" days, ", ":")	// remove string days from timer
 	let text = $('.text')[index].textContent
 	let posted = $('.posted')[index].textContent
 	// if there were no changes don't save
