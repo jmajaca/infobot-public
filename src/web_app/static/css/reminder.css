@@ -9,3 +9,8 @@ tr > td:hover {
     overflow: visible;
     white-space: unset;
 }
+
+#check {
+	width: 25px;
+	height: 25px;
+}
