@@ -79,7 +79,7 @@ class ReminderManager:
 			reminder.posted = True if kwargs['posted'] is True else False
 			self.session.commit()
 		except SQLAlchemyError as e:
-			self.logger.info_log('Error when updating:' + str(type(e)))
+			self.logger.error_log(e)
 			return False
 		return True
 
@@ -89,6 +89,6 @@ class ReminderManager:
 			self.session.query(Reminder).filter_by(id=reminder_id).delete()
 			self.session.commit()
 		except SQLAlchemyError as e:
-			self.logger.info_log('Error when deleting:' + str(type(e)))
+			self.logger.error_log(e)
 			return False
 		return True
