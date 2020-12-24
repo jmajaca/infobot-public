@@ -52,7 +52,7 @@ def start_scraper_process():
                             database.insert(reminder)
                         # https://api.slack.com/methods/pins.add
                         client.pins_add(channel=response['channel'], timestamp=response['ts'])
-                        # database.insert(Pin(datetime.now(), timedelta(hours=24), response['channel'], response['ts']))
+                        database.insert(Pin(datetime.now(), timedelta(hours=24), response['channel'], response['ts']))
                 progress_queue.put((INIT_PROGRESS + SCRAPE_PROGRESS + int(SAVE_PROGRESS/(len(notifications))) * (i+1), None))
             gc.collect()
             if loop_count == 10:
