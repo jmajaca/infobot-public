@@ -4,10 +4,12 @@ window.setInterval(function(){
 
 function processNewData() {
     let reload = localStorage.getItem('reload');
-    const data = localStorage.getItem('data').split(',');
-    $('#progress-bar').css('width', data[0]+'%').attr('aria-valuenow', data[0]);
-    $('#progress-bar-label').text(data[0]+'%');
-    $('#progress-bar-action').text(data[1])
+    if (localStorage.getItem('data')) {
+        const data = localStorage.getItem('data').split(',');
+        $('#progress-bar').css('width', data[0]+'%').attr('aria-valuenow', data[0]);
+        $('#progress-bar-label').text(data[0]+'%');
+        $('#progress-bar-action').text(data[1])
+    }
 
     if(data[2] === 'error' && localStorage.getItem('error') === '0') {
         console.log(reload)
