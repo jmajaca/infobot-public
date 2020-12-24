@@ -165,3 +165,23 @@
 	cursor: pointer;
 	outline: inherit;
 }
+
+.no-button:focus {
+    outline: none;
+}
+
+.reaction_table_left{
+    margin-left: 1vw;
+    margin-bottom: 5vh;
+}
+
+.reaction_table_right{
+    margin-right: 1vw;
+    margin-bottom: 5vh;
+}
+
+.reaction_table_middle{
+    margin-right: 1vw;
+    margin-left: 1vw;
+    margin-bottom: 5vh;
+}

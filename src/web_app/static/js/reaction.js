@@ -1,3 +1,4 @@
+
 function hideReactionProcessElements() {
     $('#reaction-scan-spinner').toggle();
     $('#reaction-scan-error').hide();
@@ -26,6 +27,7 @@ function startReactionScan() {
     })
 }
 
+
 function saveNewTime() {
     $.ajax({
         url: '/ui/reaction/time',
@@ -34,6 +36,7 @@ function saveNewTime() {
         contentType: 'application/json;charset=UTF-8'
     });
 }
+
 
 $(document).ready(function() {
     setInterval(function(){
@@ -53,3 +56,25 @@ function toggleAutomaticReactionScan() {
         type: 'get'
     });
 }
+
+function reactionNameSend() {
+let name = $("#reaction_name").val();
+name = name.replace('+', '%2b');
+if(name === ''){
+    name = 'default';
+}
+window.location.href = '/ui/reaction/' + name;
+}
+
+ function refreshView() {
+$.ajax({
+    url: '/ui/reaction/refreshView',
+    type: 'get'
+});
+}
+
+$( "#reaction_name" ).keyup(function( event ) {
+    if (event.keyCode === 13) {
+        reactionNameSend();
+    }
+});

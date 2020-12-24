@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, SelectField, IntegerField
+from wtforms import StringField, BooleanField, IntegerField
 from wtforms.validators import DataRequired
 
 
@@ -10,6 +10,7 @@ class WatchlistForm(FlaskForm):
     # tag = SelectField('Tag:', choices=[''], validators=[])
     url = StringField('URL:', validators=[DataRequired()])
     watch = BooleanField('Watch:', validators=[])
+
     # https://stackoverflow.com/questions/39147578/set-wtforms-submit-button-to-icon
     # submit = SubmitField('Add')
 
