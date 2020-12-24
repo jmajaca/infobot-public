@@ -43,7 +43,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">https://www.fer.unizg.hr/predmet/</span>
                                 </div>
-                                {{ form.url(class_="watchlist-common url-input", value=course.url) }}
+                                {{ form.url(class_="watchlist-common url-input", value=course.url.split('/')[-1]) }}
                             </div>
                         </div>
 
@@ -216,7 +216,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">https://www.fer.unizg.hr/predmet/</span>
                                 </div>
-                                {{ form.url(class_="watchlist-common url-input", value=course.url) }}
+                                {{ form.url(class_="watchlist-common url-input", value=course.url.split('/')[-1]) }}
                             </div>
                         </div>
 
@@ -315,7 +315,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">https://www.fer.unizg.hr/predmet/</span>
                                 </div>
-                                {{ form.url(class_="watchlist-common url-input", value=course.url) }}
+                                {{ form.url(class_="watchlist-common url-input", value=course.url.split('/')[-1]) }}
                             </div>
                         </div>
 

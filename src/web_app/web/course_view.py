@@ -19,8 +19,6 @@ def course_handler():
     form = WatchlistForm()
     courses = session.query(Course).all()
     archived_channel_tags = [channel.tag for channel in session.query(Channel).filter(Channel.archived == True).all()]
-    for course in courses:
-        course.url = course.url.split('/')[-1]
     if form.validate_on_submit():
         watch = False
         if request.form.get('watch_input') == 'on':
