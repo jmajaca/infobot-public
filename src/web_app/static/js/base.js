@@ -7,7 +7,7 @@ function course() {
     window.location.href = '/ui/course';
 }
 function reaction() {
-    window.location.href = '/ui/reaction';
+    window.location.href = '/ui/reaction/default';
 }
 function reminder() {
     window.location.href = '/ui/reminder';
