@@ -92,7 +92,7 @@ def get_date(match_group):
         return str(day) + '.' + str(month) + '.' + str(year) + '.'
     else:
         month = re.search(r'[0-9]+\.([0-9])\.', match_group).group(1)
-        if int(month) > datetime.now().month:
+        if int(month) < datetime.now().month:
             year = datetime.now().year + 1
         else:
             year = datetime.now().year
