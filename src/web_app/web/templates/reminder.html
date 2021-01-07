@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reminder.css') }}">
+
+<div class="container mx-auto my-5 bg-white">
+
+	<div class="row my-4 justify-content-center">
+		<h4 class="my-1">Filters</h4>
+	</div>
+
+	<div class="row my-4">
+		<div class="col-xs ml-3 mr-1">
+			<label class="label" for="course">Course:</label>
+		</div>
+		<div class="col-xs mx-2">
+				<select class="selectpicker" id="course" data-style="btn-dark" data-live-search="true">
+					<option selected>Nothing selected</option>
+					{% for course in courses %}
+						<option>{{ course.name }}</option>
+					{% endfor %}
+				</select>
+		</div>
+
+		<div class="col-xs ml-3 mr-1">
+			<label class="label" for="author">Author:</label>
+		</div>
+		<div class="col-xs mx-2">
+				<select class="selectpicker" id="author" data-style="btn-dark" data-live-search="true">
+					<option selected>Nothing selected</option>
+					{% for author in authors %}
+						<option>{{ author.first_name ~ " " ~ author.last_name }}</option>
+					{% endfor %}
+				</select>
+		</div>
+
+		<div class="col-xs ml-3 mr-1">
+			<label class="label" for="from">From:</label>
+		</div>
+		<div class="col-xs mx-2">
+				<input type="date" id="from">
+		</div>
+
+		<div class="col-xs ml-3 mr-1">
+			<label class="label" for="to">To:</label>
+		</div>
+		<div class="col-xs mx-2">
+				<input type="date" id="to">
+		</div>
+	</div>
+
+	<div class="row my-4 justify-content-end">
+		<div class="col-auto">
+				<label class="custom-check-label" for="check">Posted:</label>
+		</div>
+		<div class="col-auto mr-4">
+			<input type="checkbox" class="custom-checkbox-input" id="check">
+		</div>
+	</div>
+
+	<div class="row my-4 justify-content-end">
+			<button type="button" class="btn btn-danger mr-3 mb-2" onclick="resetFilters()">Cancel</button>
+			<button type="button" class="btn btn-primary mr-3 mb-2" onclick="getFilters()">Apply</button>
+	</div>
+
+</div>
+
+<div class="container mx-auto my-5 bg-white">
+	<div class="table-responsive">
+		<table class="table table-bordered table-hover" data-toggle="table" data-sort-order="desc" id="reminders-table">
+			<thead class="thead-dark">
+				<tr>
+					<th data-field="id">#</th>
+					<th data-field="end_date">End date</th>
+					<th data-field="timer" data-sortable="true" data-sorter="countdownSorter">Countdown</th>
+					<th data-field="text">Text</th>
+					<th data-field="posted" data-sortable="true">Posted</th>
+					<th data-field="options"></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for reminder in reminders %}
+				<tr>
+					<td class="reminder-id">{{ reminder.id }}</td>
+					<td class="end_date">{{ reminder.end_date }}</td>
+					<td class="timer">{{ reminder.timer }}</td>
+					<td class="text">{{ reminder.text }}</td>
+					<td class="posted">{{ reminder.posted }}</td>
+					<td class="btn w-100" data-toggle="dropdown">&hellip;
+						<div class="dropdown-menu menu">
+							<a class="ml-3 mr-2" href="#" onclick="editReminder(this)">Edit</a>
+							<a class="mx-1">or</a>
+							<a class="mr-3 ml-2" href="#" onclick="deleteReminder(this)">Delete</a>
+						</div>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+<script src="../../static/js/reminder.js" type="application/javascript"></script>
+{% endblock content %}

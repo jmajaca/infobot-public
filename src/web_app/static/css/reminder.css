@@ -1,0 +1,16 @@
+td {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 400px;
+}
+
+tr > td:hover {
+    overflow: visible;
+    white-space: unset;
+}
+
+#check {
+	width: 25px;
+	height: 25px;
+}
