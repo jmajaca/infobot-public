@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, Response
 
-from src import Logger, log_path
+from src import Logger
 from src.main import client
 from src.main.objects.reminder_manager import ReminderManager
 from src.models.base import DataBase
@@ -8,7 +8,7 @@ from src.web_app.services import reminder_service
 
 
 app_reminder = Blueprint('app_reminder', __name__, template_folder='templates')
-logger = Logger(log_path)
+logger = Logger()
 reminder_manager = ReminderManager(client, DataBase(), logger)  # used for all interactions with database
 
 @app_reminder.route('/ui/reminder', methods=['GET'])
