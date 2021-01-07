@@ -118,7 +118,7 @@ def check_filters(notification):
 
 def check_pins(client):
     session = Session()
-    pins = session.query(Pin).filter(Pin.done is False).all()
+    pins = session.query(Pin).filter(Pin.done == False).all()
     for pin in pins:
         if datetime.now() >= pin.creation_date + pin.timer:
             response = client.pins_remove(channel=pin.channel, timestamp=pin.timestamp)
