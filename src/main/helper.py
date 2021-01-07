@@ -21,7 +21,7 @@ def parse_date(date):
     return groups.group(3) + '.' + groups.group(2) + '.' + groups.group(1) + '. u ' + groups.group(4)
 
 
-def check_reminders(client):
+def check_reminders(client, logger):
     session = Session()
     reminders = session.query(Reminder).filter(Reminder.end_date - Reminder.timer <= datetime.now()).filter(
         Reminder.posted == False).all()
@@ -33,6 +33,8 @@ def check_reminders(client):
                                        '\nSee more at ' + notification.link)
         response = client.chat_postMessage(channel=course.channel_tag, text=text)
         reminder.posted = True
+        logger.info_log('Posted reminder with id ' + str(reminder.id) + ' in channel ' + course.channel_tag + '(' +
+                        course.channel + ')')
         session.commit()
 
 
@@ -116,14 +118,15 @@ def check_filters(notification):
     return True
 
 
-def check_pins(client):
+def check_pins(client, logger):
     session = Session()
     pins = session.query(Pin).filter(Pin.done == False).all()
     for pin in pins:
         if datetime.now() >= pin.creation_date + pin.timer:
-            response = client.pins_remove(channel=pin.channel, timestamp=pin.timestamp)
+            response = client.pins_remove(channel=pin.channel, timestamp='%.6f' % pin.timestamp)
             pin.done = True
             session.commit()
+            logger.info_log('Unpinned message with timestamp ' + str(pin.timestamp) + ' in channel ' + pin.channel)
 
 
 def create_notification_object(notification):
