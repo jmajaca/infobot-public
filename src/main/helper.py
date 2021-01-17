@@ -34,7 +34,7 @@ def check_reminders(client, logger):
         response = client.chat_postMessage(channel=course.channel_tag, text=text)
         reminder.posted = True
         logger.info_log('Posted reminder with id ' + str(reminder.id) + ' in channel ' + course.channel_tag + '(' +
-                        course.channel + ')')
+                        str(course.channel.id) + ')')
         session.commit()
 
 
