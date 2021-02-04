@@ -203,6 +203,9 @@
                                 <div class="col">
                                     <b>Receiver</b>
                                 </div>
+                                  <div class="col">
+                                    <b>Reaction</b>
+                                </div>
                                 <div class="col">
                                     <b>Channel</b>
                                 </div>
@@ -211,7 +214,7 @@
                                 </div>
                             </div>
                         </li>
-                        {% for sender, receiver, channel, time in latest_reactions %}
+                        {% for sender, receiver, name, channel, time in latest_reactions %}
                             <li class="list-group-item">
                                 <div class="row">
                                     <div class="col">
@@ -219,6 +222,9 @@
                                     </div>
                                     <div class="col">
                                         {{ receiver }}
+                                    </div>
+                                     <div class="col">
+                                        {{ name }}
                                     </div>
                                     <div class="col">
                                         {{ channel }}
