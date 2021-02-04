@@ -98,6 +98,7 @@ class ReactionManager:
         return latest_reactions[0:number_of_top]
 
     def get_top_all(self, number_of_top: int = default_number, reaction_name="default"):
+        reaction_name = reaction_name.lower()
         senders = self.get_top_senders(number_of_top, reaction_name)
         receivers = self.get_top_receivers(number_of_top, reaction_name)
         channels = self.get_top_channels(number_of_top, reaction_name)
