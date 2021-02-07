@@ -79,20 +79,20 @@ class ReactionManager:
         slackUserR = aliased(SlackUser)
         slackUserS = aliased(SlackUser)
         if reaction_name == "default":
-            latest_reactions = self.session.query(slackUserS.name, slackUserR.name, Channel.tag,
+            latest_reactions = self.session.query(slackUserS.name, slackUserR.name, Reaction.name, Channel.tag,
                                                   Reaction.timestamp).join(
                 slackUserS, slackUserS.id == Reaction.sender).join(
-                slackUserR, slackUserR.id == Reaction.receiver).join(Channel, Channel.id == Reaction.channel).all()
+                slackUserR, slackUserR.id == Reaction.receiver).join(Channel, Channel.id == Reaction.channel).order_by(Reaction.timestamp.desc()).all()
         else:
-            latest_reactions = self.session.query(slackUserS.name, slackUserR.name, Channel.tag,
+            latest_reactions = self.session.query(slackUserS.name, slackUserR.name, Reaction.name, Channel.tag,
                                                   Reaction.timestamp).join(
                 slackUserS, slackUserS.id == Reaction.sender).join(
-                slackUserR, slackUserR.id == Reaction.receiver).join(Channel, Channel.id == Reaction.channel).filter(
+                slackUserR, slackUserR.id == Reaction.receiver).join(Channel, Channel.id == Reaction.channel).order_by(Reaction.timestamp.desc()).filter(
                 Reaction.name == reaction_name).all()
 
         for i in range(len(latest_reactions)):
-            real_time = datetime.fromtimestamp(latest_reactions[i][3])
-            latest_reactions[i] = latest_reactions[i][:3]
+            real_time = datetime.fromtimestamp(latest_reactions[i][4])
+            latest_reactions[i] = latest_reactions[i][:4]
             latest_reactions[i] += (str(real_time)[:-7],)
 
         return latest_reactions[0:number_of_top]
