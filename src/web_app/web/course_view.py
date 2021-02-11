@@ -1,4 +1,3 @@
-import time
 from datetime import datetime
 
 from flask import Blueprint, render_template, request, redirect, url_for
@@ -11,7 +10,6 @@ from src.models.notification import Notification
 from src.models.pin import Pin
 from src.models.reminder import Reminder
 from src.models.slack_user import SlackUser
-from src.web_app.web import home_view
 from src.web_app.web.forms import WatchlistForm
 
 app_course = Blueprint('app_course', __name__, template_folder='templates')
@@ -45,7 +43,6 @@ def course_handler():
         form.name.data = ''
         form.url.data = ''
         form.watch.data = True
-        reset_scraper()
     watched = [course for course in courses if course.watch and course.channel_tag not in archived_channel_tags]
     unwatched = [course for course in courses if not course.watch and course.channel_tag not in archived_channel_tags]
     archived = [course for course in courses if course.channel_tag in archived_channel_tags]
@@ -71,7 +68,6 @@ def course_delete():
     session.query(Course).filter(Course.id == course_id).delete()
     session.commit()
     session.flush()
-    reset_scraper()
     return redirect(url_for('app_course.course_handler'))
 
 
@@ -117,7 +113,6 @@ def archive_channel():
     session.add(channel)
     session.commit()
     session.flush()
-    reset_scraper()
     return redirect(url_for('app_course.course_handler'))
 
 
@@ -135,11 +130,4 @@ def unarchive_channel():
     session.add(channel)
     session.commit()
     session.flush()
-    reset_scraper()
     return redirect(url_for('app_course.course_handler'))
-
-
-def reset_scraper():
-    home_view.stop_scraper()
-    time.sleep(2)
-    home_view.start_scraper()

@@ -15,11 +15,11 @@ def start_scraper_process():
     database = DataBase()
     logger.info_log('Program started.')
     # refresh_active_courses.start()
-    courses = database.select_many(Course, watch=True)
     # count_reactions(client)
     timeout = 600
     try:
         loop_count = 0
+        courses = database.select_many(Course, watch=True)
         while True:
             check_pins(client, logger)
             check_reminders(client, logger)
@@ -57,6 +57,7 @@ def start_scraper_process():
             gc.collect()
             if loop_count == 10:
                 count_reactions(client)
+                courses = database.select_many(Course, watch=True)
                 loop_count = 0
             progress_queue.put((DONE_PROGRESS, 'Scraping done', 'sleep'))
             time.sleep(60)
