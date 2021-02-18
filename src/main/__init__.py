@@ -1,10 +1,10 @@
 import slack
 from src import config
-from src.main.html_scraper import Scraper
+from src.main.objects.web_scraper import WebScraper
 
 
 client = slack.WebClient(token=config['bot_token'])
-scraper = Scraper(link=config['fer_url'], payload={'username': config['username'], 'password': config['password']})
+scraper = WebScraper(link=config['fer_url'], payload={'username': config['username'], 'password': config['password']})
 
 # locally
 del config

@@ -136,3 +136,4 @@ src/resources/legacy/*
 src/resources/docker-compose.yml
 src/resources/sql_scripts/data.sql
 src/main/course_list.csv
+src/test/*
