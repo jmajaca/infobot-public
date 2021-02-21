@@ -96,15 +96,15 @@ class WebScraper:
             time.sleep(2)
             self.progress_queue_manager.scraping_course_start_info(course)
             link = course.url + '/obavijesti'
-            notification = Notification()
             raw_html = session.get('https://' + link, headers=self.headers, data=self.payload).text
             soup = BeautifulSoup(raw_html, self.html_parser)
             news_articles = soup.findAll('div', {'class': 'news_article'})
             for j, news_article in enumerate(news_articles):
                 title_element = news_article.find('div', {'class': 'news_title'})
+                notification = Notification()
                 notification.link = self.link + title_element.a['href']
-                notification.title = title_element.get_text().rstrip().lstrip()
-                notification.site = self.database.select(Course, name=course.name)
+                notification.title = title_element.get_text().strip()
+                notification.site = self.database.select(Course, name=course.name).id
                 notification.author = self._check_author(news_article
                                                          .find('span', {'class': 'author_name'})
                                                          .get_text().strip()).id
@@ -145,16 +145,18 @@ class WebScraper:
 
     # https://api.slack.com/reference/surfaces/formatting
     def _check_text(self, text: str) -> str:
+        # getting only text from html
+        text = '\n'.join(text.split('\n')[1:-1]).strip()
         # replacing HTML spacing
-        text = text.replace('&nbsp;', ' ')
+        text = text.replace(u"\u00A0", " ")
         # closing right gaps
-        text = re.sub(r'([0-9A-z]) +(</)', r'\g<1>\g<2>', text)
+        text = re.sub(r'([0-9A-z:;"\').]) +(</)', r'\g<1>\g<2>', text)
         # closing left gaps
         text = re.sub(r'(<[^>]+>) +([^ ])', r'\g<1>\g<2>', text)
         # expanding right gaps
-        text = re.sub(r'(</[^>]+>)([^ :;"\'.])', r'\g<1> \g<2>', text)
+        text = re.sub(r'(</[^>]+>)([^ :;"\').])', r'\g<1> \g<2>', text)
         # expanding left gaps
-        text = re.sub(r'([^ :;"\'.])(<[^/>]+>)', r'\g<1> \g<2>', text)
+        text = re.sub(r'([^ :;"\'(.])(<[^/>]+>)', r'\g<1> \g<2>', text)
         # replacing bold and italic html tags for slack tags
         text = text.replace('<strong>', '*').replace('</strong>', '*').replace('<em>', '_').replace('</em>', '_')
         # parsing links
@@ -168,6 +170,6 @@ class WebScraper:
         # workaround for Slack not parsing list as expected
         text = text.replace('<li>', '<li>• ')
         # removing extra spaces
-        text = text.replace(' +', ' ')
+        text = re.sub(r' +', r' ', text)
         # parsing the rest of text
         return BeautifulSoup(text, self.html_parser).get_text()
