@@ -23,7 +23,7 @@ def start_scraper_process():
         while True:
             check_pins(client, logger)
             check_reminders(client, logger)
-            notifications = scraper.scrape_notifications(courses)
+            notifications = scraper.start(courses)
             print('Scraping phase done.')
             # TODO catch exception do in main
             if notifications is None:
