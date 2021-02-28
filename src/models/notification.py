@@ -14,7 +14,7 @@ class Notification(Base):
     link = Column(String, nullable=False)
     reminders = relationship('Reminder')
 
-    def __init__(self, title, site, author, publish_date, text, link):
+    def __init__(self, title=None, site=None, author=None, publish_date=None, text=None, link=None):
         self.title, self.site, self.author, self.publish_date, self.text, self.link = \
             title, site, author, publish_date, text, link
 

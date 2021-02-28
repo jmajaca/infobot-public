@@ -6,15 +6,18 @@ from src.main import client
 from src.models.base import Session
 from src.models.channel import Channel
 from src.models.course import Course
+from src.models.notification import Notification
+from src.models.pin import Pin
+from src.models.reminder import Reminder
 from src.models.slack_user import SlackUser
 from src.web_app.web.forms import WatchlistForm
 
 app_course = Blueprint('app_course', __name__, template_folder='templates')
-session = Session()
 
 
 @app_course.route('/ui/course', methods=['GET', 'POST'])
 def course_handler():
+    session = Session()
     default_course_url = 'www.fer.unizg.hr/predmet/'
     form = WatchlistForm()
     courses = session.query(Course).all()
@@ -90,13 +93,24 @@ def add_channel_tag():
 def archive_channel():
     session = Session()
     channel_tag = '#' + request.args.get('tag')
+    course = session.query(Course).filter(Course.channel_tag == channel_tag).first()
+    course.watch = False
+    session.add(course)
+    pins = session.query(Pin).join(Channel, Pin.channel == Channel.id).filter(Pin.done == False).filter(Channel.tag == channel_tag).all()
+    for pin in pins:
+        client.pins_remove(channel=pin.channel, timestamp='%.6f' % pin.timestamp)
+        pin.done = True
+        session.add(pin)
+    reminders = session.query(Reminder).join(Notification, Reminder.notification == Notification.id)\
+        .join(Course, Course.id == Notification.site).filter(Course.channel_tag == channel_tag)\
+        .filter(Reminder.posted == False).all()
+    for reminder in reminders:
+        reminder.posted = True
+        session.add(reminder)
     channel = session.query(Channel).filter(Channel.tag == channel_tag).first()
     client.conversations_archive(channel=channel.id)
     channel.archived = True
     session.add(channel)
-    course = session.query(Course).filter(Course.channel_tag == channel_tag).first()
-    course.watch = False
-    session.add(course)
     session.commit()
     session.flush()
     return redirect(url_for('app_course.course_handler'))

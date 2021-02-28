@@ -23,3 +23,7 @@ function unarchive(tag) {
         setTimeout(refresh_page, 500);
     }
 }
+
+function refresh_page() {
+    location.reload();
+}

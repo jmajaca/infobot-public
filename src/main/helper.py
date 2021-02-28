@@ -127,30 +127,3 @@ def check_pins(client, logger):
             pin.done = True
             session.commit()
             logger.info_log('Unpinned message with timestamp ' + str(pin.timestamp) + ' in channel ' + pin.channel)
-
-
-def create_notification_object(notification):
-    database = DataBase()
-    site = database.select(Course, name=notification['site_name'])
-    author = database.select(Author, first_name=notification['author_name'].split()[0],
-                             last_name=' '.join(notification['author_name'].split()[1:]))
-    if author is None:
-        author_name_list = notification['author_name'].split()
-        database.insert(Author(author_name_list[0], ' '.join(author_name_list[1:])))
-        author = database.select(Author, first_name=notification['author_name'].split()[0],
-                                 last_name=notification['author_name'].split()[1])
-    return Notification(notification['title'], site.id, author.id, notification['date'], notification['text'],
-                        notification['link'])
-
-
-def from_notification_to_dict(notification):
-    result = dict()
-    database = DataBase()
-    result['site_name'] = database.select(Course, id=notification.site).name
-    author = database.select(Author, id=notification.author)
-    result['author_name'] = author.first_name + ' ' + author.last_name
-    result['date'] = notification.publish_date
-    result['text'] = notification.text
-    result['link'] = notification.link
-    result['title'] = notification.title
-    return result

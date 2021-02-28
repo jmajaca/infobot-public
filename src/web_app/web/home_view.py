@@ -1,5 +1,4 @@
 import multiprocessing
-import re
 
 from src.main.main import start_scraper_process
 from src import logger, progress_queue, NONE_PROGRESS
