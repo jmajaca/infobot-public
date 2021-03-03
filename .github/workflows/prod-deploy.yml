@@ -15,6 +15,6 @@ jobs:
           DEPLOY_PASSWD: ${{ secrets.DEPLOY_PASSWD }}
           DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
         run: |
-          apt install sshpass
+          sudo apt install sshpass
           sshpass -p "$DEPLOY_PASSWD" ssh -o StrictHostKeyChecking=no -l $DEPLOY_USERNAME $DEPLOY_HOST < "$GITHUB_WORKSPACE/src/resources/bash_scripts/deployment.sh"
           
