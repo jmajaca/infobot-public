@@ -1,0 +1,20 @@
+name: Production Deploy
+
+on:
+  push:
+    branches: [ 46-deployment-script ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - shell: bash
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PASSWD: ${{ secrets.DEPLOY_PASSWD }}
+          DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
+        run: |
+          apt install sshpass
+          sshpass -p "$DEPLOY_PASSWD" ssh -o StrictHostKeyChecking=no -l $DEPLOY_USERNAME $DEPLOY_HOST < "$GITHUB_WORKSPACE/src/resources/bash_scripts/deployment.sh"
+          
