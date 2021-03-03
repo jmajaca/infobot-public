@@ -150,11 +150,11 @@ class WebScraper:
         # replacing HTML spacing
         text = text.replace(u"\u00A0", " ")
         # closing right gaps
-        text = re.sub(r'([0-9A-z:;"\').]) +(</)', r'\g<1>\g<2>', text)
+        text = re.sub(r'([0-9A-z:;,"\').]) +(</)', r'\g<1>\g<2>', text)
         # closing left gaps
         text = re.sub(r'(<[^>]+>) +([^ ])', r'\g<1>\g<2>', text)
         # expanding right gaps
-        text = re.sub(r'(</[^>]+>)([^ :;"\').])', r'\g<1> \g<2>', text)
+        text = re.sub(r'(</[^>]+>)([^ :;,"\').])', r'\g<1> \g<2>', text)
         # expanding left gaps
         text = re.sub(r'([^ :;"\'(.])(<[^/>]+>)', r'\g<1> \g<2>', text)
         # replacing bold and italic html tags for slack tags
@@ -164,9 +164,12 @@ class WebScraper:
             re.findall(r'(<a href=\"([^<> ]*)\"[^<>]*>([^<>]*)</a>)', text))
         for link_group in link_groups:
             if 'http' in link_group.target:
-                text = re.sub(link_group.target, '&lt;' + link_group.link + '|' + link_group.text + '&gt;', text)
+                text = re.sub(re.escape(link_group.target), '&lt;' + link_group.link + '|' + link_group.text + '&gt;',
+                              text)
             else:
-                text = re.sub(link_group.target, '&lt;mailto:' + link_group.link + '|' + link_group.text + '&gt;', text)
+                mail_elements = re.search(r"javascript:cms_mail\(\'([^,]*)\',\'([^,]*)\'.*\)", link_group.link)
+                text = re.sub(re.escape(link_group.target), '&lt;mailto:' + mail_elements.group(1) + '@' +
+                              mail_elements.group(2) + '|' + link_group.text + '&gt;', text)
         # workaround for Slack not parsing list as expected
         text = text.replace('<li>', '<li>• ')
         # removing extra spaces
