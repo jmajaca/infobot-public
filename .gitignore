@@ -138,3 +138,4 @@ src/resources/sql_scripts/data.sql
 src/main/course_list.csv
 src/test/*
 src/resources/bash_scripts/deployment_local.sh
+src/resources/db_backup.cfg
