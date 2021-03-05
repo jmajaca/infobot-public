@@ -16,4 +16,6 @@ docker build --tag infobot-app -f Dockerfile .
 echo "$(info_log) Build new docker image finished"
 docker run --name infobot-app -p 9000:9000 infobot-app &
 echo "$(info_log) Infobot application started"
+curl GET http://207.246.120.216:9000/ui/home/ui/home/scraper/start
+echo "$(info_log) Scraper started"
 exit 0
