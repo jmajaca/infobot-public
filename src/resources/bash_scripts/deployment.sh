@@ -1,8 +1,6 @@
 #!/bin/bash
 
-info_log () {
-  echo "---- INFO - [$(date +%d.%m.%Y-%H:%M:%S.%N)] --"
-}
+source ./log_func.sh
 
 echo "$(info_log) Deploy script started"
 docker stop infobot-app > /dev/null 2>&1
@@ -18,6 +16,6 @@ docker build --tag infobot-app -f Dockerfile .
 echo "$(info_log) Build new docker image finished"
 docker run --name infobot-app -p 9000:9000 infobot-app &
 echo "$(info_log) Infobot application started"
-curl GET "http://$DEPLOY_HOST/ui/home/ui/home/scraper/start"
+curl -X GET "http://$DEPLOY_HOST/ui/home/ui/home/scraper/start"
 echo "$(info_log) Scraper started"
 exit 0

@@ -19,6 +19,7 @@ unzip infobot-public.zip
 rm infobot-public.zip
 cp infobot-public/config.cfg ..
 cp infobot-public/docker-compose.yml ..
+cp infobot-public/db_backup.cfg ..
 rm -rf infobot-public
 
 echo Database container init
