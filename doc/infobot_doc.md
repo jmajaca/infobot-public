@@ -74,6 +74,12 @@ Command will create two databases: one for production and one for testing. Both 
 tables from infobot project. Production database is on default postgres port `5432` while test database is on port
 `5431`.
 
+#### Database Backup
+
+In order to activate cron job for snapshotting database every day at midnight paste
+following string `0 0 * * * {path_to_git_repo}/infobot-public/src/resources/bash_scripts/database_backup.sh > /tmp/script.log 2>&1`
+in file which is opened with command `sudo crontab -e`.
+
 ### Application
 
 Docker bash script will install

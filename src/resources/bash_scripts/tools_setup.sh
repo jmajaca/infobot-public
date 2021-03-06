@@ -8,8 +8,17 @@ yes Y | apt install git
 echo Installing unzip
 apt install unzip
 
+echo Installing zip
+apt install zip
+
 echo Installing curl
 apt install curl
+
+echo Installing postgresql-client
+apt install postgresql-client
+
+echo Installing jq
+apt install jq
 
 echo Installing Docker
 cd /tmp || exit
@@ -32,3 +41,4 @@ docker-compose --version
 #echo Installing ngrok
 #wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.tgz
 #tar xvf ngrok-stable-linux-amd64.tgz -C /usr/local/bin
+
