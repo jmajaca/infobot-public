@@ -31,6 +31,24 @@ curl -X POST -L   \
   -F "metadata={name :'$file_name', parents: ['$API_PARENT_ID']};type=application/json;charset=UTF-8" \
   -F "file=@$file_name;type=application/zip" "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart"
 echo "$(info_log) Uploaded data to Google Drive"
+
+echo "$(info_log) Checking if number of snapshots is over the limit"
+echo "$(info_log) Get list of file IDs"
+file_ids=($(curl 'https://www.googleapis.com/drive/v3/files?corpora=user' \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H 'Accept: application/json' | jq -r '.files' | jq -r '.[].id'))
+
+if [ ${#file_ids[@]} -gt 5 ]
+then
+  echo "$(info_log) Number of snapshots is greater than 5, sending delete request"
+  curl -X DELETE "https://www.googleapis.com/drive/v3/files/${file_ids[-1]}" \
+    -H "Authorization: Bearer $ACCESS_TOKEN" \
+    -H 'Accept: application/json'
+  echo "$(info_log) Delete request sent"
+else
+  echo "$(info_log) Number of snapshots is lower or equal to 5, skipping deletion"
+fi
+
 echo "$(info_log) Cleaning up"
 cd .. || exit 1
 rm -rf tmp
