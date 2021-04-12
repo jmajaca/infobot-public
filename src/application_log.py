@@ -5,6 +5,7 @@ class ApplicationLogType(Enum):
     INFO = 'INFO'
     WARNING = 'WARNING'
     ERROR = 'ERROR'
+    UNKNOWN = 'UNKNOWN'
 
 
 class ApplicationLog:
