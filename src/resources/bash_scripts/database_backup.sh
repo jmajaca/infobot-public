@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd  "$(dirname "$(realpath "$0")")" || exit 1
+
 source ./log_func.sh
 
 cleanup () {
