@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from src import config
 from src import logger
 
-engine = create_engine(config['database_url'], echo=True, client_encoding='utf8')
+engine = create_engine(config['database_url'], echo=True, client_encoding='utf8', pool_size=20, max_overflow=100)
 Session = sessionmaker(bind=engine)
 Base = declarative_base(bind=engine)
 
