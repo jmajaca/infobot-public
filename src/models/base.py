@@ -15,21 +15,33 @@ class DataBase:
         self.session = Session()
 
     def insert(self, element):
-        self.session.add(element)
-        self.session.commit()
-        logger.info_log('Database insert ' + str(element))
+        try:
+            self.session.add(element)
+            self.session.commit()
+            logger.info_log('Database insert ' + str(element))
+        except Exception as e:
+            self.session.rollback()
+            logger.error_log(e, text='Database insert error occurred')
 
     def select(self, table, **kwargs):
-        result = self.session.query(table)
-        for key in kwargs.keys():
-            result = result.filter(getattr(table, key) == kwargs[key])
-        return result.first()
+        try:
+            result = self.session.query(table)
+            for key in kwargs.keys():
+                result = result.filter(getattr(table, key) == kwargs[key])
+            return result.first()
+        except Exception as e:
+            self.session.rollback()
+            logger.error_log(e, text='Database select error occurred')
 
     def select_many(self, table, **kwargs):
-        result = self.session.query(table)
-        for key in kwargs.keys():
-            result = result.filter(getattr(table, key) == kwargs[key])
-        return result.all()
+        try:
+            result = self.session.query(table)
+            for key in kwargs.keys():
+                result = result.filter(getattr(table, key) == kwargs[key])
+            return result.all()
+        except Exception as e:
+            self.session.rollback()
+            logger.error_log(e, text='Database select many error occurred')
 
 # getattr(object, attrname)
 # setattr(object, attrname, value)
