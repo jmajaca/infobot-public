@@ -18,7 +18,7 @@ class DataBase:
         try:
             self.session.add(element)
             self.session.commit()
-            logger.info_log('Database insert ' + str(element))
+            logger.info_log('Database insert {}'.format(element))
         except Exception as e:
             self.session.rollback()
             logger.error_log(e, text='Database insert error occurred')

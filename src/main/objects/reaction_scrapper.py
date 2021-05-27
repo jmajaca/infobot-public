@@ -97,7 +97,6 @@ class ReactionScrapper:
                                                 receiver=author, name=reaction_code) is None:
                             slack_reaction = Reaction(channel, ts, reaction_code, user.id, author)
                             self.database.insert(slack_reaction)
-                            self.logger.info_log('Database insert {}'.format(slack_reaction))
         self.logger.info_log('Finished counting reactions.')
 
     def generate_slack_message(self, target_reaction) -> str:

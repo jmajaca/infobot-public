@@ -45,7 +45,6 @@ class Scanner:
             if self.database.select(SlackUser, id=user['id']) is None:
                 slack_user = SlackUser(user['id'], user['name'])
                 self.database.insert(slack_user)
-                self.logger.info_log('Database insert {}.'.format(slack_user))
         self.logger.info_log('Finished scanning for user.')
 
     def scan_channels(self):
@@ -56,7 +55,6 @@ class Scanner:
             slack_channel = Channel(channel['id'], '#' + channel['name'], author_id, date_created)
             if self.database.select(Channel, id=channel['id']) is None:
                 self.database.insert(slack_channel)
-                self.logger.info_log('Database insert {}.'.format(slack_channel))
         self.logger.info_log('Finished scanning for channels.')
 
     def scan_reactions(self):
