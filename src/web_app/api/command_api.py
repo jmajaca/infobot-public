@@ -5,7 +5,7 @@ from src import config
 from src.models.base import DataBase
 from src.web_app.api.slack_command_utils import SlackCommandUtils
 
-api_command = Blueprint('api_course', __name__)
+api_command = Blueprint('api_command', __name__)
 default_protocol = 'http'
 
 
