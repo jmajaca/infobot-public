@@ -1,6 +1,7 @@
 from flask import Flask
 import multiprocessing
 from src import config
+from src.web_app.api.command_api import api_command
 from src.web_app.api.course_api import api_course
 from src.web_app.api.reaction_api import api_reaction
 from src.web_app.web.course_view import app_course
@@ -22,6 +23,7 @@ app.register_blueprint(app_reaction)
 app.register_blueprint(app_reminder)
 app.register_blueprint(api_course)
 app.register_blueprint(api_reaction)
+app.register_blueprint(api_command)
 
 
 def start_app():

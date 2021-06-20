@@ -20,6 +20,10 @@ class SlackCommandUtils:
 
     @staticmethod
     def create_slack_command_log(data, success):
-        return SlackCommandLog(text=data['text'], command=data['command'], user_id=data['user_id'],
+        if len(data['text']) == 1:
+            text = data['text']
+        else:
+            text = ' '.join(data['text'])
+        return SlackCommandLog(text=text, command=data['command'], user_id=data['user_id'],
                                channel_id=data['channel_id'], creation_time=datetime.now(),
                                success=success)
