@@ -15,7 +15,7 @@ def get_reaction_table():
     database = DataBase()
     data, data_ok = SlackCommandUtils.read_data(request=request, text_tokens_length=2)
     try:
-        reaction_name = data['text'][1][1:-1]
+        reaction_name = data['text'][1]
         if not data_ok:
             return 'Invalid request format', 400
         if data['text'][0] == 'r':
