@@ -10,7 +10,7 @@ api_reaction = Blueprint('api_reaction', __name__)
 reaction_manager = ReactionManager(Logger())
 
 
-@api_reaction.route('/api/reaction/top', methods=['GET'])
+@api_reaction.route('/api/reaction/top', methods=['GET', 'POST'])
 def get_reaction_table():
     database = DataBase()
     data, data_ok = SlackCommandUtils.read_data(request=request, text_tokens_length=2)

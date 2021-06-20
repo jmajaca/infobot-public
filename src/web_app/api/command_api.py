@@ -9,7 +9,7 @@ api_command = Blueprint('api_course', __name__)
 default_protocol = 'http'
 
 
-@api_command.route('/api/command/scraper', methods=['GET'])
+@api_command.route('/api/command/scraper', methods=['GET', 'POST'])
 def command_endpoint():
     database = DataBase()
     data, data_ok = SlackCommandUtils.read_data(request, text_tokens_length=1)

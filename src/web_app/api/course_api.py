@@ -10,7 +10,7 @@ api_course = Blueprint('api_course', __name__)
 default_protocol = 'http'
 
 
-@api_course.route('/api/course/archive', methods=['GET'])
+@api_course.route('/api/course/archive', methods=['GET', 'POST'])
 def archive_course():
     database = DataBase()
     data, data_ok = SlackCommandUtils.read_data(request=request, text_tokens_length=1)
