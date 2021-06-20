@@ -14,9 +14,9 @@ default_protocol = 'http'
 def archive_course():
     database = DataBase()
     data, data_ok = SlackCommandUtils.read_data(request=request, text_tokens_length=1)
+    print('> TEXT:', data['text'])
     if not data_ok:
         return 'Invalid request format', 400
-    print('> TEXT:', data['text'])
     channel = database.select(Channel, id=data['text'][2:-1])
     response = requests.post(default_protocol + '://' + config.get('flask_address') + ':' + config.get('flask_port') +
                              '/ui/channel/archive?tag=' + channel.tag[1:])

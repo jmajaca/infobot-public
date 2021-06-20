@@ -18,12 +18,12 @@ def command_endpoint():
     command = data['text']
     if command != 'start' and command != 'stop':
         return 'Invalid request format', 400
-    response = requests.post(default_protocol + '://' + config.get('flask_address') + ':' + config.get('flask_port') +
-                             '/ui/home/scraper/' + command)
+    response = requests.get(default_protocol + '://' + config.get('flask_address') + ':' + config.get('flask_port') +
+                            '/ui/home/scraper/' + command)
     success_flag = response.status_code == 500
     slack_command_log = SlackCommandUtils.create_slack_command_log(data, success_flag)
     database.insert(slack_command_log)
     if response.status_code == 200:
         return '', 200
     else:
-        return 'Error has occurred while archiving the channel', 500
+        return 'Error has occurred while commanding scraper', 500

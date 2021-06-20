@@ -16,11 +16,13 @@ class SlackCommandUtils:
             return data, False
         else:
             data['text'] = data['text'].split()
+            if len(data['text']) == 1:
+                data['text'] = data['text'][0]
             return data, True
 
     @staticmethod
     def create_slack_command_log(data, success):
-        if len(data['text']) == 1:
+        if not isinstance(data['text'], list):
             text = data['text']
         else:
             text = ' '.join(data['text'])
