@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS pin CASCADE;
 DROP TABLE IF EXISTS slack_user CASCADE;
 DROP TABLE IF EXISTS filter CASCADE;
 DROP TABLE IF EXISTS reaction CASCADE;
+DROP TABLE IF EXISTS slack_command_log CASCADE;
 
 CREATE TABLE "user"(
     id SERIAL PRIMARY KEY,
@@ -84,4 +85,14 @@ CREATE TABLE reaction(
     channel VARCHAR(64) REFERENCES channel(id),
     sender VARCHAR(64) NOT NULL REFERENCES slack_user(id),
     receiver VARCHAR(64) NOT NULL REFERENCES slack_user(id)
+);
+
+CREATE TABLE slack_command_log(
+    id SERIAL primary key,
+    user_id VARCHAR (64) NOT NULL REFERENCES slack_user(id),
+    channel_id VARCHAR (64) NOT NULL REFERENCES channel(id),
+    creation_time TIMESTAMP NOT NULL,
+    command VARCHAR (64) NOT NULL,
+    text VARCHAR (256),
+    success BOOLEAN NOT NULL
 );

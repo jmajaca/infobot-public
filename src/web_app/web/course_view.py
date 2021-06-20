@@ -59,15 +59,15 @@ def course_handler():
 
 @app_course.route('/ui/course/delete', methods=['POST'])
 def course_delete():
-    course_id = request.args.get('id')
-    session = Session()
+    # course_id = request.args.get('id')
+    # session = Session()
     # course = session.query(Course).filter(Course.id == course_id).first()
     # channel = session.query(Channel).filter(Channel.tag == course.channel_tag).first()
     # client.conversations_close(channel=channel.id)
     # session.query(Channel).filter(Channel.tag == course.channel_tag).delete()
-    session.query(Course).filter(Course.id == course_id).delete()
-    session.commit()
-    session.flush()
+    # session.query(Course).filter(Course.id == course_id).delete()
+    # session.commit()
+    # session.flush()
     return redirect(url_for('app_course.course_handler'))
 
 

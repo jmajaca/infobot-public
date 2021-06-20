@@ -7,3 +7,4 @@ from src.models.channel import Channel
 from src.models.pin import Pin
 from src.models.reaction import Reaction
 from src.models.filter import Filter
+from src.models.slack_command_log import SlackCommandLog
