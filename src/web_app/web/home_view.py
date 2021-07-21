@@ -7,6 +7,8 @@ from flask import Blueprint, render_template, redirect, url_for
 app_home = Blueprint('app_home', __name__, template_folder='templates')
 scraper_process: multiprocessing.Process = None
 
+from flask import jsonify
+
 
 @app_home.route('/ui/home')
 def home():
@@ -30,3 +32,11 @@ def stop_scraper():
         scraper_process.kill()
         progress_queue.put((NONE_PROGRESS, 'Program finished with exit code 130', 'off'))
     return redirect(url_for('app_home.home'))
+
+@app_home.route("/ui/home/test")
+def test():
+    return jsonify("""
+    {
+    id: 5
+    }
+    """)
