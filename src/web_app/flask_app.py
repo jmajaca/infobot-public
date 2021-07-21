@@ -24,6 +24,7 @@ app.register_blueprint(app_reminder)
 app.register_blueprint(api_course)
 app.register_blueprint(api_reaction)
 app.register_blueprint(api_command)
+app.register_blueprint(test)
 
 
 def start_app():
